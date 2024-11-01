@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.bookreadingapp.R
 
 data class BarItem(
     val title: String,
@@ -19,27 +20,27 @@ data class BarItem(
 object NavBarItems {
     val  BarItems = listOf(
         BarItem(
-            title = "Home",
+            title = R.string.home_icon_title.toString(),
             image = Icons.Filled.Home,
             route = "home"
         ),
         BarItem(
-            title = "Library",
+            title = R.string.library_icon_title.toString(),
             image = Icons.Filled.MoreVert,
             route = "library"
         ),
         BarItem(
-            title = "Search",
+            title = R.string.search_icon_title.toString(),
             image = Icons.Filled.Search,
             route = "search"
         ),
         BarItem(
-            title = "Table of Content",
+            title = R.string.table_content_icon_title.toString(),
             image = Icons.Filled.Menu,
             route = "content_table"
         ),
         BarItem(
-            title = "Reading Mode",
+            title = R.string.reading_mode_icon_title.toString(),
             image = Icons.Filled.PlayArrow,
             route = "reading"
         )
