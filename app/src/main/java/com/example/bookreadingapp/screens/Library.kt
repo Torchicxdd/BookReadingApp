@@ -52,7 +52,7 @@ fun Library(context: Context, viewModel: AppViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = dimensionResource(R.dimen.padding_medium))
+            .padding(top = dimensionResource(R.dimen.padding_big))
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

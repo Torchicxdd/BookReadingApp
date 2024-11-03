@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Book Reading App</string>
+    <string name="name">BookWorm</string>
 
     <string name="url_wood">https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip</string>
     <string name="url_plumbing">https://www.gutenberg.org/cache/epub/25269/pg25269-h.zip</string>

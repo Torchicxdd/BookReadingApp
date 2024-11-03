@@ -20,6 +20,7 @@ import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import androidx.compose.foundation.lazy.LazyColumn
 import com.example.bookreadingapp.data.books
+import com.example.bookreadingapp.objects.TopAppBar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +40,7 @@ fun BookReadingApp()  {
     val context = LocalContext.current
 
     Scaffold(
+        topBar = { TopAppBar() },
         bottomBar = { BottomNavBar(navController, context) },
         content = { padding ->
             NavigationHost(

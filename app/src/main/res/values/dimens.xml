@@ -2,7 +2,9 @@
 <resources>
     <dimen name="padding_small">10dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_big">80dp</dimen>
     <dimen name="padding_large">130dp</dimen>
     <dimen name="image_size">250dp</dimen>
+    <dimen name="logo_size">80dp</dimen>
     <dimen name="spacer_padding">5dp</dimen>
 </resources>
