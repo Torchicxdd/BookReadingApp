@@ -3,12 +3,15 @@ package com.example.bookreadingapp.objects
 import NavBarItems
 import android.content.Context
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.PermanentDrawerSheet
+import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -122,7 +125,41 @@ fun NavRail(
 @Composable
 fun PermanentNavDrawer(
     navController: NavHostController,
+    context: Context,
     modifier: Modifier = Modifier
 ) {
-    // Some Composable
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    val barItems = NavBarItems.getBarItems(context)
+
+    PermanentNavigationDrawer(
+        drawerContent = {
+            PermanentDrawerSheet(
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Spacer(Modifier.weight(0.5f))
+                barItems.forEach { navItem ->
+                    NavigationDrawerItem(
+                        selected = currentRoute == navItem.route,
+                        onClick = {
+                            navController.navigate(navItem.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        icon = {
+                            Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                        },
+                        label = { Text(text = navItem.title) }
+                    )
+                }
+                Spacer(Modifier.weight(1f))
+            }
+        },
+        content = { NavigationHost(navController) },
+        modifier = modifier
+    )
 }
