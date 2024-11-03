@@ -14,4 +14,10 @@
     <string name="search_icon_title">Search</string>
     <string name="table_content_icon_title">Table of Content</string>
     <string name="reading_mode_icon_title">Reading Mode</string>
+
+    <string name="home">Home Screen</string>
+    <string name="content">Table of Content Screen</string>
+    <string name="library">Library Screen</string>
+    <string name="reading">Reading Screen</string>
+    <string name="search">Search Screen</string>
 </resources>

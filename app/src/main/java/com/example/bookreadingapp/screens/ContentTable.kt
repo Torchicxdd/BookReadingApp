@@ -1,9 +1,11 @@
 package com.example.bookreadingapp.screens
 
+import android.content.Context
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.bookreadingapp.R
 
 @Composable
-fun ContentTable() {
-    Text(text = "Table of Content Screen")
+fun ContentTable(context: Context) {
+    Text(text = context.getString(R.string.content))
 }
