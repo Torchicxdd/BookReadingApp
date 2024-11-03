@@ -21,7 +21,10 @@ fun Reading(context: Context, viewModel: AppViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = dimensionResource(R.dimen.padding_big))
+            .padding(
+                top = if (viewModel.readingMode) dimensionResource(R.dimen.padding_small)
+                      else dimensionResource(R.dimen.padding_big)
+            )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

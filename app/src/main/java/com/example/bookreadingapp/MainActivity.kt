@@ -42,7 +42,11 @@ fun BookReadingApp(viewModel: AppViewModel = viewModel())  {
     val context = LocalContext.current
 
     Scaffold(
-        topBar = { TopAppBar() },
+        topBar = {
+            if(!viewModel.readingMode) {
+                TopAppBar()
+            }
+        },
         content = { padding ->
             NavigationHost(
                 navController,
