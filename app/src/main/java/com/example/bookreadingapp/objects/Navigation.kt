@@ -41,6 +41,7 @@ import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.R
+import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 
 @Composable
@@ -48,25 +49,26 @@ fun NavigationHost(
     navController: NavHostController,
     context: Context,
     modifier: Modifier,
+    adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel = viewModel()
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home(context, viewModel)
+            Home(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel, navController)
+            Library(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.Search.route) {
-            Search(context, viewModel)
+            Search(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.ContentTable.route) {
-            ContentTable(context, viewModel)
+            ContentTable(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Reading.route) {
-            Reading(context, viewModel)
+            Reading(context, viewModel, adaptiveNavigationType)
         }
     }
 }
@@ -143,6 +145,7 @@ fun NavRail(
 fun PermanentNavDrawer(
     navController: NavHostController,
     context: Context,
+    adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -152,7 +155,7 @@ fun PermanentNavDrawer(
     PermanentNavigationDrawer(
         drawerContent = {
             PermanentDrawerSheet(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
             ) {
                 Spacer(Modifier.weight(0.5f))
                 barItems.forEach { navItem ->
@@ -176,7 +179,7 @@ fun PermanentNavDrawer(
                 Spacer(Modifier.weight(1f))
             }
         },
-        content = { NavigationHost(navController, context, modifier) },
+        content = { NavigationHost(navController, context, modifier, adaptiveNavigationType) },
         modifier = modifier
     )
 }

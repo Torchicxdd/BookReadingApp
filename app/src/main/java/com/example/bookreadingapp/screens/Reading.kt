@@ -24,23 +24,40 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
 import com.example.bookreadingapp.objects.Routes
+import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 @Composable
-fun Reading(context: Context, viewModel: AppViewModel) {
+fun Reading(
+    context: Context,
+    viewModel: AppViewModel,
+    adaptiveNavigationType: AdaptiveNavigationType
+) {
+    // Set the top and bottom padding based on the adaptive navigation type
+    val topPadding = when (adaptiveNavigationType) {
+        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
+        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
+        else -> dimensionResource(R.dimen.padding_big)
+    }
+
+    val bottomPadding = when (adaptiveNavigationType) {
+        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
+        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
+        else -> dimensionResource(R.dimen.padding_large)
+    }
     val bookTitleResId = viewModel.selectedBookTitleResId
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(
                 top = if (viewModel.readingMode) dimensionResource(R.dimen.padding_small)
-                      else dimensionResource(R.dimen.padding_big)
+                      else topPadding,
+                bottom = bottomPadding
             )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Text(
                 text = context.getString(R.string.reading),

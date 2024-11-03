@@ -14,19 +14,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
+import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 @Composable
-fun Home(context: Context, viewModel: AppViewModel) {
+fun Home(
+    context: Context,
+    viewModel: AppViewModel,
+    adaptiveNavigationType: AdaptiveNavigationType
+) {
+    // Set the top and bottom padding based on the adaptive navigation type
+    val topPadding = when (adaptiveNavigationType) {
+        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
+        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
+        else -> dimensionResource(R.dimen.padding_big)
+    }
+
+    val bottomPadding = when (adaptiveNavigationType) {
+        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
+        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
+        else -> dimensionResource(R.dimen.padding_large)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = dimensionResource(R.dimen.padding_big))
+            .padding(top = topPadding, bottom = bottomPadding)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Text(text = context.getString(R.string.home), style = MaterialTheme.typography.displayLarge)
             Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
