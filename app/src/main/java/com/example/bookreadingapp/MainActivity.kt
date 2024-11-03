@@ -37,7 +37,8 @@ fun BookReadingApp()  {
         content = {padding ->
             Column(Modifier.padding(padding)) {
                 NavigationHost(
-                    navController
+                    navController,
+                    context
                 )
             } },
         bottomBar = { BottomNavBar(navController, context) }
