@@ -33,13 +33,13 @@ fun NavigationHost(
             Library(viewModel)
         }
         composable(Routes.Search.route) {
-            Search()
+            Search(viewModel)
         }
         composable(Routes.ContentTable.route) {
-            ContentTable()
+            ContentTable(viewModel)
         }
         composable(Routes.Reading.route) {
-            Reading()
+            Reading(viewModel)
         }
     }
 }
