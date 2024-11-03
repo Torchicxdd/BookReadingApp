@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.bookreadingapp.data.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BookReadingApp()  {
     val navController = rememberNavController()
+    val viewModel = AppViewModel()
 
     Scaffold(
         content = {padding ->
