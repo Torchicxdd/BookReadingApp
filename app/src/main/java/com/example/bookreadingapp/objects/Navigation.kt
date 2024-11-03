@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.objects
 
+import android.content.Context
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,53 +22,58 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun NavigationHost(
     navController: NavHostController,
+    context: Context,
     viewModel: AppViewModel = viewModel()
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home(viewModel)
+            Home(context, viewModel)
         }
         composable(Routes.Library.route) {
-            Library(viewModel)
+            Library(context, viewModel)
         }
         composable(Routes.Search.route) {
-            Search(viewModel)
+            Search(context, viewModel)
         }
         composable(Routes.ContentTable.route) {
-            ContentTable(viewModel)
+            ContentTable(context, viewModel)
         }
         composable(Routes.Reading.route) {
-            Reading(viewModel)
+            Reading(context, viewModel)
         }
     }
 }
 
+
 @Composable
 fun BottomNavBar(
-    navController: NavHostController
+    navController: NavHostController,
+    context: Context
 ) {
     NavigationBar {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
-        NavBarItems.BarItems.forEach{
-                navItem -> NavigationBarItem(
-            selected = currentRoute == navItem.route,
-            onClick = {
-                navController.navigate(navItem.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+        val barItems = NavBarItems.getBarItems(context)
+
+        barItems.forEach { navItem ->
+            NavigationBarItem(
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            },
-            icon = {
-                Icon(imageVector = navItem.image, contentDescription = navItem.title)
-            },
-            label = { Text(text = navItem.title) }
-        )
+                },
+                icon = {
+                    Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                },
+                label = { Text(text = navItem.title) }
+            )
         }
     }
 }

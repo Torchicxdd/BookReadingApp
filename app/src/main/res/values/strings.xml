@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Book Reading App</string>
+
+    <string name="url_wood">https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip</string>
+    <string name="url_plumbing">https://www.gutenberg.org/cache/epub/25269/pg25269-h.zip</string>
+    <string name="url_hardware">https://www.gutenberg.org/cache/epub/72897/pg72897-h.zip</string>
+    <string name="url_steam">https://www.gutenberg.org/cache/epub/22657/pg22657-h.zip</string>
+    <string name="url_dairy">https://www.gutenberg.org/cache/epub/27778/pg27778-h.zip</string>
+    <string name="url_mushroom">https://www.gutenberg.org/cache/epub/29086/pg29086-h.zip</string>
+    <string name="url_glass">https://www.gutenberg.org/cache/epub/63421/pg63421-h.zip</string>
+
+    <string name="home_icon_title">Home</string>
+    <string name="library_icon_title">Library</string>
+    <string name="search_icon_title">Search</string>
+    <string name="table_content_icon_title">Table of Content</string>
+    <string name="reading_mode_icon_title">Reading Mode</string>
+
+    <string name="home">Home Screen</string>
+    <string name="content">Table of Content Screen</string>
+    <string name="library">Library Screen</string>
+    <string name="reading">Reading Screen</string>
+    <string name="search">Search Screen</string>
 </resources>
