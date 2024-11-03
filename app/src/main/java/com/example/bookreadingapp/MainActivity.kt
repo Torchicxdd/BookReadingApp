@@ -39,7 +39,7 @@ fun BookReadingApp()  {
     val context = LocalContext.current
 
     Scaffold(
-        bottomBar = { BottomNavBar(navController) },
+        bottomBar = { BottomNavBar(navController, context) },
         content = { padding ->
             NavigationHost(
                 navController,

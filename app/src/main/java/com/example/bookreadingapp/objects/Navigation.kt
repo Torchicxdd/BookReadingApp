@@ -53,28 +53,32 @@ fun NavigationHost(
 
 @Composable
 fun BottomNavBar(
-    navController: NavHostController
+    navController: NavHostController,
+    context: Context
 ) {
     NavigationBar {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
-        NavBarItems.BarItems.forEach{
-                navItem -> NavigationBarItem(
-            selected = currentRoute == navItem.route,
-            onClick = {
-                navController.navigate(navItem.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+        val barItems = NavBarItems.getBarItems(context)
+
+        barItems.forEach { navItem ->
+            NavigationBarItem(
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            },
-            icon = {
-                Icon(imageVector = navItem.image, contentDescription = navItem.title)
-            },
-            label = { Text(text = navItem.title) }
-        )
+                },
+                icon = {
+                    Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                },
+                label = { Text(text = navItem.title) }
+            )
         }
+
     }
 }
