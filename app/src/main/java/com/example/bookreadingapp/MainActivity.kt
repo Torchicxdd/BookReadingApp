@@ -34,7 +34,9 @@ fun BookReadingApp()  {
     Scaffold(
         content = {padding ->
             Column(Modifier.padding(padding)) {
-                NavigationHost(navController)
+                NavigationHost(
+                    navController
+                )
             } },
         bottomBar = { BottomNavBar(navController) }
     )

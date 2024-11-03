@@ -16,28 +16,30 @@ import com.example.bookreadingapp.screens.Home
 import com.example.bookreadingapp.screens.Library
 import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun NavigationHost(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: AppViewModel = viewModel()
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home()
+            Home(viewModel)
         }
         composable(Routes.Library.route) {
-            Library()
+            Library(viewModel)
         }
         composable(Routes.Search.route) {
-            Search()
+            Search(viewModel)
         }
         composable(Routes.ContentTable.route) {
-            ContentTable()
+            ContentTable(viewModel)
         }
         composable(Routes.Reading.route) {
-            Reading()
+            Reading(viewModel)
         }
     }
 }
