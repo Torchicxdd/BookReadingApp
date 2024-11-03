@@ -83,30 +83,28 @@ fun NavRail(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    NavigationBar {
-        val backStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = backStackEntry?.destination?.route
-        NavigationRail {
-            Spacer(Modifier.weight(1f))
-            NavBarItems.BarItems.forEach { navItem ->
-                NavigationRailItem(
-                    selected = currentRoute == navItem.route,
-                    onClick = {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    NavigationRail(modifier = modifier) {
+        Spacer(Modifier.weight(1f))
+        NavBarItems.BarItems.forEach { navItem ->
+            NavigationRailItem(
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
-                    },
-                    icon = {
-                        Icon(imageVector = navItem.image, contentDescription = navItem.title)
-                    },
-                )
-            }
-            Spacer(Modifier.weight(1f))
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                icon = {
+                    Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                },
+            )
         }
+        Spacer(Modifier.weight(1f))
     }
 }
 
