@@ -18,6 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.objects.BottomNavBar
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import androidx.compose.foundation.lazy.LazyColumn
+import com.example.bookreadingapp.data.books
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,15 +39,16 @@ fun BookReadingApp()  {
     val context = LocalContext.current
 
     Scaffold(
-        content = {padding ->
-            Column(
+        content = { padding ->
+            NavigationHost(
+                navController,
+                context,
                 Modifier
                     .padding(padding)
                     .verticalScroll(rememberScrollState())
                     .fillMaxSize()
-            ) {
-                NavigationHost(navController, context)
-            } },
+            )
+        },
         bottomBar = { BottomNavBar(navController) }
     )
 }
