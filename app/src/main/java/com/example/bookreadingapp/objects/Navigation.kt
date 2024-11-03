@@ -1,5 +1,7 @@
 package com.example.bookreadingapp.objects
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import NavBarItems
 import android.content.Context
 import androidx.compose.foundation.layout.Spacer
