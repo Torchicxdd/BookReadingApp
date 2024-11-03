@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -58,11 +60,17 @@ fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifi
             Row(Modifier.padding(padding)) {
                 // Navigation rail if medium screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.NAVIGATION_RAIL) {
-                    NavRail()
+                    NavRail(
+                        navController,
+                        context,
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxHeight()
+                    )
                 }
                 // Permanent Navigation Drawer is expanded screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-                    PermanentNavDrawer()
+                    PermanentNavDrawer(navController)
                 }
                 Box(
                     modifier = Modifier
