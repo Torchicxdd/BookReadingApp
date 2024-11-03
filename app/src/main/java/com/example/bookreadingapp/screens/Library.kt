@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -47,23 +49,37 @@ import com.example.bookreadingapp.objects.AppViewModel
 
 @Composable
 fun Library(context: Context, viewModel: AppViewModel) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // Set the number of columns to 2
-        modifier = Modifier.fillMaxSize(),
-        content = {
-            item {
-                Text(text = context.getString(R.string.library))
-                Text(text = viewModel.exampleState)
-
-                Button(onClick = { viewModel.updateExampleState("This state was changed from the Library screen") }) {
-                    Text(text = "Change ViewModel state")
-                }
-            }
-            items(books) { book ->
-                BookItem(book = book)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        // Top item displayed by itself
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_small))
+        ) {
+            Text(text = context.getString(R.string.library), style = MaterialTheme.typography.titleLarge)
+            Text(text = viewModel.exampleState)
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Library screen") }) {
+                Text(text = "Change ViewModel state")
             }
         }
-    )
+
+        // LazyVerticalGrid for the book items
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2), // Set the number of columns to 2
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = dimensionResource(R.dimen.padding_large)),
+            content = {
+                items(books) { book ->
+                    BookItem(book = book)
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -73,6 +89,8 @@ fun BookItem(
 ) {
     Card(
         modifier = modifier
+            .fillMaxWidth() // Ensure it takes the full width of the column
+            .padding(dimensionResource(R.dimen.padding_small)) // Add some padding around the card
     ) {
         Column(
             modifier = Modifier
@@ -83,14 +101,11 @@ fun BookItem(
                     )
                 )
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_small))
-            ) {
-                BookCover(book.imageResourceId)
-                BookInformation(book.title)
-            }
+            // Display book cover
+            BookCover(book.imageResourceId)
+
+            // Display book title underneath the cover
+            BookInformation(book.title)
         }
     }
 }
@@ -100,13 +115,19 @@ fun BookCover(
     @DrawableRes bookCover: Int,
     modifier: Modifier = Modifier
 ) {
-    Image(
+    Box(
         modifier = modifier
-            .size(dimensionResource(R.dimen.image_size))
-            .padding(dimensionResource(R.dimen.padding_small)),
-        painter = painterResource(bookCover),
-        contentDescription = null
-    )
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium)),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            modifier = Modifier
+                .size(dimensionResource(R.dimen.image_size)),
+            painter = painterResource(bookCover),
+            contentDescription = null
+        )
+    }
 }
 
 @Composable
@@ -114,10 +135,17 @@ fun BookInformation(
     @StringRes bookTitle: Int,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
         Text(
             text = stringResource(bookTitle),
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(
+                top = dimensionResource(R.dimen.padding_medium),
+                bottom = dimensionResource(R.dimen.padding_medium)
+            )
         )
     }
 }
