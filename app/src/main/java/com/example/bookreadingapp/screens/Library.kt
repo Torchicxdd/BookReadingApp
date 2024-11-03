@@ -7,6 +7,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,13 +28,15 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
 import com.example.bookreadingapp.objects.AppViewModel
+import com.example.bookreadingapp.objects.Routes
 
 @Composable
-fun Library(context: Context, viewModel: AppViewModel) {
+fun Library(context: Context, viewModel: AppViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,13 +57,18 @@ fun Library(context: Context, viewModel: AppViewModel) {
 
         // LazyVerticalGrid for the book items
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2), // Set the number of columns to 2
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = dimensionResource(R.dimen.padding_large)),
             content = {
                 items(books) { book ->
-                    BookItem(book = book)
+                    BookItem(book = book, onClick = {
+                        viewModel.updateBookTitle(book.title)
+                        navController.navigate(Routes.Reading.route) {
+                            popUpTo(Routes.Library.route) { inclusive = true }
+                        }
+                    })
                 }
             }
         )
@@ -70,12 +78,14 @@ fun Library(context: Context, viewModel: AppViewModel) {
 @Composable
 fun BookItem(
     book: Book,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_small))
+            .clickable(onClick = onClick)
     ) {
         Column(
             modifier = Modifier

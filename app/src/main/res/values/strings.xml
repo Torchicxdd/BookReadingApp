@@ -29,4 +29,6 @@
     <string name="dairy">Outlines of Dairy Bacteriology, 8th edition by H. L. Russell</string>
     <string name="mushroom">The Mushroom, Edible and Otherwise by Miron Elisha Hard</string>
 
+    <string name="book_404">Book not found</string>
+
 </resources>

@@ -46,7 +46,7 @@ fun NavigationHost(
             Home(context, viewModel)
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel)
+            Library(context, viewModel, navController)
         }
         composable(Routes.Search.route) {
             Search(context, viewModel)
@@ -74,12 +74,14 @@ fun BottomNavBar(
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
                 onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    if (currentRoute != navItem.route) {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 icon = {
