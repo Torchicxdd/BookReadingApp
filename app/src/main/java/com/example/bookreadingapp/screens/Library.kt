@@ -53,7 +53,6 @@ fun Library(context: Context, viewModel: AppViewModel) {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        // Top item displayed by itself
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -89,8 +88,8 @@ fun BookItem(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth() // Ensure it takes the full width of the column
-            .padding(dimensionResource(R.dimen.padding_small)) // Add some padding around the card
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_small))
     ) {
         Column(
             modifier = Modifier
@@ -118,7 +117,7 @@ fun BookCover(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium)),
+            .padding(top = dimensionResource(R.dimen.padding_medium)),
         contentAlignment = Alignment.Center
     ) {
         Image(
