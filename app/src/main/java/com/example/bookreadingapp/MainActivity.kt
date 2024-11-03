@@ -69,7 +69,7 @@ fun BookReadingApp(
             }
         },
         content = { padding ->
-            Row(Modifier.padding(padding)) {
+            Row() {
                 // Navigation rail if medium screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.NAVIGATION_RAIL
                     && !viewModel.readingMode) {

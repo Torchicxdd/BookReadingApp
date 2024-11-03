@@ -205,8 +205,6 @@ fun TopAppBar(modifier: Modifier = Modifier) {
                     contentDescription = null
                 )
             }
-        },
-        modifier = modifier
-            .padding(top = dimensionResource(R.dimen.spacer_padding))
+        }
     )
 }

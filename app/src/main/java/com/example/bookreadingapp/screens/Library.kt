@@ -43,23 +43,9 @@ fun Library(
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
-    // Set the top and bottom padding based on the adaptive navigation type
-    val topPadding = when (adaptiveNavigationType) {
-        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
-        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
-        else -> dimensionResource(R.dimen.padding_big)
-    }
-
-    val bottomPadding = when (adaptiveNavigationType) {
-        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
-        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
-        else -> dimensionResource(R.dimen.padding_large)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = topPadding, bottom = bottomPadding)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,8 +63,7 @@ fun Library(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = bottomPadding),
+                .fillMaxSize(),
             content = {
                 items(books) { book ->
                     BookItem(book = book, onClick = {

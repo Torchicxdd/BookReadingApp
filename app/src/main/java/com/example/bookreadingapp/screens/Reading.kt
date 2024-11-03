@@ -48,11 +48,6 @@ fun Reading(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                top = if (viewModel.readingMode) dimensionResource(R.dimen.padding_small)
-                      else topPadding,
-                bottom = bottomPadding
-            )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
