@@ -3,41 +3,42 @@ package com.example.bookreadingapp.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Light Theme
-val md_theme_light_primary = Color(0xFFCA8787)
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFCA8787)
+val md_theme_light_primary = Color(0xFFDED0B6)
+val md_theme_light_onPrimary = Color(0xFF201E43)
+val md_theme_light_primaryContainer = Color(0xFFFAEED1)
 val md_theme_light_onPrimaryContainer = Color(0xFF201E43)
 
-val md_theme_light_secondary = Color(0xFFFCC5C5)
+val md_theme_light_secondary = Color(0xFFB2A59B)
 val md_theme_light_onSecondary = Color(0xFF201E43)
-val md_theme_light_secondaryContainer = Color(0xFFCA8787)
-val md_theme_light_onSecondaryContainer = Color(0xFFFFFFFF)
+val md_theme_light_secondaryContainer = Color(0xFFDED0B6)
+val md_theme_light_onSecondaryContainer = Color(0xFF201E43)
 
-val md_theme_light_tertiary = Color(0xFFD3B2B2)
-val md_theme_light_onTertiary = Color(0xFFFFFFFF)
-val md_theme_light_tertiaryContainer = Color(0xFFD0B4B4)
-val md_theme_light_onTertiaryContainer = Color(0xFFD3B2B2)
+val md_theme_light_tertiary = Color(0xFFDED0B6)
+val md_theme_light_onTertiary = Color(0xFF201E43)
+val md_theme_light_tertiaryContainer = Color(0xFF201E43)
+val md_theme_light_onTertiaryContainer = Color(0xFF201E43)
 
 val md_theme_light_error = Color(0xFFBA1A1A)
 val md_theme_light_errorContainer = Color(0xFFFFDAD6)
 val md_theme_light_onError = Color(0xFFFFFFFF)
 val md_theme_light_onErrorContainer = Color(0xFF410002)
 
-val md_theme_light_background = Color(0xFFFFD0D0)
+val md_theme_light_background = Color(0xFFFAEED1)
 val md_theme_light_onBackground = Color(0xFF201E43)
-val md_theme_light_surface = Color(0xFFFFD0D0)
-val md_theme_light_onSurface = Color(0xFFA87676)
-val md_theme_light_surfaceVariant = Color(0xFFE1ACAC)
+val md_theme_light_surface = Color(0xFFFAEED1)
+val md_theme_light_onSurface = Color(0xFF201E43)
+val md_theme_light_surfaceVariant = Color(0xFFDED0B6)
 val md_theme_light_onSurfaceVariant = Color(0xFF201E43)
 
-val md_theme_light_outline = Color(0xFFFCC5C5)
-val md_theme_light_inverseOnSurface = Color(0xFFF5F5F5)
+val md_theme_light_outline = Color(0xFF201E43)
+val md_theme_light_inverseOnSurface = Color(0xFFFAEED1)
 val md_theme_light_inverseSurface = Color(0xFF201E43)
-val md_theme_light_inversePrimary = Color(0xFFCA8787)
+val md_theme_light_inversePrimary = Color(0xFFDED0B6)
 val md_theme_light_shadow = Color(0xFF000000)
-val md_theme_light_surfaceTint = Color(0xFFA87676)
-val md_theme_light_outlineVariant = Color(0xFFFCC5C5)
+val md_theme_light_surfaceTint = Color(0xFFB2A59B)
+val md_theme_light_outlineVariant = Color(0xFFB2A59B)
 val md_theme_light_scrim = Color(0xFF000000)
+
 
 
 // Dark Theme
