@@ -20,6 +20,7 @@ fun Home(context: Context, viewModel: AppViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(top = dimensionResource(R.dimen.padding_medium))
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

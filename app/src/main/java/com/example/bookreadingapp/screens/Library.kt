@@ -52,6 +52,7 @@ fun Library(context: Context, viewModel: AppViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(top = dimensionResource(R.dimen.padding_medium))
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -141,9 +142,8 @@ fun BookInformation(
         Text(
             text = stringResource(bookTitle),
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(
-                top = dimensionResource(R.dimen.padding_medium),
-                bottom = dimensionResource(R.dimen.padding_medium)
+            modifier = Modifier
+                .padding(dimensionResource(R.dimen.padding_medium)
             )
         )
     }
