@@ -71,17 +71,17 @@ fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifi
                 }
                 // Permanent Navigation Drawer is expanded screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-                    PermanentNavDrawer(navController)
+                    PermanentNavDrawer(navController, context)
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                )
-                NavigationHost(
-                    navController,
-                    context
-                )
+                if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                    ) {
+                        NavigationHost(navController, context)
+                    }
+                }
             }
         },
         bottomBar = {
