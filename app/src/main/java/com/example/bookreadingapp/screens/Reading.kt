@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
+import androidx.compose.material3.Switch
 
 @Composable
 fun Reading(context: Context, viewModel: AppViewModel) {
@@ -28,11 +29,17 @@ fun Reading(context: Context, viewModel: AppViewModel) {
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            Text(text = context.getString(R.string.reading), style = MaterialTheme.typography.displayLarge)
+            Text(
+                text = context.getString(R.string.reading),
+                style = MaterialTheme.typography.displayLarge
+            )
             Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
             Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") }) {
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
+            Switch(
+                checked = viewModel.readingMode,
+                onCheckedChange = { viewModel.updateReadingMode() })
         }
     }
 }

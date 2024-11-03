@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
@@ -35,13 +37,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BookReadingApp()  {
+fun BookReadingApp(viewModel: AppViewModel = viewModel())  {
     val navController = rememberNavController()
     val context = LocalContext.current
 
     Scaffold(
         topBar = { TopAppBar() },
-        bottomBar = { BottomNavBar(navController, context) },
         content = { padding ->
             NavigationHost(
                 navController,
@@ -50,6 +51,11 @@ fun BookReadingApp()  {
                     .padding(padding)
                     .fillMaxSize()
             )
+        },
+        bottomBar = {
+            if(!viewModel.readingMode) {
+                BottomNavBar(navController, context)
+            }
         }
     )
 }

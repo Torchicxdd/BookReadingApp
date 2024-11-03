@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -61,7 +60,6 @@ fun NavigationHost(
     }
 }
 
-
 @Composable
 fun BottomNavBar(
     navController: NavHostController,
@@ -90,7 +88,6 @@ fun BottomNavBar(
                 label = { Text(text = navItem.title) }
             )
         }
-
     }
 }
 
