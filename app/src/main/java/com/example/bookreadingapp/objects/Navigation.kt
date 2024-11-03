@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -93,32 +94,30 @@ fun NavRail(
     context: Context,
     modifier: Modifier = Modifier
 ) {
-    NavigationBar {
-        val backStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = backStackEntry?.destination?.route
-        val barItems = NavBarItems.getBarItems(context)
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    val barItems = NavBarItems.getBarItems(context)
 
-        NavigationRail {
-            Spacer(Modifier.weight(1f))
-            barItems.forEach { navItem ->
-                NavigationRailItem(
-                    selected = currentRoute == navItem.route,
-                    onClick = {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+    NavigationRail {
+        Spacer(Modifier.weight(1f))
+        barItems.forEach { navItem ->
+            NavigationRailItem(
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
-                    },
-                    icon = {
-                        Icon(imageVector = navItem.image, contentDescription = navItem.title)
-                    },
-                )
-            }
-            Spacer(Modifier.weight(1f))
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                icon = {
+                    Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                },
+            )
         }
+        Spacer(Modifier.weight(1f))
     }
 }
 
@@ -159,7 +158,7 @@ fun PermanentNavDrawer(
                 Spacer(Modifier.weight(1f))
             }
         },
-        content = { NavigationHost(navController) },
+        content = { NavigationHost(navController, context) },
         modifier = modifier
     )
 }

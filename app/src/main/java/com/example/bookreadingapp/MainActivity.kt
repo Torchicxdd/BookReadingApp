@@ -98,7 +98,7 @@ fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifi
 fun GreetingPreview() {
     BookReadingAppTheme {
         BookReadingApp(
-            windowSize = WindowWidthSizeClass.Compact
+            windowSize = WindowWidthSizeClass.Medium
         )
     }
 }
