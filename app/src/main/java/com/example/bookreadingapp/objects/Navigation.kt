@@ -6,12 +6,17 @@ import NavBarItems
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -48,8 +53,8 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 fun NavigationHost(
     navController: NavHostController,
     context: Context,
-    modifier: Modifier,
     adaptiveNavigationType: AdaptiveNavigationType,
+    modifier: Modifier,
     viewModel: AppViewModel = viewModel()
 ) {
     NavHost(navController = navController,
@@ -154,33 +159,48 @@ fun PermanentNavDrawer(
 
     PermanentNavigationDrawer(
         drawerContent = {
-            PermanentDrawerSheet(
-                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-            ) {
-                Spacer(Modifier.weight(0.5f))
+            PermanentDrawerSheet {
+                Spacer(Modifier.weight(1f))
                 barItems.forEach { navItem ->
-                    NavigationDrawerItem(
-                        selected = currentRoute == navItem.route,
-                        onClick = {
-                            navController.navigate(navItem.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+                    Box(
+                        modifier = Modifier
+                            .padding(start = dimensionResource(R.dimen.padding_big))
+                    ) {
+                        NavigationDrawerItem(
+                            selected = currentRoute == navItem.route,
+                            onClick = {
+                                navController.navigate(navItem.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = {
-                            Icon(imageVector = navItem.image, contentDescription = navItem.title)
-                        },
-                        label = { Text(text = navItem.title) }
-                    )
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = navItem.image,
+                                    contentDescription = navItem.title
+                                )
+                            },
+                            label = { Text(text = navItem.title) }
+                        )
+                    }
                 }
                 Spacer(Modifier.weight(1f))
             }
         },
-        content = { NavigationHost(navController, context, modifier, adaptiveNavigationType) },
-        modifier = modifier
+        content = {
+            Box(
+                modifier = modifier
+            ) {
+                NavigationHost(
+                    navController,
+                    context,
+                    adaptiveNavigationType,
+                    modifier = modifier.fillMaxSize())
+            }
+        }
     )
 }
 

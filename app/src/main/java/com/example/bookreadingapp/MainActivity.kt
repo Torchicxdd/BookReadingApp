@@ -69,7 +69,7 @@ fun BookReadingApp(
             }
         },
         content = { padding ->
-            Row() {
+            Row {
                 // Navigation rail if medium screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.NAVIGATION_RAIL
                     && !viewModel.readingMode) {
@@ -83,7 +83,13 @@ fun BookReadingApp(
                 }
                 // Permanent Navigation Drawer is expanded screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-                    PermanentNavDrawer(navController, context, adaptiveNavigationType)
+                    PermanentNavDrawer(
+                        navController,
+                        context,
+                        adaptiveNavigationType,
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxSize())
                 }
                 if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
                     Box(
@@ -94,10 +100,9 @@ fun BookReadingApp(
                         NavigationHost(
                             navController,
                             context,
+                            adaptiveNavigationType,
                             Modifier
-                                .padding(padding)
-                                .fillMaxSize(),
-                            adaptiveNavigationType
+                                .padding(padding),
                         )
                     }
                 }
@@ -113,12 +118,16 @@ fun BookReadingApp(
     )
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    widthDp = 1200,
+    heightDp = 800
+)
 @Composable
 fun GreetingPreview() {
     BookReadingAppTheme {
         BookReadingApp(
-            windowSize = WindowWidthSizeClass.Medium
+            windowSize = WindowWidthSizeClass.Expanded
         )
     }
 }
