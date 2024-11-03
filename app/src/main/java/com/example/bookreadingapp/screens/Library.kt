@@ -60,10 +60,10 @@ fun Library(context: Context, viewModel: AppViewModel) {
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            Text(text = context.getString(R.string.library), style = MaterialTheme.typography.titleLarge)
-            Text(text = viewModel.exampleState)
+            Text(text = context.getString(R.string.library), style = MaterialTheme.typography.displayLarge)
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
             Button(onClick = { viewModel.updateExampleState("This state was changed from the Library screen") }) {
-                Text(text = "Change ViewModel state")
+                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }
 
@@ -141,6 +141,7 @@ fun BookInformation(
     ) {
         Text(
             text = stringResource(bookTitle),
+            style = MaterialTheme.typography.displayMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_medium)

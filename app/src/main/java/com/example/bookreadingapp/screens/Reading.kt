@@ -28,10 +28,10 @@ fun Reading(context: Context, viewModel: AppViewModel) {
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            Text(text = context.getString(R.string.reading), style = MaterialTheme.typography.titleLarge)
-            Text(text = viewModel.exampleState)
+            Text(text = context.getString(R.string.reading), style = MaterialTheme.typography.displayLarge)
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
             Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") }) {
-                Text(text = "Change ViewModel state")
+                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }
     }

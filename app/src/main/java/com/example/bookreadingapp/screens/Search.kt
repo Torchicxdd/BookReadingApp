@@ -28,10 +28,10 @@ fun Search(context: Context, viewModel: AppViewModel) {
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            Text(text = context.getString(R.string.search), style = MaterialTheme.typography.titleLarge)
-            Text(text = viewModel.exampleState)
+            Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
             Button(onClick = { viewModel.updateExampleState("This state was changed from the Search screen") }) {
-                Text(text = "Change ViewModel state")
+                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }
     }

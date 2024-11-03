@@ -28,10 +28,10 @@ fun ContentTable(context: Context, viewModel: AppViewModel) {
                 .fillMaxWidth()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            Text(text = context.getString(R.string.content), style = MaterialTheme.typography.titleLarge)
-            Text(text = viewModel.exampleState)
+            Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
             Button(onClick = { viewModel.updateExampleState("This state was changed from the Content screen") }) {
-                Text(text = "Change ViewModel state")
+                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }
     }
