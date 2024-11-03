@@ -56,21 +56,6 @@ fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifi
         else -> AdaptiveNavigationType.BOTTOM_NAVIGATION
     }
 
-    val adaptiveNavigationType = when (windowSize) {
-        WindowWidthSizeClass.Compact -> {
-            // Screen State
-        }
-        WindowWidthSizeClass.Medium -> {
-            // Screen State
-        }
-        WindowWidthSizeClass.Expanded -> {
-            // Screen State
-        }
-        else -> {
-            // Screen State
-        }
-    }
-
     Scaffold(
         content = { padding ->
             Row(Modifier.padding(padding)) {
