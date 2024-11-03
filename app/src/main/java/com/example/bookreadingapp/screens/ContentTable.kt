@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import com.example.bookreadingapp.objects.AppViewModel
 
 @Composable
-fun ContentTable(viewModel: AppViewModel) {
+fun ContentTable(
+    viewModel: AppViewModel
+) {
     Column {
         Text(text = "Content Screen")
         Text(text = viewModel.exampleState)

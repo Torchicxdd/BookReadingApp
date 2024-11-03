@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import com.example.bookreadingapp.objects.AppViewModel
 
 @Composable
-fun Search(viewModel: AppViewModel) {
+fun Search(
+    viewModel: AppViewModel
+) {
     Column {
         Text(text = "Search Screen")
         Text(text = viewModel.exampleState)

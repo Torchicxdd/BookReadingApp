@@ -5,7 +5,10 @@ import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -16,8 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.objects.BottomNavBar
+import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
+import com.example.bookreadingapp.objects.PermanentNavDrawer
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
     @ExperimentalMaterial3WindowSizeClassApi
@@ -39,29 +45,41 @@ class MainActivity : ComponentActivity() {
 fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifier)  {
     val navController = rememberNavController()
 
+    // Adaptive navigation type depending on screen size
     val adaptiveNavigationType = when (windowSize) {
-        WindowWidthSizeClass.Compact -> {
-            // Screen State
-        }
-        WindowWidthSizeClass.Medium -> {
-            // Screen State
-        }
-        WindowWidthSizeClass.Expanded -> {
-            // Screen State
-        }
-        else -> {
-            // Screen State
-        }
+        WindowWidthSizeClass.Compact -> AdaptiveNavigationType.BOTTOM_NAVIGATION
+        WindowWidthSizeClass.Medium -> AdaptiveNavigationType.NAVIGATION_RAIL
+        WindowWidthSizeClass.Expanded -> AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER
+        else -> AdaptiveNavigationType.BOTTOM_NAVIGATION
     }
 
     Scaffold(
-        content = {padding ->
-            Column(Modifier.padding(padding)) {
+        content = { padding ->
+            Row(Modifier.padding(padding)) {
+                // Navigation rail if medium screen size
+                if (adaptiveNavigationType == AdaptiveNavigationType.NAVIGATION_RAIL) {
+                    NavRail()
+                }
+                // Permanent Navigation Drawer is expanded screen size
+                if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
+                    PermanentNavDrawer()
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                )
                 NavigationHost(
                     navController
                 )
-            } },
-        bottomBar = { BottomNavBar(navController) }
+            }
+        },
+        bottomBar = {
+            // Bottom bar if compact screen size
+            if (adaptiveNavigationType == AdaptiveNavigationType.BOTTOM_NAVIGATION) {
+                BottomNavBar(navController)
+            }
+        }
     )
 }
 

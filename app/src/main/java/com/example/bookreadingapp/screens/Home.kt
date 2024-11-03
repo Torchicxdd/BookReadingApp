@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import com.example.bookreadingapp.objects.AppViewModel
 
 @Composable
-fun Home(viewModel: AppViewModel) {
+fun Home(
+    viewModel: AppViewModel
+) {
     Column {
         Text(text = "Home Screen")
         Text(text = viewModel.exampleState)
