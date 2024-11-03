@@ -1,6 +1,7 @@
 package com.example.bookreadingapp
 
 import android.os.Bundle
+import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -53,6 +54,21 @@ fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifi
         WindowWidthSizeClass.Medium -> AdaptiveNavigationType.NAVIGATION_RAIL
         WindowWidthSizeClass.Expanded -> AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER
         else -> AdaptiveNavigationType.BOTTOM_NAVIGATION
+    }
+
+    val adaptiveNavigationType = when (windowSize) {
+        WindowWidthSizeClass.Compact -> {
+            // Screen State
+        }
+        WindowWidthSizeClass.Medium -> {
+            // Screen State
+        }
+        WindowWidthSizeClass.Expanded -> {
+            // Screen State
+        }
+        else -> {
+            // Screen State
+        }
     }
 
     Scaffold(
