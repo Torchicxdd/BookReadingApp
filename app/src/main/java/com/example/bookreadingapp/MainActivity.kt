@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
 import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
@@ -44,7 +46,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifier)  {
+fun BookReadingApp(
+    windowSize: WindowWidthSizeClass,
+    viewModel: AppViewModel = viewModel(),
+    modifier: Modifier = Modifier
+)  {
     val navController = rememberNavController()
     val context = LocalContext.current
 
@@ -86,7 +92,8 @@ fun BookReadingApp(windowSize: WindowWidthSizeClass, modifier: Modifier = Modifi
         },
         bottomBar = {
             // Bottom bar if compact screen size
-            if (adaptiveNavigationType == AdaptiveNavigationType.BOTTOM_NAVIGATION) {
+            if (adaptiveNavigationType == AdaptiveNavigationType.BOTTOM_NAVIGATION
+                && !viewModel.readingMode) {
                 BottomNavBar(navController, context)
             }
         }
