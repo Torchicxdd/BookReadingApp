@@ -20,4 +20,12 @@
     <string name="library">Library Screen</string>
     <string name="reading">Reading Screen</string>
     <string name="search">Search Screen</string>
+
+    <string name="wood">The Mechanical Properties of Wood by Samuel J. Record</string>
+    <string name="plumbing">Elements of Plumbing by Samuel Edward Dibble</string>
+    <string name="hardware">Hardware, estimating, and mill design by William S. Lowndes</string>
+    <string name="steam">Steam, Its Generation and Use by Babcock &amp; Wilcox Company</string>
+    <string name="dairy">Outlines of Dairy Bacteriology, 8th edition by H. L. Russell</string>
+    <string name="mushroom">The Mushroom, Edible and Otherwise by Miron Elisha Hard</string>
+
 </resources>
