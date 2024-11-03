@@ -1,9 +1,14 @@
 package com.example.bookreadingapp.objects
 
+import NavBarItems
 import android.content.Context
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,11 +52,11 @@ fun NavigationHost(
     }
 }
 
-
 @Composable
 fun BottomNavBar(
     navController: NavHostController,
-    context: Context
+    context: Context,
+    modifier: Modifier = Modifier,
 ) {
     NavigationBar {
         val backStackEntry by navController.currentBackStackEntryAsState()
@@ -81,13 +86,42 @@ fun BottomNavBar(
 
 @Composable
 fun NavRail(
+    navController: NavHostController,
+    context: Context,
     modifier: Modifier = Modifier
 ) {
-    // Some Composable
+    NavigationBar {
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = backStackEntry?.destination?.route
+        val barItems = NavBarItems.getBarItems(context)
+
+        NavigationRail {
+            Spacer(Modifier.weight(1f))
+            barItems.forEach { navItem ->
+                NavigationRailItem(
+                    selected = currentRoute == navItem.route,
+                    onClick = {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    icon = {
+                        Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                    },
+                )
+            }
+            Spacer(Modifier.weight(1f))
+        }
+    }
 }
 
 @Composable
 fun PermanentNavDrawer(
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     // Some Composable
