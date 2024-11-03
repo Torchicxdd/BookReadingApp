@@ -1,9 +1,11 @@
 package com.example.bookreadingapp.screens
 
+import android.content.Context
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.bookreadingapp.R
 
 @Composable
-fun Search() {
-    Text(text = "Search Screen")
+fun Search(context: Context) {
+    Text(text = context.getString(R.string.search))
 }

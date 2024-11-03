@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.objects.BottomNavBar
@@ -30,11 +31,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BookReadingApp()  {
     val navController = rememberNavController()
+    val context = LocalContext.current
 
     Scaffold(
         content = {padding ->
             Column(Modifier.padding(padding)) {
-                NavigationHost(navController)
+                NavigationHost(navController, context)
             } },
         bottomBar = { BottomNavBar(navController) }
     )

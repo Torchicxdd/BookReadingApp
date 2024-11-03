@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.objects
 
+import android.content.Context
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -19,25 +20,26 @@ import com.example.bookreadingapp.screens.Search
 
 @Composable
 fun NavigationHost(
-    navController: NavHostController
+    navController: NavHostController,
+    context: Context
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home()
+            Home(context)
         }
         composable(Routes.Library.route) {
-            Library()
+            Library(context)
         }
         composable(Routes.Search.route) {
-            Search()
+            Search(context)
         }
         composable(Routes.ContentTable.route) {
-            ContentTable()
+            ContentTable(context)
         }
         composable(Routes.Reading.route) {
-            Reading()
+            Reading(context)
         }
     }
 }
