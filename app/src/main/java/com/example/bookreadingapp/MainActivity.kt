@@ -5,11 +5,10 @@ import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -27,6 +26,7 @@ import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.objects.PermanentNavDrawer
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.objects.TopAppBar
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
@@ -63,8 +63,13 @@ fun BookReadingApp(
     }
 
     Scaffold(
+        topBar = {
+            if(!viewModel.readingMode) {
+                TopAppBar()
+            }
+        },
         content = { padding ->
-            Row(Modifier.padding(padding)) {
+            Row {
                 // Navigation rail if medium screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.NAVIGATION_RAIL
                     && !viewModel.readingMode) {
@@ -78,7 +83,13 @@ fun BookReadingApp(
                 }
                 // Permanent Navigation Drawer is expanded screen size
                 if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-                    PermanentNavDrawer(navController, context)
+                    PermanentNavDrawer(
+                        navController,
+                        context,
+                        adaptiveNavigationType,
+                        modifier = Modifier
+                            .padding(padding)
+                            .fillMaxSize())
                 }
                 if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
                     Box(
@@ -86,7 +97,13 @@ fun BookReadingApp(
                             .fillMaxSize()
                             .padding(padding)
                     ) {
-                        NavigationHost(navController, context)
+                        NavigationHost(
+                            navController,
+                            context,
+                            adaptiveNavigationType,
+                            Modifier
+                                .padding(padding),
+                        )
                     }
                 }
             }
@@ -101,12 +118,16 @@ fun BookReadingApp(
     )
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    widthDp = 1200,
+    heightDp = 800
+)
 @Composable
 fun GreetingPreview() {
     BookReadingAppTheme {
         BookReadingApp(
-            windowSize = WindowWidthSizeClass.Medium
+            windowSize = WindowWidthSizeClass.Expanded
         )
     }
 }

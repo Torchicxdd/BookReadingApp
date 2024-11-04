@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_big">80dp</dimen>
+    <dimen name="padding_large">130dp</dimen>
+    <dimen name="image_size">250dp</dimen>
+    <dimen name="logo_size">285dp</dimen>
+    <dimen name="spacer_padding">5dp</dimen>
+</resources>

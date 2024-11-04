@@ -4,7 +4,19 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import NavBarItems
 import android.content.Context
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -17,7 +29,10 @@ import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -30,33 +45,39 @@ import com.example.bookreadingapp.screens.Library
 import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bookreadingapp.R
+import com.example.bookreadingapp.utils.AdaptiveNavigationType
+
 
 @Composable
 fun NavigationHost(
     navController: NavHostController,
     context: Context,
+    adaptiveNavigationType: AdaptiveNavigationType,
+    modifier: Modifier,
     viewModel: AppViewModel = viewModel()
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home(context, viewModel)
+            Home(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel)
+            Library(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.Search.route) {
-            Search(context, viewModel)
+            Search(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.ContentTable.route) {
-            ContentTable(context, viewModel)
+            ContentTable(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Reading.route) {
-            Reading(context, viewModel)
+            Reading(context, viewModel, adaptiveNavigationType)
         }
     }
 }
+
 
 @Composable
 fun BottomNavBar(
@@ -73,12 +94,14 @@ fun BottomNavBar(
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
                 onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    if (currentRoute != navItem.route) {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 icon = {
@@ -127,6 +150,7 @@ fun NavRail(
 fun PermanentNavDrawer(
     navController: NavHostController,
     context: Context,
+    adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -135,32 +159,72 @@ fun PermanentNavDrawer(
 
     PermanentNavigationDrawer(
         drawerContent = {
-            PermanentDrawerSheet(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Spacer(Modifier.weight(0.5f))
+            PermanentDrawerSheet {
+                Spacer(Modifier.weight(1f))
                 barItems.forEach { navItem ->
-                    NavigationDrawerItem(
-                        selected = currentRoute == navItem.route,
-                        onClick = {
-                            navController.navigate(navItem.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+                    Box(
+                        modifier = Modifier
+                            .padding(start = dimensionResource(R.dimen.padding_big))
+                    ) {
+                        NavigationDrawerItem(
+                            selected = currentRoute == navItem.route,
+                            onClick = {
+                                navController.navigate(navItem.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = {
-                            Icon(imageVector = navItem.image, contentDescription = navItem.title)
-                        },
-                        label = { Text(text = navItem.title) }
-                    )
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = navItem.image,
+                                    contentDescription = navItem.title
+                                )
+                            },
+                            label = { Text(text = navItem.title) }
+                        )
+                    }
                 }
                 Spacer(Modifier.weight(1f))
             }
         },
-        content = { NavigationHost(navController, context) },
-        modifier = modifier
+        content = {
+            Box(
+                modifier = modifier
+            ) {
+                NavigationHost(
+                    navController,
+                    context,
+                    adaptiveNavigationType,
+                    modifier = modifier.fillMaxSize())
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBar(modifier: Modifier = Modifier) {
+    // Determine if dark theme is active
+    val darkTheme = isSystemInDarkTheme()
+
+    CenterAlignedTopAppBar(
+        title = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(dimensionResource(R.dimen.logo_size))
+                        .padding(top = dimensionResource(R.dimen.spacer_padding)),
+                    painter = painterResource(
+                        id = if (darkTheme) R.drawable.dark_logo else R.drawable.light_logo
+                    ),
+                    contentDescription = null
+                )
+            }
+        }
     )
 }

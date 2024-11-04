@@ -1,24 +1,106 @@
 package com.example.bookreadingapp.screens
 
 import android.content.Context
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.bookreadingapp.R
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.Switch
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
+import androidx.compose.material3.Switch
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.data.books
+import com.example.bookreadingapp.objects.Routes
+import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 @Composable
-fun Reading(context: Context, viewModel: AppViewModel) {
-    Column {
-        Text(text = context.getString(R.string.reading))
-        Text(text = viewModel.exampleState)
+fun Reading(
+    context: Context,
+    viewModel: AppViewModel,
+    adaptiveNavigationType: AdaptiveNavigationType
+) {
+    // Set the top and bottom padding based on the adaptive navigation type
+    val topPadding = when (adaptiveNavigationType) {
+        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
+        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
+        else -> dimensionResource(R.dimen.padding_big)
+    }
 
-        Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") }) {
-            Text(text = "Change ViewModel state")
+    val bottomPadding = when (adaptiveNavigationType) {
+        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
+        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
+        else -> dimensionResource(R.dimen.padding_large)
+    }
+    val bookTitleResId = viewModel.selectedBookTitleResId
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = context.getString(R.string.reading),
+                style = MaterialTheme.typography.displayLarge
+            )
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") }) {
+                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
+            }
+
+            Switch(
+                checked = viewModel.readingMode,
+                onCheckedChange = { viewModel.updateReadingMode() })
+
+            val book = books.find { it.title == bookTitleResId }
+
+            if (book != null) {
+                BookDisplay(
+                    imageResourceId = book.imageResourceId,
+                    titleResourceId = book.title
+                )
+            } else {
+                // Handling the case where the book is not found
+                Text(
+                    text = context.getString(R.string.book_404),
+                    style = MaterialTheme.typography.displayMedium
+                )
+            }
         }
+    }
+}
 
-        Switch(checked =  viewModel.readingMode, onCheckedChange = { viewModel.updateReadingMode() })
+@Composable
+fun BookDisplay(
+    @DrawableRes imageResourceId: Int,
+    @StringRes titleResourceId: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.padding(dimensionResource(R.dimen.padding_small))
+    ) {
+        BookCover(imageResourceId)
+        Text(
+            text = stringResource(titleResourceId),
+            style = MaterialTheme.typography.displayMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium))
+        )
     }
 }
