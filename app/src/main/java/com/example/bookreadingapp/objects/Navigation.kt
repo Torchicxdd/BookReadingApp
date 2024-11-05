@@ -151,6 +151,7 @@ fun PermanentNavDrawer(
     navController: NavHostController,
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
+    viewModel: AppViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -159,35 +160,37 @@ fun PermanentNavDrawer(
 
     PermanentNavigationDrawer(
         drawerContent = {
-            PermanentDrawerSheet {
-                Spacer(Modifier.weight(1f))
-                barItems.forEach { navItem ->
-                    Box(
-                        modifier = Modifier
-                            .padding(start = dimensionResource(R.dimen.padding_big))
-                    ) {
-                        NavigationDrawerItem(
-                            selected = currentRoute == navItem.route,
-                            onClick = {
-                                navController.navigate(navItem.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+            if (!viewModel.readingMode) {
+                PermanentDrawerSheet {
+                    Spacer(Modifier.weight(1f))
+                    barItems.forEach { navItem ->
+                        Box(
+                            modifier = Modifier
+                                .padding(start = dimensionResource(R.dimen.padding_big))
+                        ) {
+                            NavigationDrawerItem(
+                                selected = currentRoute == navItem.route,
+                                onClick = {
+                                    navController.navigate(navItem.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = navItem.image,
-                                    contentDescription = navItem.title
-                                )
-                            },
-                            label = { Text(text = navItem.title) }
-                        )
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = navItem.image,
+                                        contentDescription = navItem.title
+                                    )
+                                },
+                                label = { Text(text = navItem.title) }
+                            )
+                        }
                     }
+                    Spacer(Modifier.weight(1f))
                 }
-                Spacer(Modifier.weight(1f))
             }
         },
         content = {
