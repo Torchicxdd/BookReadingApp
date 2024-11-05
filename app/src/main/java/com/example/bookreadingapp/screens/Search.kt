@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextField
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -37,5 +38,20 @@ fun Search(
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }
+        SearchBar(viewModel, context)
     }
+}
+
+@Composable
+fun SearchBar(viewModel: AppViewModel, context: Context) {
+    TextField(
+        value = viewModel.searchBarInput,
+        onValueChange = { viewModel.updateSearchBarInput(it)},
+        label = {
+            Text(
+                text = context.getString(R.string.search_input),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+    )
 }
