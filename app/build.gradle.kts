@@ -56,6 +56,26 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:2.5.3")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation("androidx.compose.material3:material3-window-size-class")
+    androidTestImplementation ("androidx.navigation:navigation-compose:2.6.0") // Or the latest stable version
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.5.0") // Or the latest version
+
+    implementation(libs.androidx.navigation.testing)
+
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation("org.mockito:mockito-core:4.8.0")
+    testImplementation("org.mockito:mockito-android:4.8.0")
+
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+
+    testImplementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
+    testImplementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
+
+    androidTestImplementation("junit:junit:4.13.2")
+    androidTestImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    androidTestImplementation("org.mockito:mockito-android:5.5.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
