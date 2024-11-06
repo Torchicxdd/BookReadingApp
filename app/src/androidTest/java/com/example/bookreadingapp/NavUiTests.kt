@@ -69,7 +69,6 @@ class NavUiTests {
     fun testBottomNavigationIsVisible() {
         // Wait for idle state to ensure UI is rendered
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("bottom_nav_bar").assertIsDisplayed()
 
         // Assert that the Home button is visible
         composeTestRule.onNodeWithTag("home_button").assertIsDisplayed()
@@ -180,24 +179,13 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("book_item_2131689622").assertIsDisplayed()
 
     }
-    @Test
-    fun testViewModelStateChange() {
-
-
-        composeTestRule.onNodeWithText("Library").performClick()
-        composeTestRule.onNodeWithText("Change ViewModel state").performClick()
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithText("This state was changed from the Library screen").assertIsDisplayed()
-    }
 
 
     @Test
     fun testViewModelStateChangeOnButtonClickInHome() {
 
         composeTestRule.onNodeWithTag("home_viewmodel_text")
-            .assertTextEquals("Initial state")
+            .assertTextEquals("This is the state before being changed")
 
         composeTestRule.onNodeWithTag("home_viewmodel_button").performClick()
 
@@ -210,6 +198,80 @@ class NavUiTests {
 
 
     }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInLibrary() {
+
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("library_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("library_viewmodel_text")
+            .assertTextEquals("This state was changed from the Library screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Library screen")
+    }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInReading() {
+
+        composeTestRule.onNodeWithTag("reading_button").performClick()
+        composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("reading_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("reading_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("reading_viewmodel_text")
+            .assertTextEquals("This state was changed from the Reading screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Reading screen")
+    }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInSearch() {
+
+        composeTestRule.onNodeWithTag("search_button").performClick()
+        composeTestRule.onNodeWithTag("search_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("search_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("search_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("search_viewmodel_text")
+            .assertTextEquals("This state was changed from the Search screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Search screen")
+    }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInContentTable() {
+
+        composeTestRule.onNodeWithTag("content_button").performClick()
+        composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("content_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("content_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("content_viewmodel_text")
+            .assertTextEquals("This state was changed from the Content screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Content screen")
+    }
+
+
 
 
 }

@@ -35,8 +35,10 @@ fun ContentTable(
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Content screen") }) {
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.testTag("content_viewmodel_text"))
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Content screen") },
+                modifier = Modifier.testTag("content_viewmodel_button")) {
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }

@@ -27,13 +27,13 @@
       <SelectionState runConfigName="testNavigateToLibraryScreen()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testInitialNavigationToHomeScreen()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="testNavigateToReadingScreenFromLibrary()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="testViewModelStateChangeOnButtonClickInHome()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testViewModelStateChangeOnButtonClickInLibrary()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

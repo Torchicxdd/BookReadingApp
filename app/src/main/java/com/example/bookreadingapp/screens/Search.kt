@@ -46,7 +46,7 @@ fun Search(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .testTag("reading_screen")
+            .testTag("search_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,8 +54,10 @@ fun Search(
                 .fillMaxWidth()
         ) {
             Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Search screen") }) {
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.testTag("search_viewmodel_text"))
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Search screen") },
+                modifier = Modifier.testTag("search_viewmodel_button")) {
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }
