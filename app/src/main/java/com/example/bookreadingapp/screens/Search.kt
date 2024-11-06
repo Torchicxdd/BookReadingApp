@@ -24,6 +24,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.navigation.compose.rememberNavController
@@ -45,6 +46,7 @@ fun Search(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("search_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,8 +54,10 @@ fun Search(
                 .fillMaxWidth()
         ) {
             Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Search screen") }) {
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.testTag("search_viewmodel_text"))
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Search screen") },
+                modifier = Modifier.testTag("search_viewmodel_button")) {
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }

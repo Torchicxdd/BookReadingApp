@@ -19,6 +19,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.data.Book
@@ -36,6 +37,7 @@ fun Reading(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("reading_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,8 +48,10 @@ fun Reading(
                 text = context.getString(R.string.reading),
                 style = MaterialTheme.typography.displayLarge
             )
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") }) {
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.testTag("reading_viewmodel_text"))
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") },
+                modifier = Modifier.testTag("reading_viewmodel_button")) {
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
 

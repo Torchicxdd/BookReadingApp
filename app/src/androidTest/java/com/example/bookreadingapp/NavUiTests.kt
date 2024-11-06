@@ -7,20 +7,29 @@ import com.example.bookreadingapp.objects.TopAppBar
 
 
 import android.content.Context
+import androidx.activity.compose.setContent
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.objects.Routes
@@ -29,156 +38,130 @@ import com.example.bookreadingapp.screens.Home
 import com.example.bookreadingapp.screens.Library
 import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
+import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
 
+@RunWith(AndroidJUnit4::class)
 class NavUiTests {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
 
-    private fun setupNavigationScreen() {
+    @Before
+    fun setUP() {
         composeTestRule.setContent {
-
-            val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = Routes.Home.route) {
-                composable(Routes.Home.route) {
-                    Home(
-                        context = ApplicationProvider.getApplicationContext(),
-                        viewModel = AppViewModel(),
-                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-                    )
-                }
-                composable(Routes.Library.route) {
-                    Library(
-                        context = ApplicationProvider.getApplicationContext(),
-                        viewModel = AppViewModel(),
-                        navController = navController,
-                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-                    )
-                }
-                composable(Routes.Reading.route) {
-                    Reading(
-                        context = ApplicationProvider.getApplicationContext(),
-                        viewModel = AppViewModel(),
-                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-                    )
-                }
-                composable(Routes.Search.route) {
-                    Search(
-                        context = ApplicationProvider.getApplicationContext(),
-                        viewModel = AppViewModel(),
-                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-                    )
-                }
-                composable(Routes.ContentTable.route) {
-                    ContentTable(
-                        context = ApplicationProvider.getApplicationContext(),
-                        viewModel = AppViewModel(),
-                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-                    )
-                }
+            BookReadingAppTheme {
+                BookReadingApp(
+                    windowSize = WindowWidthSizeClass.Compact
+                )
             }
-            BottomNavBar(navController = navController, context = ApplicationProvider.getApplicationContext())
         }
     }
 
 
-
     @Test
     fun testBottomNavigationIsVisible() {
+        // Wait for idle state to ensure UI is rendered
+        composeTestRule.waitForIdle()
 
-        setupNavigationScreen()
+        // Assert that the Home button is visible
+        composeTestRule.onNodeWithTag("home_button").assertIsDisplayed()
 
+        // Assert that the Library button is visible
+        composeTestRule.onNodeWithTag("library_button").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Home").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Library").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Reading Mode").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Table of Content").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Search").assertIsDisplayed()
+        // Assert that the Search button is visible
+        composeTestRule.onNodeWithTag("search_button").assertIsDisplayed()
 
+        // Assert that the Content Table button is visible
+        composeTestRule.onNodeWithTag("content_button").assertIsDisplayed()
+
+        // Assert that the Reading button is visible
+        composeTestRule.onNodeWithTag("reading_button").assertIsDisplayed()
     }
 
     @Test
     fun testInitialNavigationToHomeScreen() {
-        setupNavigationScreen()
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
     }
 
     @Test
     fun testNavigateToLibraryScreen() {
 
-        setupNavigationScreen()
+
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Library").performClick()
+        composeTestRule.onNodeWithTag("library_button").performClick()
 
-        composeTestRule.onNodeWithText("Library Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
     }
 
 
 
     @Test
     fun testNavigateToReadingScreenFromLibrary() {
-        setupNavigationScreen()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Library").performClick()
-        composeTestRule.onNodeWithText("The Mechanical Properties of Wood by Samuel J. Record").performClick()
+
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131689622").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131689622").performClick()
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Reading Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
     }
 
     @Test
     fun testNavigateToSearchScreen() {
 
-        setupNavigationScreen()
+
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Search").performClick()
+        composeTestRule.onNodeWithTag("search_button").performClick()
 
-        composeTestRule.onNodeWithText("Search Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("search_screen").assertIsDisplayed()
     }
 
     @Test
     fun testNavigateToContentTableScreen() {
 
-        setupNavigationScreen()
+
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Home").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Table of Content", ignoreCase = true).performClick()
+        composeTestRule.onNodeWithTag("content_button").performClick()
 
-        composeTestRule.onNodeWithText("Table of Content Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
     }
 
     @Test
     fun testNavigateToReadingScreen() {
 
-        setupNavigationScreen()
+
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Home").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Reading Mode", ignoreCase = true).performClick()
+        composeTestRule.onNodeWithTag("reading_button").performClick()
 
-        composeTestRule.onNodeWithText("Reading Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
     }
 
 
@@ -188,39 +171,107 @@ class NavUiTests {
 
     @Test
     fun testLibraryScreenDisplaysCorrectly() {
-        setupNavigationScreen()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithText("Library").performClick()
-        val expectedText = "Library Screen"
-        composeTestRule.onNodeWithText(expectedText).assertIsDisplayed()
-        composeTestRule.onNodeWithText("The Mechanical Properties of Wood by Samuel J. Record").isDisplayed()
-
-    }
-    @Test
-    fun testViewModelStateChange() {
-        setupNavigationScreen()
-
-        composeTestRule.onNodeWithText("Library").performClick()
-        composeTestRule.onNodeWithText("Change ViewModel state").performClick()
 
         composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131689622").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("This state was changed from the Library screen").assertIsDisplayed()
     }
 
 
     @Test
-    fun testViewModelStateChangeOnButtonClick() {
-        setupNavigationScreen()
+    fun testViewModelStateChangeOnButtonClickInHome() {
 
-        composeTestRule.onNodeWithText("Change ViewModel state").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("home_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Home screen")
+
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("library_viewmodel_text")
+            .assertTextEquals("This state was changed from the Home screen")
 
 
-        composeTestRule.waitForIdle()
-
-
-        composeTestRule.onNodeWithText("This state was changed from the Home screen").assertIsDisplayed()
     }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInLibrary() {
+
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("library_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("library_viewmodel_text")
+            .assertTextEquals("This state was changed from the Library screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Library screen")
+    }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInReading() {
+
+        composeTestRule.onNodeWithTag("reading_button").performClick()
+        composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("reading_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("reading_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("reading_viewmodel_text")
+            .assertTextEquals("This state was changed from the Reading screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Reading screen")
+    }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInSearch() {
+
+        composeTestRule.onNodeWithTag("search_button").performClick()
+        composeTestRule.onNodeWithTag("search_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("search_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("search_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("search_viewmodel_text")
+            .assertTextEquals("This state was changed from the Search screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Search screen")
+    }
+
+    @Test
+    fun testViewModelStateChangeOnButtonClickInContentTable() {
+
+        composeTestRule.onNodeWithTag("content_button").performClick()
+        composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("content_viewmodel_text")
+            .assertTextEquals("This is the state before being changed")
+
+        composeTestRule.onNodeWithTag("content_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("content_viewmodel_text")
+            .assertTextEquals("This state was changed from the Content screen")
+
+        composeTestRule.onNodeWithTag("home_button").performClick()
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Content screen")
+    }
+
+
 
 
 }

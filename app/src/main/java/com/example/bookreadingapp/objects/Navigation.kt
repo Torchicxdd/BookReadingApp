@@ -31,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -65,15 +66,19 @@ fun NavigationHost(
         }
         composable(Routes.Library.route) {
             Library(context, viewModel, navController, adaptiveNavigationType)
+
         }
         composable(Routes.Search.route) {
             Search(context, viewModel, adaptiveNavigationType)
+
         }
         composable(Routes.ContentTable.route) {
             ContentTable(context, viewModel, adaptiveNavigationType)
+
         }
         composable(Routes.Reading.route) {
             Reading(context, viewModel, adaptiveNavigationType)
+
         }
     }
 }
@@ -89,7 +94,7 @@ fun BottomNavBar(
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
         val barItems = NavBarItems.getBarItems(context)
-
+        //Text("BottomNavBar", modifier = Modifier.testTag("bottom_nav_bar"))
         barItems.forEach { navItem ->
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
@@ -107,7 +112,8 @@ fun BottomNavBar(
                 icon = {
                     Icon(imageVector = navItem.image, contentDescription = navItem.title)
                 },
-                label = { Text(text = navItem.title) }
+                label = { Text(text = navItem.title) },
+                modifier = navItem.modifier
             )
         }
     }
