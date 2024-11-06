@@ -31,7 +31,7 @@ class AppViewModel : ViewModel() {
 
     fun performSearch() {
         if (searchBarInput.isNotBlank()) {
-            searchResultText = "Searching the word ${searchBarInput}"
+            searchResultText = "Searching for the word ${searchBarInput}"
         }
     }
 }
