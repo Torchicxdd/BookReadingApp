@@ -19,6 +19,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.data.Book
@@ -36,6 +37,7 @@ fun Reading(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("reading_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

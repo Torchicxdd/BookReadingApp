@@ -12,6 +12,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -52,53 +53,6 @@ class NavUiTests {
     val composeTestRule = createComposeRule()
 
 
-//    private fun setupNavigationScreen() {
-//        composeTestRule.setContent {
-//
-//            val navController = rememberNavController()
-//            NavHost(navController = navController, startDestination = Routes.Home.route) {
-//                composable(Routes.Home.route) {
-//                    Home(
-//                        context = ApplicationProvider.getApplicationContext(),
-//                        viewModel = AppViewModel(),
-//                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION,
-//                        modifier = Modifier.testTag("home_screen")
-//                    )
-//                }
-//                composable(Routes.Library.route) {
-//                    Library(
-//                        context = ApplicationProvider.getApplicationContext(),
-//                        viewModel = AppViewModel(),
-//                        navController = navController,
-//                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-//                    )
-//                }
-//                composable(Routes.Reading.route) {
-//                    Reading(
-//                        context = ApplicationProvider.getApplicationContext(),
-//                        viewModel = AppViewModel(),
-//                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-//                    )
-//                }
-//                composable(Routes.Search.route) {
-//                    Search(
-//                        context = ApplicationProvider.getApplicationContext(),
-//                        viewModel = AppViewModel(),
-//                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-//                    )
-//                }
-//                composable(Routes.ContentTable.route) {
-//                    ContentTable(
-//                        context = ApplicationProvider.getApplicationContext(),
-//                        viewModel = AppViewModel(),
-//                        adaptiveNavigationType = AdaptiveNavigationType.BOTTOM_NAVIGATION
-//                    )
-//                }
-//            }
-//            BottomNavBar(navController = navController, context = ApplicationProvider.getApplicationContext())
-//        }
-//    }
-
     @Before
     fun setUP() {
         composeTestRule.setContent {
@@ -111,13 +65,11 @@ class NavUiTests {
     }
 
 
-
-
     @Test
     fun testBottomNavigationIsVisible() {
         // Wait for idle state to ensure UI is rendered
         composeTestRule.waitForIdle()
-        //composeTestRule.onNodeWithTag("bottom_nav_bar").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("bottom_nav_bar").assertIsDisplayed()
 
         // Assert that the Home button is visible
         composeTestRule.onNodeWithTag("home_button").assertIsDisplayed()
@@ -148,11 +100,11 @@ class NavUiTests {
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Library").performClick()
+        composeTestRule.onNodeWithTag("library_button").performClick()
 
-        composeTestRule.onNodeWithText("Library Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
     }
 
 
@@ -161,13 +113,14 @@ class NavUiTests {
     fun testNavigateToReadingScreenFromLibrary() {
 
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Library").performClick()
-        composeTestRule.onNodeWithText("The Mechanical Properties of Wood by Samuel J. Record").performClick()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131689622").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131689622").performClick()
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Reading Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
     }
 
     @Test
@@ -177,11 +130,11 @@ class NavUiTests {
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Search").performClick()
+        composeTestRule.onNodeWithTag("search_button").performClick()
 
-        composeTestRule.onNodeWithText("Search Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("search_screen").assertIsDisplayed()
     }
 
     @Test
@@ -191,12 +144,11 @@ class NavUiTests {
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Home").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Table of Content", ignoreCase = true).performClick()
+        composeTestRule.onNodeWithTag("content_button").performClick()
 
-        composeTestRule.onNodeWithText("Table of Content Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
     }
 
     @Test
@@ -206,12 +158,11 @@ class NavUiTests {
 
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Home Screen").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Home").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Reading Mode", ignoreCase = true).performClick()
+        composeTestRule.onNodeWithTag("reading_button").performClick()
 
-        composeTestRule.onNodeWithText("Reading Screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
     }
 
 
@@ -223,10 +174,10 @@ class NavUiTests {
     fun testLibraryScreenDisplaysCorrectly() {
 
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithText("Library").performClick()
-        val expectedText = "Library Screen"
-        composeTestRule.onNodeWithText(expectedText).assertIsDisplayed()
-        composeTestRule.onNodeWithText("The Mechanical Properties of Wood by Samuel J. Record").isDisplayed()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131689622").assertIsDisplayed()
 
     }
     @Test
@@ -243,16 +194,21 @@ class NavUiTests {
 
 
     @Test
-    fun testViewModelStateChangeOnButtonClick() {
+    fun testViewModelStateChangeOnButtonClickInHome() {
+
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("Initial state")
+
+        composeTestRule.onNodeWithTag("home_viewmodel_button").performClick()
+
+        composeTestRule.onNodeWithTag("home_viewmodel_text")
+            .assertTextEquals("This state was changed from the Home screen")
+
+        composeTestRule.onNodeWithTag("library_button").performClick()
+        composeTestRule.onNodeWithTag("library_viewmodel_text")
+            .assertTextEquals("This state was changed from the Home screen")
 
 
-        composeTestRule.onNodeWithText("Change ViewModel state").performClick()
-
-
-        composeTestRule.waitForIdle()
-
-
-        composeTestRule.onNodeWithText("This state was changed from the Home screen").assertIsDisplayed()
     }
 
 

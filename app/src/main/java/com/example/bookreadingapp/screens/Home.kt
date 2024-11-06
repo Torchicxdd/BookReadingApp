@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
@@ -20,12 +21,12 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 fun Home(
     context: Context,
     viewModel: AppViewModel,
-    adaptiveNavigationType: AdaptiveNavigationType,
-    modifier: Modifier
+    adaptiveNavigationType: AdaptiveNavigationType
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("home_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -34,7 +35,8 @@ fun Home(
         ) {
             Text(text = context.getString(R.string.home), style = MaterialTheme.typography.displayLarge)
             Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Home screen") }) {
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Home screen") },
+                modifier = Modifier.testTag("home_viewmodel_button")) {
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
         }

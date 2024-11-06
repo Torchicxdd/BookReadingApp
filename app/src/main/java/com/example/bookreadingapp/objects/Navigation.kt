@@ -62,23 +62,23 @@ fun NavigationHost(
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home(context, viewModel, adaptiveNavigationType, Modifier.testTag("home_screen"))
+            Home(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Library.route) {
             Library(context, viewModel, navController, adaptiveNavigationType)
-                modifier.testTag("library_screen")
+
         }
         composable(Routes.Search.route) {
             Search(context, viewModel, adaptiveNavigationType)
-            modifier.testTag("search_screen")
+
         }
         composable(Routes.ContentTable.route) {
             ContentTable(context, viewModel, adaptiveNavigationType)
-            modifier.testTag("contentTable_screen")
+
         }
         composable(Routes.Reading.route) {
             Reading(context, viewModel, adaptiveNavigationType)
-            modifier.testTag("reading_screen")
+
         }
     }
 }

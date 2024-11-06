@@ -24,6 +24,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.navigation.compose.rememberNavController
@@ -45,6 +46,7 @@ fun Search(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("reading_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
