@@ -11,6 +11,7 @@ class AppViewModel : ViewModel() {
     var readingMode by mutableStateOf(false)
     var selectedBookTitleResId by mutableStateOf(0)
     var searchBarInput by mutableStateOf("")
+    var searchResultText by mutableStateOf("")
 
     fun updateExampleState(newText: String) {
         exampleState = newText
@@ -26,5 +27,11 @@ class AppViewModel : ViewModel() {
 
     fun updateSearchBarInput(newInput: String) {
         searchBarInput = newInput
+    }
+
+    fun performSearch() {
+        if (searchBarInput.isNotBlank()) {
+            searchResultText = "Searching the word ${searchBarInput}"
+        }
     }
 }
