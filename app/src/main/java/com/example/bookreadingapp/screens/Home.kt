@@ -20,7 +20,8 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 fun Home(
     context: Context,
     viewModel: AppViewModel,
-    adaptiveNavigationType: AdaptiveNavigationType
+    adaptiveNavigationType: AdaptiveNavigationType,
+    modifier: Modifier
 ) {
     Column(
         modifier = Modifier
