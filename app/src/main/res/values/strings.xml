@@ -30,5 +30,6 @@
     <string name="mushroom">The Mushroom, Edible and Otherwise by Miron Elisha Hard</string>
 
     <string name="book_404">Book not found</string>
+    <string name="search_input">Search for</string>
 
 </resources>

@@ -47,7 +47,7 @@ val Typography = Typography(
     labelSmall = TextStyle(
         fontFamily = NotoSerif,
         fontWeight = FontWeight.Bold,
-        fontSize = 14.sp
+        fontSize = 16.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = Prompt,
