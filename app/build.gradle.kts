@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -17,6 +18,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        kapt{
+            arguments{
+                arg("room.schemaLocation, $projectDir/schemas")
+            }
         }
     }
 
@@ -75,6 +81,8 @@ dependencies {
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     androidTestImplementation("org.mockito:mockito-android:5.5.0")
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
