@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.screens
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,6 +48,7 @@ fun Library(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("library_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -61,13 +64,17 @@ fun Library(
             modifier = Modifier
                 .fillMaxSize(),
             content = {
+
                 items(books) { book ->
                     BookItem(book = book, onClick = {
                         viewModel.updateBookTitle(book.title)
                         navController.navigate(Routes.ContentTable.route) {
                             popUpTo(Routes.Library.route) { inclusive = true }
                         }
-                    })
+                    }, modifier = Modifier.testTag("book_item_${book.title}"))
+                    Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
+
+
                 }
             }
         )

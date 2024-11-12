@@ -5,13 +5,16 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import com.example.bookreadingapp.R
 
 data class BarItem(
     val title: String,
     val image: ImageVector,
-    val route: String
+    val route: String,
+    val modifier: Modifier
 )
 
 object NavBarItems {
@@ -22,21 +25,24 @@ object NavBarItems {
             BarItem(
                 title = context.getString(R.string.home_icon_title),
                 image = Icons.Filled.Home,
-                route = "home"
+                route = "home",
+                modifier = Modifier.testTag("home_button")
             )
         )
         items.add(
             BarItem(
                 title = context.getString(R.string.library_icon_title),
                 image = Icons.Filled.MoreVert,
-                route = "library"
+                route = "library",
+                modifier = Modifier.testTag("library_button")
             )
         )
         items.add(
             BarItem(
                 title = context.getString(R.string.search_icon_title),
                 image = Icons.Filled.Search,
-                route = "search"
+                route = "search",
+                modifier = Modifier.testTag("search_button")
             )
         )
 //        items.add(

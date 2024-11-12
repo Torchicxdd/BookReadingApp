@@ -19,6 +19,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
@@ -34,22 +35,11 @@ fun Reading(
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
-    // Set the top and bottom padding based on the adaptive navigation type
-    val topPadding = when (adaptiveNavigationType) {
-        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
-        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
-        else -> dimensionResource(R.dimen.padding_big)
-    }
-
-    val bottomPadding = when (adaptiveNavigationType) {
-        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
-        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
-        else -> dimensionResource(R.dimen.padding_large)
-    }
     val bookTitleResId = viewModel.selectedBookTitleResId
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("reading_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

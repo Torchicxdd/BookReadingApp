@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavController
 import com.example.bookreadingapp.objects.AppViewModel
@@ -28,6 +29,7 @@ fun ContentTable(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("content_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
