@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavController
 import com.example.bookreadingapp.objects.AppViewModel
+import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 @Composable
@@ -35,10 +36,11 @@ fun ContentTable(
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
             Button(
-                onClick = { viewModel.updateExampleState("This state was changed from the Content screen")
-                }
+                onClick = {
+                    navController.navigate(Routes.Reading.route) {
+                    popUpTo(Routes.ContentTable.route) { inclusive = true }
+                } }
             ){
                 Text(text = "Navigate to Reading Screen", style = MaterialTheme.typography.labelSmall)
             }

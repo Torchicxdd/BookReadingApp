@@ -58,10 +58,6 @@ fun Reading(
                 text = context.getString(R.string.reading),
                 style = MaterialTheme.typography.displayLarge
             )
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") }) {
-                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
-            }
 
             Switch(
                 checked = viewModel.readingMode,

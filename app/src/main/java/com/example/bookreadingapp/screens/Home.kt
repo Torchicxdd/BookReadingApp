@@ -32,10 +32,6 @@ fun Home(
                 .fillMaxWidth()
         ) {
             Text(text = context.getString(R.string.home), style = MaterialTheme.typography.displayLarge)
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Home screen") }) {
-                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
-            }
         }
     }
 }

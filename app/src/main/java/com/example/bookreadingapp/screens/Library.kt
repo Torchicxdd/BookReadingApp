@@ -53,10 +53,6 @@ fun Library(
                 .fillMaxWidth()
         ) {
             Text(text = context.getString(R.string.library), style = MaterialTheme.typography.displayLarge)
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Library screen") }) {
-                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
-            }
         }
 
         // LazyVerticalGrid for the book items
