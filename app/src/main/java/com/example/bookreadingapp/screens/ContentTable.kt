@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.navigation.NavController
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
@@ -20,6 +21,7 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 fun ContentTable(
     context: Context,
     viewModel: AppViewModel,
+    navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
     Column(
@@ -34,8 +36,11 @@ fun ContentTable(
         ) {
             Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
             Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Content screen") }) {
-                Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
+            Button(
+                onClick = { viewModel.updateExampleState("This state was changed from the Content screen")
+                }
+            ){
+                Text(text = "Navigate to Reading Screen", style = MaterialTheme.typography.labelSmall)
             }
         }
     }

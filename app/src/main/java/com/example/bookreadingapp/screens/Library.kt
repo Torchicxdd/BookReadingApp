@@ -68,7 +68,7 @@ fun Library(
                 items(books) { book ->
                     BookItem(book = book, onClick = {
                         viewModel.updateBookTitle(book.title)
-                        navController.navigate(Routes.Reading.route) {
+                        navController.navigate(Routes.ContentTable.route) {
                             popUpTo(Routes.Library.route) { inclusive = true }
                         }
                     })
