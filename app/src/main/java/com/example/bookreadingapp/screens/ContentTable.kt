@@ -36,6 +36,7 @@ fun ContentTable(
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
+            Text(text = "Book Chosen: ${viewModel.selectedBookTitleResId}")
             Button(
                 onClick = {
                     navController.navigate(Routes.Reading.route) {

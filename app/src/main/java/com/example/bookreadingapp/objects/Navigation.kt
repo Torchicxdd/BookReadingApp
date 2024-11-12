@@ -73,7 +73,7 @@ fun NavigationHost(
             ContentTable(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.Reading.route) {
-            Reading(context, viewModel, adaptiveNavigationType)
+            Reading(context, viewModel, navController, adaptiveNavigationType)
         }
     }
 }

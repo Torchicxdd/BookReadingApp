@@ -21,6 +21,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavController
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
 import com.example.bookreadingapp.objects.Routes
@@ -30,6 +31,7 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 fun Reading(
     context: Context,
     viewModel: AppViewModel,
+    navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
     // Set the top and bottom padding based on the adaptive navigation type
@@ -76,6 +78,13 @@ fun Reading(
                     text = context.getString(R.string.book_404),
                     style = MaterialTheme.typography.displayMedium
                 )
+            }
+            Button(onClick = {
+                navController.navigate(Routes.ContentTable.route) {
+                    popUpTo(Routes.Reading.route) { inclusive = true }
+                }
+            }) {
+                Text(text = "Return to Table of Content")
             }
         }
     }
