@@ -10,6 +10,8 @@ class AppViewModel : ViewModel() {
     var exampleState by mutableStateOf("This is the state before being changed")
     var readingMode by mutableStateOf(false)
     var selectedBookTitleResId by mutableStateOf(0)
+    var searchBarInput by mutableStateOf("")
+    var searchResultText by mutableStateOf("")
 
     fun updateExampleState(newText: String) {
         exampleState = newText
@@ -21,5 +23,15 @@ class AppViewModel : ViewModel() {
 
     fun updateBookTitle(resId: Int) {
         selectedBookTitleResId = resId
+    }
+
+    fun updateSearchBarInput(newInput: String) {
+        searchBarInput = newInput
+    }
+
+    fun performSearch() {
+        if (searchBarInput.isNotBlank()) {
+            searchResultText = "Searching for the word ${searchBarInput}"
+        }
     }
 }

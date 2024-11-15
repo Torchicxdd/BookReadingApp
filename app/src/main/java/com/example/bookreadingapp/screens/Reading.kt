@@ -19,6 +19,7 @@ import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.data.Book
@@ -32,22 +33,11 @@ fun Reading(
     viewModel: AppViewModel,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
-    // Set the top and bottom padding based on the adaptive navigation type
-    val topPadding = when (adaptiveNavigationType) {
-        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
-        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
-        else -> dimensionResource(R.dimen.padding_big)
-    }
-
-    val bottomPadding = when (adaptiveNavigationType) {
-        AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER -> dimensionResource(R.dimen.padding_small)
-        AdaptiveNavigationType.NAVIGATION_RAIL -> dimensionResource(R.dimen.spacer_padding) // Smaller padding for rail mode
-        else -> dimensionResource(R.dimen.padding_large)
-    }
     val bookTitleResId = viewModel.selectedBookTitleResId
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("reading_screen")
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -58,8 +48,10 @@ fun Reading(
                 text = context.getString(R.string.reading),
                 style = MaterialTheme.typography.displayLarge
             )
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") }) {
+            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.testTag("reading_viewmodel_text"))
+            Button(onClick = { viewModel.updateExampleState("This state was changed from the Reading screen") },
+                modifier = Modifier.testTag("reading_viewmodel_button")) {
                 Text(text = "Change ViewModel state", style = MaterialTheme.typography.labelSmall)
             }
 
