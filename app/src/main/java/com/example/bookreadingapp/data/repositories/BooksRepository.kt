@@ -17,4 +17,10 @@ class BooksRepository(private val booksDao: BooksDao) {
         }
     }
 
+    fun deleteBook(id: Int) {
+        coroutineScope.launch(Dispatchers.IO) {
+            booksDao.deleteBook(id)
+        }
+    }
+
 }
