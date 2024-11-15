@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.bookreadingapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -56,6 +56,13 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.6.0")
+    implementation("androidx.room:room-ktx:2.6.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation("androidx.compose.foundation:foundation-layout-android:1.5.4")
+    annotationProcessor("androidx.room:room-compiler:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
