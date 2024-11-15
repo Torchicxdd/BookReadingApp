@@ -33,4 +33,23 @@
 
     <string name="book_404">Livre non trouvé</string>
     <string name="search_input">Rechercher</string>
+
+    <string name="welcome_message">Bienvenue dans l\'application BookWorm !</string>
+    <string-array name="app_description">
+        <item>Cette application a été créée par Smadja Eliana, Parker David, Do Hoang Hai et Maara Vanessa Purici.</item>
+        <item>C\'est notre projet final pour le cours de Développement Mobile pendant notre 5ème semestre en Informatique au Collège Dawson.</item>
+        <item>BookWorm vous permet de découvrir, explorer et profiter d\'une collection de livres directement sur votre appareil !</item>
+        <item>Commencez votre aventure de lecture dès aujourd\'hui et plongez dans le monde de la connaissance et des histoires !</item>
+    </string-array>
+
+    <string name="how_to_use_title">Comment utiliser :</string>
+    <string-array name="how_to_use_steps">
+        <item>Pour voir les livres disponibles, consultez notre bibliothèque !</item>
+        <item>Une fois que vous avez choisi un livre, cliquez sur sa couverture.</item>
+        <item>Cela vous amènera à un nouvel écran où vous pourrez :</item>
+        <item>Passer en mode lecture,</item>
+        <item>Voir la table des matières, ou</item>
+        <item>Rechercher un mot dans le livre.</item>
+    </string-array>
+
 </resources>
