@@ -12,7 +12,7 @@ interface BooksDao {
     fun insertBook(book: Books)
 
     @Query("SELECT * FROM books")
-    fun getAttBooks(): LiveData<List<Books>>
+    fun getAllBooks(): LiveData<List<Books>>
 
     @Query("SELECT * FROM books WHERE bookId=:id")
     fun findBookById(id: Int): List<Books>
