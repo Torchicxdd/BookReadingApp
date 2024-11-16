@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.BookReadingApp
@@ -77,6 +78,7 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
             .padding(horizontal = dimensionResource(R.dimen.padding_small))
             .fillMaxWidth()
     ) {
+        Text(text = "Searching for word in ${stringResource(viewModel.selectedBookTitleResId)}")
         OutlinedTextField(
             value = viewModel.searchBarInput,
             singleLine = true,

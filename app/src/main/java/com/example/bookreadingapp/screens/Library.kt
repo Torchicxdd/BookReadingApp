@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -45,6 +46,22 @@ fun Library(
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
+    // Track the bookDeselected state from the ViewModel, default to true initially
+    val bookDeselected = viewModel.bookDeselected ?: true
+
+    // Handle navigation only when book is selected
+    LaunchedEffect(bookDeselected) {
+        // Ensure navigation happens only once when book is selected
+        if (!bookDeselected) {
+            navController.navigate(Routes.ContentTable.route) {
+                popUpTo(Routes.Library.route) { inclusive = true }
+                popUpTo(Routes.Home.route) { inclusive = true }
+            }
+        }
+        // After navigating, mark the book as deselected to prevent looping navigation
+        viewModel.updateBookDeselected(true)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,17 +81,14 @@ fun Library(
             modifier = Modifier
                 .fillMaxSize(),
             content = {
-
                 items(books) { book ->
                     BookItem(book = book, onClick = {
+                        // Set bookSelected to true when a book is clicked
                         viewModel.updateBookTitle(book.title)
-                        navController.navigate(Routes.ContentTable.route) {
-                            popUpTo(Routes.Library.route) { inclusive = true }
-                        }
+                        viewModel.updateBookSelected(true)
+                        viewModel.updateBookDeselected(false)
                     }, modifier = Modifier.testTag("book_item_${book.title}"))
                     Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
-
-
                 }
             }
         )

@@ -12,6 +12,10 @@ class AppViewModel : ViewModel() {
     var selectedBookTitleResId by mutableStateOf(0)
     var searchBarInput by mutableStateOf("")
     var searchResultText by mutableStateOf("")
+    // Track whether a book is selected
+    var bookSelected by mutableStateOf(false)
+    // Track if the book is deselected (to prevent looping navigation)
+    var bookDeselected by mutableStateOf(true)
 
     fun updateExampleState(newText: String) {
         exampleState = newText
@@ -33,5 +37,15 @@ class AppViewModel : ViewModel() {
         if (searchBarInput.isNotBlank()) {
             searchResultText = "Searching for the word ${searchBarInput}"
         }
+    }
+
+    // Update book selection state (true if selected, false if deselected)
+    fun updateBookSelected(isSelected: Boolean) {
+        bookSelected = isSelected
+    }
+
+    // Update book deselection state (true if deselected, false if selected)
+    fun updateBookDeselected(isDeselected: Boolean) {
+        bookDeselected = isDeselected
     }
 }

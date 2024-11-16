@@ -45,20 +45,22 @@ object NavBarItems {
                 modifier = Modifier.testTag("search_button")
             )
         )
-//        items.add(
-//            BarItem(
-//                title = context.getString(R.string.table_content_icon_title),
-//                image = Icons.Filled.Menu,
-//                route = "content_table"
-//            )
-//        )
-//        items.add(
-//            BarItem(
-//                title = context.getString(R.string.reading_mode_icon_title),
-//                image = Icons.Filled.PlayArrow,
-//                route = "reading"
-//            )
-//        )
+        items.add(
+            BarItem(
+                title = context.getString(R.string.table_content_icon_title),
+                image = Icons.Filled.Menu,
+                route = "content_table",
+                modifier = Modifier.testTag("search_button")
+            )
+        )
+        items.add(
+            BarItem(
+                title = context.getString(R.string.reading_mode_icon_title),
+                image = Icons.Filled.PlayArrow,
+                route = "reading",
+                modifier = Modifier.testTag("search_button")
+            )
+        )
 
         return items
     }
