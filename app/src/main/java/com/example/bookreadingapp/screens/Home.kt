@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -43,16 +45,41 @@ fun Home(
         ) {
             Text(text = context.getString(R.string.home), style = MaterialTheme.typography.displayLarge)
         }
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+        ) {
+            HomeContent(context)
+        }
     }
 }
 
 @Composable
 fun HomeContent(
-    modifier: Modifier = Modifier,
+    context: Context
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+    ) {
+        Description(context)
+        HowToUse(context)
+    }
+}
+
+@Composable
+fun Description(
     context: Context
 ) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_small))
     ) {
@@ -64,37 +91,27 @@ fun HomeContent(
                         stiffness = Spring.StiffnessMedium
                     )
                 )
+                .padding(horizontal = dimensionResource(R.dimen.padding_medium))
         ) {
-            Description(context)
-
-            HowToUse(context)
-        }
-    }
-}
-
-@Composable
-fun Description(
-    context: Context
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = context.getString(R.string.welcome_message),
-            style = MaterialTheme.typography.displayMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium))
-        )
-
-        // App description
-        val descriptionArray = context.resources.getStringArray(R.array.app_description)
-        descriptionArray.forEach { descriptionItem ->
             Text(
-                text = descriptionItem,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_small))
+                text = context.getString(R.string.welcome_message),
+                style = MaterialTheme.typography.displayMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
             )
+
+            // App description
+            val descriptionArray = context.resources.getStringArray(R.array.app_description)
+            descriptionArray.forEach { descriptionItem ->
+                Text(
+                    text = descriptionItem,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(bottom = dimensionResource(id = R.dimen.padding_small))
+                        .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+                )
+            }
         }
     }
 }
@@ -103,25 +120,40 @@ fun Description(
 fun HowToUse(
     context: Context
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_small))
     ) {
-        Text(
-            text = context.getString(R.string.welcome_message),
-            style = MaterialTheme.typography.displayMedium,
-            textAlign = TextAlign.Center,
+        Column(
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium))
-        )
-
-        // "How to Use" steps
-        val howToUseStepsArray = context.resources.getStringArray(R.array.how_to_use_steps)
-        howToUseStepsArray.forEachIndexed { index, step ->
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessMedium
+                    )
+                )
+                .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+        ) {
             Text(
-                text = "${index + 1}. $step",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(bottom = dimensionResource(id = R.dimen.padding_small))
+                text = context.getString(R.string.welcome_message),
+                style = MaterialTheme.typography.displayMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
             )
+
+            // "How to Use" steps
+            val howToUseStepsArray = context.resources.getStringArray(R.array.how_to_use_steps)
+            howToUseStepsArray.forEachIndexed { index, step ->
+                Text(
+                    text = "${index + 1}. $step",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(bottom = dimensionResource(id = R.dimen.padding_small))
+                        .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+                )
+            }
         }
     }
 }
