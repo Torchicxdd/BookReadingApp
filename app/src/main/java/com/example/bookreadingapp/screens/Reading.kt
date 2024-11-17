@@ -14,26 +14,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import com.example.bookreadingapp.objects.AppViewModel
 import androidx.compose.material3.Switch
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
-import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
-import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
-import com.example.bookreadingapp.ui.theme.BackToBookshelfButton
-import com.example.bookreadingapp.ui.theme.GoToSearchButton
-import com.example.bookreadingapp.ui.theme.GoToTableContentButton
+import com.example.bookreadingapp.ui.BackToBookshelfButton
+import com.example.bookreadingapp.ui.GoToSearchButton
+import com.example.bookreadingapp.ui.GoToTableContentButton
 
 @Composable
 fun Reading(

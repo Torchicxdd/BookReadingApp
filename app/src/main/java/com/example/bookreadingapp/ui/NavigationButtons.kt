@@ -1,4 +1,4 @@
-package com.example.bookreadingapp.ui.theme
+package com.example.bookreadingapp.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
