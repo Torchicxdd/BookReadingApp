@@ -103,7 +103,7 @@ fun BooksAvailable(
             modifier = Modifier.fillMaxSize(),
             content = {
                 items(books) { book ->
-                    BookshelfItem(
+                    BookItem(
                         book = book,
                         onClick = {
                             onBookClick(book)
@@ -112,76 +112,6 @@ fun BooksAvailable(
                     )
                 }
             }
-        )
-    }
-}
-
-@Composable
-fun BookshelfItem(
-    book: Book,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_small))
-            .clickable(onClick = onClick)
-    ) {
-        Column(
-            modifier = Modifier
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    )
-                )
-        ) {
-            // Display book cover
-            BookshelfCover(book.imageResourceId)
-
-            // Display book title underneath the cover
-            BookshelfInformation(book.title)
-        }
-    }
-}
-
-@Composable
-fun BookshelfCover(
-    @DrawableRes bookCover: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = dimensionResource(R.dimen.padding_medium)),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .size(dimensionResource(R.dimen.image_size)),
-            painter = painterResource(bookCover),
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
-fun BookshelfInformation(
-    @StringRes bookTitle: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(bookTitle),
-            style = MaterialTheme.typography.displayMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium)
-                )
         )
     }
 }
