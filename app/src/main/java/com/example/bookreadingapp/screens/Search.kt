@@ -36,7 +36,9 @@ import com.example.bookreadingapp.BookReadingApp
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
-import com.example.bookreadingapp.ui.*
+import com.example.bookreadingapp.ui.theme.BackToBookshelfButton
+import com.example.bookreadingapp.ui.theme.GoToReadingButton
+import com.example.bookreadingapp.ui.theme.GoToTableContentButton
 import com.example.bookreadingapp.ui.theme.md_theme_dark_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_dark_surface
 import com.example.bookreadingapp.ui.theme.md_theme_light_onSurface

@@ -31,7 +31,9 @@ import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
 import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
-import com.example.bookreadingapp.ui.*
+import com.example.bookreadingapp.ui.theme.BackToBookshelfButton
+import com.example.bookreadingapp.ui.theme.GoToSearchButton
+import com.example.bookreadingapp.ui.theme.GoToTableContentButton
 
 @Composable
 fun Reading(

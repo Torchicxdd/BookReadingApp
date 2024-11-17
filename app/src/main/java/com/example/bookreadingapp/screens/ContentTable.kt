@@ -23,7 +23,9 @@ import androidx.navigation.NavController
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
-import com.example.bookreadingapp.ui.*
+import com.example.bookreadingapp.ui.theme.BackToBookshelfButton
+import com.example.bookreadingapp.ui.theme.GoToReadingButton
+import com.example.bookreadingapp.ui.theme.GoToSearchButton
 
 @Composable
 fun ContentTable(
