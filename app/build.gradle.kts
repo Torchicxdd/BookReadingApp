@@ -6,11 +6,15 @@ plugins {
 
 android {
     namespace = "com.example.bookreadingapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.bookreadingapp"
+<<<<<<< HEAD
         minSdk = 26
+=======
+        minSdk = 30
+>>>>>>> 4617dd5 (Implement file download class from example)
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -72,6 +76,7 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.navigation:navigation-compose:2.5.3")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.compose.material3:material3-window-size-class")
     androidTestImplementation ("androidx.navigation:navigation-compose:2.6.0") // Or the latest stable version
     androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.5.0") // Or the latest version
