@@ -72,12 +72,12 @@ fun TestFileDownload(downloadViewModel: DownloadViewModel) {
         }
 
         Button(onClick = {
-            downloadViewModel.setupDownload("https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip")
+            downloadViewModel.setupDownload("https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip", "TestDownload")
         }) {
             Text("Download File")
         }
         Button(onClick = {
-            downloadViewModel.confirmDeletion("DownloadedFiles")
+            downloadViewModel.confirmDeletion("TestDownload")
         }) {
             Text("Delete Directory")
         }
