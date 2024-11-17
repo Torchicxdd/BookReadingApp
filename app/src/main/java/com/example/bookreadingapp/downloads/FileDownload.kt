@@ -4,10 +4,12 @@ import android.content.Context
 import android.os.Environment
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.util.zip.ZipFile
 
 class FileDownload(private val context: Context) {
     // Create download folder if it doesn't exist, then saves file
@@ -42,7 +44,7 @@ class FileDownload(private val context: Context) {
             return true
         } catch(e: IOException) {
             e.printStackTrace()
-            return false;
+            return false
         }
     }
 
@@ -61,5 +63,41 @@ class FileDownload(private val context: Context) {
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         downloadFolder.listFiles()?.forEach { it.delete() }
     }
+}
 
+object ExtractFile {
+    private const val BUFFER_SIZE = 4096
+
+    private fun extractFile(inputStream: InputStream, destFilePath: String) {
+        val bos = BufferedOutputStream(FileOutputStream(destFilePath))
+        val bytesIn = ByteArray(BUFFER_SIZE)
+        var read: Int
+        while (inputStream.read(bytesIn).also { read = it } != -1) {
+            bos.write(bytesIn, 0, read)
+        }
+        bos.close()
+    }
+
+    fun unzipFile(zipFile: File, destinationDirectory: String) {
+        File(destinationDirectory).run {
+            if (!exists()) {
+                mkdirs()
+            }
+        }
+
+        ZipFile(zipFile).use { zip ->
+            zip.entries().asSequence().forEach { entry ->
+                zip.getInputStream(entry).use { input ->
+                    val filePath = destinationDirectory + File.separator + entry.name
+
+                    if (!entry.isDirectory) {
+                        extractFile(input, filePath)
+                    } else {
+                        val dir = File(filePath)
+                        dir.mkdir()
+                    }
+                }
+            }
+        }
+    }
 }

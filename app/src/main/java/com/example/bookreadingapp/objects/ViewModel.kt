@@ -83,13 +83,13 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     val directoryContents: LiveData<List<String>> = _directoryContents
 
     // Function to set up file download
-    fun setupDownload(url: String) {
+    fun setupDownload(url: String, directoryName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
-            val file = repository.createFile("DownloadedFiles", fileName)
+            val file = repository.createFile(directoryName, fileName)
 
             if (repository.downloadFile(url, file)) {
-                updateDirectoryContents("DownloadedFiles")
+                updateDirectoryContents(directoryName)
                 Log.e("DownloadViewModel", "File Downloaded")
             } else {
                 Log.e("DownloadViewModel", "Failed to download file")
