@@ -60,6 +60,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation("androidx.compose.foundation:foundation-layout-android:1.5.4")
+    implementation(libs.androidx.room.common)
     annotationProcessor("androidx.room:room-compiler:2.6.0")
     kapt("androidx.room:room-compiler:2.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
