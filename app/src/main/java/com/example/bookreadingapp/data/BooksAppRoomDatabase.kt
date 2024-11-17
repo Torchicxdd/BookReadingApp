@@ -5,11 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.bookreadingapp.data.daos.BooksDao
+import com.example.bookreadingapp.data.daos.ImageDao
 import com.example.bookreadingapp.data.entities.Books
 
 @Database(entities = [(Books::class)], version = 1)
 abstract class BooksAppRoomDatabase: RoomDatabase() {
     abstract fun booksDao(): BooksDao
+    abstract fun imageDao(): ImageDao
 
     companion object {
         private var INSTANCE: BooksAppRoomDatabase? = null

@@ -13,4 +13,7 @@ interface ImageDao {
 
     @Query("DELETE FROM images WHERE imageId = :id")
     fun deleteImage(id: Int)
+
+    @Query("SELECT * FROM images WHERE imageId = :id")
+    fun findImageById(id: Int): List<Image>
 }
