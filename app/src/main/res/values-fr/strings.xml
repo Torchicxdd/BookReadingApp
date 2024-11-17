@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Application de Lecture de Livres</string>
     <string name="name">BookWorm</string>
 
     <string-array name="download">
@@ -17,20 +18,42 @@
     <string name="search_icon_title">Recherche</string>
     <string name="table_content_icon_title">Table des matières</string>
     <string name="reading_mode_icon_title">Mode de lecture</string>
+    <string name="bookshelf_icon_title">Étagère</string>
 
-    <string name="home">Écran d\'accueil</string>
+    <string name="home">Écran d'accueil</string>
     <string name="content">Écran de la table des matières</string>
     <string name="library">Écran de la bibliothèque</string>
     <string name="reading">Écran de lecture</string>
     <string name="search">Écran de recherche</string>
+    <string name="bookshelf">Écran de l'étagère</string>
 
-    <string name="wood">The Mechanical Properties of Wood by Samuel J. Record</string>
-    <string name="plumbing">Elements of Plumbing by Samuel Edward Dibble</string>
-    <string name="hardware">Hardware, estimating, and mill design by William S. Lowndes</string>
-    <string name="steam">Steam, Its Generation and Use by Babcock &amp; Wilcox Company</string>
-    <string name="dairy">Outlines of Dairy Bacteriology, 8th edition by H. L. Russell</string>
-    <string name="mushroom">The Mushroom, Edible and Otherwise by Miron Elisha Hard</string>
+    <string name="wood">Les propriétés mécaniques du bois par Samuel J. Record</string>
+    <string name="plumbing">Éléments de plomberie par Samuel Edward Dibble</string>
+    <string name="hardware">Matériel, estimation et conception de moulins par William S. Lowndes</string>
+    <string name="steam">La vapeur, sa génération et son utilisation par Babcock &amp; Wilcox Company</string>
+    <string name="dairy">Principes de bactériologie laitière, 8e édition par H. L. Russell</string>
+    <string name="mushroom">Les champignons, comestibles et autres par Miron Elisha Hard</string>
 
     <string name="book_404">Livre non trouvé</string>
     <string name="search_input">Rechercher</string>
+
+    <string name="welcome_message">Bienvenue dans l'application BookWorm !</string>
+    <string-array name="app_description">
+        <item>Cette application a été créée par Smadja Eliana, Parker David, Do Hoang Hai et Maara Vanessa Purici.</item>
+        <item>C'est notre projet final pour le cours de Développement Mobile pendant notre 5ème semestre en Informatique au Collège Dawson.</item>
+        <item>BookWorm vous permet de découvrir, explorer et profiter d'une collection de livres directement sur votre appareil !</item>
+        <item>Commencez votre aventure de lecture dès aujourd'hui et plongez dans le monde de la connaissance et des histoires !</item>
+    </string-array>
+
+    <string name="how_to_use_title">Comment utiliser :</string>
+    <string-array name="how_to_use_steps">
+        <item>Pour voir les livres disponibles, consultez notre bibliothèque !</item>
+        <item>Une fois que vous avez choisi un livre, cliquez sur sa couverture.</item>
+        <item>Cela vous amènera à un nouvel écran où vous pourrez :</item>
+        <item>Passer en mode lecture,</item>
+        <item>Voir la table des matières, ou</item>
+        <item>Rechercher un mot dans le livre.</item>
+    </string-array>
+
+    <string name="no_books_available">Vous n'avez encore téléchargé aucun livre.</string>
 </resources>
