@@ -62,4 +62,5 @@
     </string-array>
     <string name="no_books_available">You did not download any books yet.</string>
     <string name="no_books_to_download">No books available to download</string>
+    <string name="back_button">Back</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
 
@@ -26,6 +27,8 @@ class AppViewModel : ViewModel() {
 
     // A flag to ensure the library is only initialized once
     private var isLibraryInitialized = false
+
+    var canNavigateBack by mutableStateOf(false)
 
     init {
         // Initialize the library books only once

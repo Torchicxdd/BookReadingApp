@@ -14,6 +14,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,10 +61,21 @@ fun BookReadingApp(
         else -> AdaptiveNavigationType.BOTTOM_NAVIGATION
     }
 
+    // This is launched inside a LaunchEffect because TopBar is never recomposed
+    // even when NavController changes therefore canNavigateBack would never change
+    LaunchedEffect(navController) {
+        navController.addOnDestinationChangedListener { _, _, _, ->
+            viewModel.canNavigateBack = navController.previousBackStackEntry != null
+        }
+    }
+
     Scaffold(
         topBar = {
             if(!viewModel.readingMode) {
-                TopAppBar()
+                TopAppBar(
+                    canNavigateBack = viewModel.canNavigateBack,
+                    navigateBack = { navController.navigateUp() }
+                )
             }
         },
         content = { padding ->
