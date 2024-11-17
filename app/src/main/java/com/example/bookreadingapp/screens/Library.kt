@@ -48,16 +48,6 @@ fun Library(
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
-    val libraryBooks = remember { mutableStateListOf<Book>() }
-
-    // Launch a side-effect to observe libraryBooks updates
-    LaunchedEffect(Unit) {
-        // Here, instead of collectAsState, we directly access the ViewModel's StateFlow and update our list
-        viewModel.libraryBooks.forEach {
-            libraryBooks.add(it) // Add all books to the libraryBooks list
-        }
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
