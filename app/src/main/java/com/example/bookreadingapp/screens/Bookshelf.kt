@@ -58,7 +58,7 @@ fun NoBooksAvailableMessage(context: Context) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = context.getString(R.string.no_books_available),  // Use the string resource
+            text = context.getString(R.string.no_books_available),
             style = MaterialTheme.typography.bodyLarge
         )
     }

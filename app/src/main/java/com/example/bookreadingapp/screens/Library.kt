@@ -9,6 +9,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,20 +56,41 @@ fun Library(
             Text(text = context.getString(R.string.library), style = MaterialTheme.typography.displayLarge)
         }
 
-        // LazyVerticalGrid for the book items
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxSize(),
-            content = {
-                items(viewModel.libraryBooks) { book ->
-                    BookItem(book = book, onClick = {
-                        // Move book to bookshelf and update viewModel
-                        viewModel.moveBookToBookshelf(book)
-                    }, modifier = Modifier.testTag("book_item_${book.title}"))
-                    Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
+        // Check if the library has books
+        if (viewModel.libraryBooks.isEmpty()) {
+            NoBooksToDownloadMessage(context)
+        } else {
+            // LazyVerticalGrid for the book items
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxSize(),
+                content = {
+                    items(viewModel.libraryBooks) { book ->
+                        BookItem(book = book, onClick = {
+                            // Move book to bookshelf and update viewModel
+                            viewModel.moveBookToBookshelf(book)
+                        }, modifier = Modifier.testTag("book_item_${book.title}"))
+                        Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
+                    }
                 }
-            }
+            )
+        }
+    }
+}
+
+@Composable
+fun NoBooksToDownloadMessage(context: Context) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(dimensionResource(R.dimen.padding_medium)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = context.getString(R.string.no_books_to_download),
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

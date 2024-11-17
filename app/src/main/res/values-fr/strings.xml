@@ -64,4 +64,5 @@
     </string-array>
 
     <string name="no_books_available">Vous n\'avez encore téléchargé aucun livre.</string>
+    <string name="no_books_to_download">Aucun livre disponible à télécharger</string>
 </resources>
