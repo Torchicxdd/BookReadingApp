@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,6 +22,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
+import com.example.bookreadingapp.objects.DownloadViewModel
+import com.example.bookreadingapp.objects.DownloadViewModelFactory
 import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.objects.PermanentNavDrawer
@@ -29,6 +32,10 @@ import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
+    private val viewModel: DownloadViewModel by viewModels {
+        DownloadViewModelFactory(this.applicationContext) // Use application context to prevent memory leaks
+    }
+
     @ExperimentalMaterial3WindowSizeClassApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +50,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+@Composable
+fun TextFileDownload() {}
 
 @Composable
 fun BookReadingApp(
