@@ -43,6 +43,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bookreadingapp.screens.ContentTable
 import com.example.bookreadingapp.screens.Home
 import com.example.bookreadingapp.screens.Library
+import com.example.bookreadingapp.screens.Bookshelf
 import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -66,20 +67,20 @@ fun NavigationHost(
         }
         composable(Routes.Library.route) {
             Library(context, viewModel, navController, adaptiveNavigationType)
-
+        }
+        composable(Routes.Bookshelf.route) {
+            Bookshelf(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.Search.route) {
-            Search(context, viewModel, adaptiveNavigationType)
-
+            Search(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.ContentTable.route) {
-            ContentTable(context, viewModel, adaptiveNavigationType)
-
+            ContentTable(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.Reading.route) {
-            Reading(context, viewModel, adaptiveNavigationType)
-
+            Reading(context, viewModel, navController, adaptiveNavigationType)
         }
+
     }
 }
 
@@ -88,7 +89,7 @@ fun NavigationHost(
 fun BottomNavBar(
     navController: NavHostController,
     context: Context,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     NavigationBar {
         val backStackEntry by navController.currentBackStackEntryAsState()
@@ -170,10 +171,10 @@ fun PermanentNavDrawer(
                 PermanentDrawerSheet {
                     Spacer(Modifier.weight(1f))
                     barItems.forEach { navItem ->
-                        Box(
-                            modifier = Modifier
-                                .padding(start = dimensionResource(R.dimen.padding_big))
-                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(start = dimensionResource(R.dimen.padding_big))
+                            ) {
                             NavigationDrawerItem(
                                 selected = currentRoute == navItem.route,
                                 onClick = {
