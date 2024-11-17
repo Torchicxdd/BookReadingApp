@@ -39,24 +39,34 @@ object NavBarItems {
         )
         items.add(
             BarItem(
-                title = context.getString(R.string.search_icon_title),
-                image = Icons.Filled.Search,
-                route = "search",
-                modifier = Modifier.testTag("search_button")
+                title = context.getString(R.string.bookshelf_icon_title),
+                image = Icons.Filled.Menu,
+                route = "bookshelf",
+                modifier = Modifier.testTag("bookshelf_button")
             )
         )
 //        items.add(
 //            BarItem(
+//                title = context.getString(R.string.search_icon_title),
+//                image = Icons.Filled.Search,
+//                route = "search",
+//                modifier = Modifier.testTag("search_button")
+//            )
+//        )
+//        items.add(
+//            BarItem(
 //                title = context.getString(R.string.table_content_icon_title),
 //                image = Icons.Filled.Menu,
-//                route = "content_table"
+//                route = "content_table",
+//                modifier = Modifier.testTag("search_button")
 //            )
 //        )
 //        items.add(
 //            BarItem(
 //                title = context.getString(R.string.reading_mode_icon_title),
 //                image = Icons.Filled.PlayArrow,
-//                route = "reading"
+//                route = "reading",
+//                modifier = Modifier.testTag("search_button")
 //            )
 //        )
 

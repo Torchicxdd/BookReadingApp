@@ -23,6 +23,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -64,17 +67,12 @@ fun Library(
             modifier = Modifier
                 .fillMaxSize(),
             content = {
-
-                items(books) { book ->
+                items(viewModel.libraryBooks) { book ->
                     BookItem(book = book, onClick = {
-                        viewModel.updateBookTitle(book.title)
-                        navController.navigate(Routes.ContentTable.route) {
-                            popUpTo(Routes.Library.route) { inclusive = true }
-                        }
+                        // Move book to bookshelf and update viewModel
+                        viewModel.moveBookToBookshelf(book)
                     }, modifier = Modifier.testTag("book_item_${book.title}"))
                     Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
-
-
                 }
             }
         )
@@ -146,7 +144,7 @@ fun BookInformation(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_medium)
-            )
+                )
         )
     }
 }
