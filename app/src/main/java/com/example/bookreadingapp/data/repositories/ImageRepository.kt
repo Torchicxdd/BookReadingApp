@@ -25,7 +25,7 @@ class ImageRepository(private val imageDao: ImageDao) {
         }
     }
 
-    fun findImage(id: Int) {
+    fun findImageById(id: Int) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResults.value = asyncFind(id).await()
         }
