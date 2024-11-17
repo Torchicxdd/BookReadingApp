@@ -36,11 +36,13 @@ class AppViewModel : ViewModel() {
     }
 
     // Function to initialize the library with predefined books
+    // Learned about .addAll from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
     fun initializeLibrary() {
         _libraryBooks.addAll(books)
     }
 
     // Function to move a book from the library to the bookshelf
+    // Learned about .add and .remove from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
     fun moveBookToBookshelf(book: Book) {
         _libraryBooks.remove(book)
         _bookshelfBooks.add(book)
