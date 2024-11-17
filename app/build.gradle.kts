@@ -63,6 +63,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.compose.material3:material3-window-size-class")
+    implementation(libs.androidx.runtime.livedata)
     androidTestImplementation ("androidx.navigation:navigation-compose:2.6.0") // Or the latest stable version
     androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.5.0") // Or the latest version
 

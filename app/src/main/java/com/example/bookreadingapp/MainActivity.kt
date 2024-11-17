@@ -6,17 +6,23 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
@@ -32,7 +38,7 @@ import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: DownloadViewModel by viewModels {
+    private val downloadViewModel: DownloadViewModel by viewModels {
         DownloadViewModelFactory(this.applicationContext) // Use application context to prevent memory leaks
     }
 
@@ -42,17 +48,40 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BookReadingAppTheme {
-                val windowSize = calculateWindowSizeClass(this)
-                BookReadingApp(
-                    windowSize = windowSize.widthSizeClass
-                )
+//                val windowSize = calculateWindowSizeClass(this)
+//                BookReadingApp(
+//                    windowSize = windowSize.widthSizeClass
+//                )
+                TestFileDownload(downloadViewModel)
             }
         }
     }
 }
 
 @Composable
-fun TextFileDownload() {}
+fun TestFileDownload(downloadViewModel: DownloadViewModel) {
+    val directoryContents by downloadViewModel.directoryContents.observeAsState(emptyList())
+
+    val urlList = stringArrayResource(R.array.download)
+
+    Column {
+        directoryContents.forEach { fileName ->
+            Text(fileName)
+        }
+
+        Button(onClick = {
+            downloadViewModel.setupDownload("https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip")
+        }) {
+            Text("Download File")
+        }
+        Button(onClick = {
+            downloadViewModel.confirmDeletion("DownloadedFiles")
+        }) {
+            Text("Delete Directory")
+        }
+
+    }
+}
 
 @Composable
 fun BookReadingApp(
@@ -132,7 +161,7 @@ fun BookReadingApp(
     heightDp = 800
 )
 @Composable
-fun GreetingPreview() {
+fun ReadingPreview() {
     BookReadingAppTheme {
         BookReadingApp(
             windowSize = WindowWidthSizeClass.Expanded

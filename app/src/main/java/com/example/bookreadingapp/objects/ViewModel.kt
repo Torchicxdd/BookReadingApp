@@ -90,6 +90,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
             if (repository.downloadFile(url, file)) {
                 updateDirectoryContents("DownloadedFiles")
+                Log.e("DownloadViewModel", "File Downloaded")
             } else {
                 Log.e("DownloadViewModel", "Failed to download file")
             }
@@ -104,6 +105,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     fun confirmDeletion(directoryName: String) {
         repository.deleteDirectoryContents(directoryName)
         updateDirectoryContents(directoryName)
+        Log.e("DownloadViewModel", "File directory deleted")
     }
 
 }
