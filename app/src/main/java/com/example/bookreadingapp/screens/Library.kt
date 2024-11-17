@@ -46,20 +46,9 @@ fun Library(
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
-    // Track the bookDeselected state from the ViewModel, default to true initially
-    val bookDeselected = viewModel.bookDeselected ?: true
-
-    // Handle navigation only when book is selected
-    LaunchedEffect(bookDeselected) {
-        // Ensure navigation happens only once when book is selected
-        if (!bookDeselected) {
-            navController.navigate(Routes.ContentTable.route) {
-                popUpTo(Routes.Library.route) { inclusive = true }
-                popUpTo(Routes.Home.route) { inclusive = true }
-            }
-        }
-        // After navigating, mark the book as deselected to prevent looping navigation
-        viewModel.updateBookDeselected(true)
+    // Ensuring library is populated when the composable is first launched
+    LaunchedEffect(Unit) {
+        viewModel.initializeLibrary()
     }
 
     Column(
@@ -81,12 +70,10 @@ fun Library(
             modifier = Modifier
                 .fillMaxSize(),
             content = {
-                items(books) { book ->
+                items(viewModel.libraryBooks) { book ->
                     BookItem(book = book, onClick = {
-                        // Set bookSelected to true when a book is clicked
-                        viewModel.updateBookTitle(book.title)
-                        viewModel.updateBookSelected(true)
-                        viewModel.updateBookDeselected(false)
+                        // Move book to bookshelf and update viewModel
+                        viewModel.moveBookToBookshelf(book)
                     }, modifier = Modifier.testTag("book_item_${book.title}"))
                     Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
                 }
@@ -160,7 +147,7 @@ fun BookInformation(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_medium)
-            )
+                )
         )
     }
 }

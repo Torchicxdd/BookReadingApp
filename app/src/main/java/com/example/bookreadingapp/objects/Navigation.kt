@@ -43,6 +43,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bookreadingapp.screens.ContentTable
 import com.example.bookreadingapp.screens.Home
 import com.example.bookreadingapp.screens.Library
+import com.example.bookreadingapp.screens.Bookshelf
 import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,8 +59,6 @@ fun NavigationHost(
     modifier: Modifier,
     viewModel: AppViewModel = viewModel()
 ) {
-    val bookSelected = viewModel.bookSelected ?: false
-
     NavHost(navController = navController,
         startDestination = Routes.Home.route
     ) {
@@ -69,19 +68,19 @@ fun NavigationHost(
         composable(Routes.Library.route) {
             Library(context, viewModel, navController, adaptiveNavigationType)
         }
-
-        // Add conditional navigation for other buttons based on `bookSelected`
-        if (bookSelected) {
-            composable(Routes.Search.route) {
-                Search(context, viewModel, adaptiveNavigationType)
-            }
-            composable(Routes.ContentTable.route) {
-                ContentTable(context, viewModel, navController, adaptiveNavigationType)
-            }
-            composable(Routes.Reading.route) {
-                Reading(context, viewModel, navController, adaptiveNavigationType)
-            }
+        composable(Routes.Bookshelf.route) {
+            Bookshelf(context, viewModel, navController, adaptiveNavigationType)
         }
+        composable(Routes.Search.route) {
+            Search(context, viewModel, adaptiveNavigationType)
+        }
+        composable(Routes.ContentTable.route) {
+            ContentTable(context, viewModel, navController, adaptiveNavigationType)
+        }
+        composable(Routes.Reading.route) {
+            Reading(context, viewModel, navController, adaptiveNavigationType)
+        }
+
     }
 }
 
@@ -90,37 +89,33 @@ fun NavigationHost(
 fun BottomNavBar(
     navController: NavHostController,
     context: Context,
-    modifier: Modifier = Modifier,
-    viewModel: AppViewModel = viewModel()
+    modifier: Modifier = Modifier
 ) {
-    val bookSelected = viewModel.bookSelected ?: false
     NavigationBar {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
         val barItems = NavBarItems.getBarItems(context)
         //Text("BottomNavBar", modifier = Modifier.testTag("bottom_nav_bar"))
         barItems.forEach { navItem ->
-            if (bookSelected || navItem.route == Routes.Home.route || navItem.route == Routes.Library.route) {
-                NavigationBarItem(
-                    selected = currentRoute == navItem.route,
-                    onClick = {
-                        if (currentRoute != navItem.route) {
-                            navController.navigate(navItem.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
+            NavigationBarItem(
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    if (currentRoute != navItem.route) {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
                             }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                    },
-                    icon = {
-                        Icon(imageVector = navItem.image, contentDescription = navItem.title)
-                    },
-                    label = { Text(text = navItem.title) },
-                    modifier = navItem.modifier
-                )
-            }
+                    }
+                },
+                icon = {
+                    Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                },
+                label = { Text(text = navItem.title) },
+                modifier = navItem.modifier
+            )
         }
     }
 }
@@ -129,10 +124,8 @@ fun BottomNavBar(
 fun NavRail(
     navController: NavHostController,
     context: Context,
-    modifier: Modifier = Modifier,
-    viewModel: AppViewModel = viewModel()
+    modifier: Modifier = Modifier
 ) {
-    val bookSelected = viewModel.bookSelected ?: false
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val barItems = NavBarItems.getBarItems(context)
@@ -140,23 +133,21 @@ fun NavRail(
     NavigationRail {
         Spacer(Modifier.weight(1f))
         barItems.forEach { navItem ->
-            if (bookSelected || navItem.route == Routes.Home.route || navItem.route == Routes.Library.route) {
-                NavigationRailItem(
-                    selected = currentRoute == navItem.route,
-                    onClick = {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+            NavigationRailItem(
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
-                    },
-                    icon = {
-                        Icon(imageVector = navItem.image, contentDescription = navItem.title)
-                    },
-                )
-            }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                icon = {
+                    Icon(imageVector = navItem.image, contentDescription = navItem.title)
+                },
+            )
         }
         Spacer(Modifier.weight(1f))
     }
@@ -170,7 +161,6 @@ fun PermanentNavDrawer(
     viewModel: AppViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
-    val bookSelected = viewModel.bookSelected ?: false
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val barItems = NavBarItems.getBarItems(context)
@@ -181,31 +171,29 @@ fun PermanentNavDrawer(
                 PermanentDrawerSheet {
                     Spacer(Modifier.weight(1f))
                     barItems.forEach { navItem ->
-                        if (bookSelected || navItem.route == Routes.Home.route || navItem.route == Routes.Library.route) {
                             Box(
                                 modifier = Modifier
                                     .padding(start = dimensionResource(R.dimen.padding_big))
                             ) {
-                                NavigationDrawerItem(
-                                    selected = currentRoute == navItem.route,
-                                    onClick = {
-                                        navController.navigate(navItem.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-                                            launchSingleTop = true
-                                            restoreState = true
+                            NavigationDrawerItem(
+                                selected = currentRoute == navItem.route,
+                                onClick = {
+                                    navController.navigate(navItem.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
                                         }
-                                    },
-                                    icon = {
-                                        Icon(
-                                            imageVector = navItem.image,
-                                            contentDescription = navItem.title
-                                        )
-                                    },
-                                    label = { Text(text = navItem.title) }
-                                )
-                            }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = navItem.image,
+                                        contentDescription = navItem.title
+                                    )
+                                },
+                                label = { Text(text = navItem.title) }
+                            )
                         }
                     }
                     Spacer(Modifier.weight(1f))

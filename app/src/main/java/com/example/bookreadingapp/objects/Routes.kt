@@ -6,4 +6,5 @@ sealed class Routes(val route: String) {
     data object Search : Routes("search")
     data object ContentTable : Routes("content_table")
     data object Reading : Routes("reading")
+    data object Bookshelf : Routes("bookshelf")
 }
