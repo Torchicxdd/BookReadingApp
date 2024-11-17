@@ -1,9 +1,10 @@
-package com.example.bookreadingapp.objects
+package com.example.bookreadingapp.ui
 
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.bookreadingapp.data.BooksAppRoomDatabase
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.repositories.BooksRepository
 
@@ -13,8 +14,8 @@ class BookViewModel(application: Application) : ViewModel() {
     val searchResults: MutableLiveData<List<Books>>
 
     init {
-        val bookDb = BookaAppRoomDatabase.getInstance(application)
-        val booksDao = bookDb.booksDb()
+        val bookDb = BooksAppRoomDatabase.getInstance(application)
+        val booksDao = bookDb.booksDao()
         repository = BooksRepository(booksDao)
         allBooks = repository.allBooks
         searchResults = repository.searchResults
