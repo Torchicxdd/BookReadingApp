@@ -10,7 +10,7 @@ package com.example.bookreadingapp.data.entities
             onDelete = ForeignKey.CASCADE
             )]
 )
-class Image {
+class Images {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "imageId")
