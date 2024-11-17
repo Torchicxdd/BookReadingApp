@@ -33,14 +33,6 @@ interface ChaptersDao {
     @Query("SELECT * FROM chapters WHERE bookId = :bookId ORDER BY chapterPosition ASC")
     fun getChaptersByBookId(bookId: Int): LiveData<List<Chapters>>
 
-    // Check if a chapter with the same title already exists for a given book
-    @Query("SELECT COUNT(*) FROM chapters WHERE title = :title AND bookId = :bookId")
-    fun chapterExists(title: String, bookId: Int): Boolean
-
-    // Get the number of chapters for a particular book
-    @Query("SELECT COUNT(*) FROM chapters WHERE bookId = :bookId")
-    suspend fun getChapterCount(bookId: Int): Int
-
     // Delete a chapter by its id
     @Query("DELETE FROM chapters WHERE chapterId = :id")
     fun deleteChapter(id: Int)
