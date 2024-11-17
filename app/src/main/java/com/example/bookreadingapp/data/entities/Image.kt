@@ -1,14 +1,20 @@
 package com.example.bookreadingapp.data.entities
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+
 @Entity(
     tableName = "images",
-    foreignKeys = [(
+    foreignKeys = [
+        ForeignKey(
             entity = Chapters::class,
-            parentColumns = arrayOf("chaperId"),
+            parentColumns = arrayOf("chapterId"),
             childColumns = arrayOf("chapterId"),
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
-            )]
+        )]
 )
 class Image {
 
