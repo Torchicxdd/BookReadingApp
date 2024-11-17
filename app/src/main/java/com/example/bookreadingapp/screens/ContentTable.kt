@@ -60,7 +60,6 @@ fun ContentTable(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                BackToBookshelfButton(navController = navController)
                 GoToSearchButton(navController = navController)
                 GoToReadingButton(navController = navController)
             }

@@ -61,12 +61,9 @@ fun BookReadingApp(
         else -> AdaptiveNavigationType.BOTTOM_NAVIGATION
     }
 
-    // This is launched inside a LaunchEffect because TopBar is never recomposed
-    // even when NavController changes therefore canNavigateBack would never change
-    LaunchedEffect(navController) {
-        navController.addOnDestinationChangedListener { _, _, _, ->
-            viewModel.canNavigateBack = navController.previousBackStackEntry != null
-        }
+    // Add a listener to navController which changes the canNavigateBack variable in viewmodel
+    navController.addOnDestinationChangedListener { _, _, _, ->
+        viewModel.canNavigateBack = navController.previousBackStackEntry != null
     }
 
     Scaffold(

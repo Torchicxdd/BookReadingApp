@@ -53,18 +53,6 @@ fun Reading(
                 style = MaterialTheme.typography.displayLarge
             )
 
-            // Navigation buttons for Bookshelf, Table of Content, and Reading screens
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                BackToBookshelfButton(navController = navController)
-                GoToTableContentButton(navController = navController)
-                GoToSearchButton(navController = navController)
-            }
-
             Switch(
                 checked = viewModel.readingMode,
                 onCheckedChange = { viewModel.updateReadingMode() })

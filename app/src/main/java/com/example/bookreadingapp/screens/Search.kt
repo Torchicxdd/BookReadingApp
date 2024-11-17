@@ -57,18 +57,6 @@ fun Search(
             Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
             Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.testTag("search_viewmodel_text"))
-
-            // Navigation buttons for Bookshelf, Table of Content, and Reading screens
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                BackToBookshelfButton(navController = navController)
-                GoToTableContentButton(navController = navController)
-                GoToReadingButton(navController = navController)
-            }
         }
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_small)))
         SearchBar(viewModel, context)
