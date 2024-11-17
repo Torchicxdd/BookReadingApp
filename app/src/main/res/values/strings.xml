@@ -53,6 +53,5 @@
         <item>View the table of contents, or</item>
         <item>Search for a word in the book.</item>
     </string-array>
-
     <string name="no_books_available">You did not download any books yet.</string>
 </resources>
