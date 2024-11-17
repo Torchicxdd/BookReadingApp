@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.*
 
 @Composable
 fun ContentTable(
@@ -59,44 +60,5 @@ fun ContentTable(
                 GoToReadingButton(navController = navController)
             }
         }
-    }
-}
-
-@Composable
-fun BackToBookshelfButton(navController: NavController) {
-    Button(
-        onClick = {
-            navController.navigate(Routes.Bookshelf.route) {
-                popUpTo(Routes.ContentTable.route) { inclusive = true }
-            }
-        }
-    ) {
-        Text(text = "Back to Bookshelf", style = MaterialTheme.typography.labelSmall)
-    }
-}
-
-@Composable
-fun GoToSearchButton(navController: NavController) {
-    Button(
-        onClick = {
-            navController.navigate(Routes.Search.route) {
-                popUpTo(Routes.ContentTable.route) { inclusive = true }
-            }
-        }
-    ) {
-        Text(text = "Go to Search", style = MaterialTheme.typography.labelSmall)
-    }
-}
-
-@Composable
-fun GoToReadingButton(navController: NavController) {
-    Button(
-        onClick = {
-            navController.navigate(Routes.Reading.route) {
-                popUpTo(Routes.ContentTable.route) { inclusive = true }
-            }
-        }
-    ) {
-        Text(text = "Go to Reading", style = MaterialTheme.typography.labelSmall)
     }
 }

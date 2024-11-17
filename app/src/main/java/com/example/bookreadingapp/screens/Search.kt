@@ -36,6 +36,7 @@ import com.example.bookreadingapp.BookReadingApp
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.ui.*
 import com.example.bookreadingapp.ui.theme.md_theme_dark_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_dark_surface
 import com.example.bookreadingapp.ui.theme.md_theme_light_onSurface
@@ -133,17 +134,4 @@ fun DisplayFoundWord(text: String) {
         modifier = Modifier
             .padding(top = dimensionResource(R.dimen.padding_small))
     )
-}
-
-@Composable
-fun GoToTableContentButton(navController: NavController) {
-    Button(
-        onClick = {
-            navController.navigate(Routes.ContentTable.route) {
-                popUpTo(Routes.Search.route) { inclusive = true }
-            }
-        }
-    ) {
-        Text(text = "Go to Table of Content", style = MaterialTheme.typography.labelSmall)
-    }
 }
