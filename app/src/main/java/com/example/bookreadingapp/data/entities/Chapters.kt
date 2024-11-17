@@ -25,10 +25,15 @@ class Chapters {
     @ColumnInfo(name="title")
     var title: String = ""
 
+    @ColumnInfo(name="chapterPosition")
+    var position: Int = 0
+
     var bookId: Int = 0
 
     constructor()
-    constructor(title: String) {
+    constructor(title: String, position: Int, bookId: Int) {
         this.title = title
+        this.position = position
+        this.bookId = bookId
     }
 }
