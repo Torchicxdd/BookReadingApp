@@ -33,7 +33,7 @@ fun GoToReadingButton(navController: NavController) {
 @Composable
 fun GoToTableContentButton(navController: NavController) {
     NavigationButton(text = "Table of Content") {
-        navController.navigate("table_content")
+        navController.navigate("content_table")
     }
 }
 
