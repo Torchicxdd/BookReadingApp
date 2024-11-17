@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.objects.AppViewModel
@@ -41,7 +42,8 @@ fun Bookshelf(
             onBookClick = { book ->
                 viewModel.updateBookTitle(book.title)
                 navController.navigate(Routes.ContentTable.route) {
-                    popUpTo(Routes.Library.route) { inclusive = true }
+                    launchSingleTop = true
+                    restoreState = true
                 }
             }
         )

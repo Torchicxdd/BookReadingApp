@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.objects
 
+import BarItem
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import NavBarItems
@@ -106,7 +107,6 @@ fun BottomNavBar(
                                 saveState = true
                             }
                             launchSingleTop = true
-                            restoreState = true
                         }
                     }
                 },
