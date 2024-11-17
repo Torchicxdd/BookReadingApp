@@ -46,54 +46,73 @@ fun Bookshelf(
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
-    // If there are no books in the bookshelf
+    // Check if the bookshelf has any books
     if (viewModel.bookshelfBooks.isEmpty()) {
-        // Display a message indicating no books are available
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(dimensionResource(R.dimen.padding_medium)),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = context.getString(R.string.no_books_available),
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
+        NoBooksAvailableMessage(context = context)
     } else {
-        // If there are books, display them in a grid
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .testTag("bookshelf_screen")
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(text = context.getString(R.string.bookshelf), style = MaterialTheme.typography.displayLarge)
-            }
-
-            // LazyVerticalGrid for the book items
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxSize(),
-                content = {
-                    items(viewModel.bookshelfBooks) { book ->
-                        BookshelfItem(book = book, onClick = {
-                            viewModel.updateBookTitle(book.title)
-                            navController.navigate(Routes.ContentTable.route) {
-                                popUpTo(Routes.Library.route) { inclusive = true }
-                            }
-                        }, modifier = Modifier.testTag("book_item_${book.title}"))
-                        Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
-                    }
+        BooksAvailable(
+            books = viewModel.bookshelfBooks,
+            navController = navController,
+            onBookClick = { book ->
+                viewModel.updateBookTitle(book.title)
+                navController.navigate(Routes.ContentTable.route) {
+                    popUpTo(Routes.Library.route) { inclusive = true }
                 }
-            )
+            }
+        )
+    }
+}
+
+@Composable
+fun NoBooksAvailableMessage(context: Context) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(dimensionResource(R.dimen.padding_medium)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = context.getString(R.string.no_books_available),  // Use the string resource
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Composable
+fun BooksAvailable(
+    books: List<Book>,
+    navController: NavController,
+    onBookClick: (Book) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("bookshelf_screen")
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = stringResource(R.string.bookshelf), style = MaterialTheme.typography.displayLarge)
         }
+
+        // LazyVerticalGrid to display books in a grid
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            content = {
+                items(books) { book ->
+                    BookshelfItem(
+                        book = book,
+                        onClick = {
+                            onBookClick(book)
+                        },
+                        modifier = Modifier.testTag("book_item_${book.title}")
+                    )
+                }
+            }
+        )
     }
 }
 

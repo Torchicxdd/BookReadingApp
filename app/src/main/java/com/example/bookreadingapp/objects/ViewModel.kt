@@ -16,25 +16,34 @@ class AppViewModel : ViewModel() {
     var searchBarInput by mutableStateOf("")
     var searchResultText by mutableStateOf("")
 
-    // Initial state: all books are in the library
-    var libraryBooks = mutableStateListOf<Book>()
-        private set
+    // MutableStateList to hold the books in the library
+    private val _libraryBooks = mutableStateListOf<Book>()
+    val libraryBooks: List<Book> = _libraryBooks
 
-    var bookshelfBooks = mutableStateListOf<Book>()
-        private set
+    // MutableStateList to hold the books in the bookshelf
+    private val _bookshelfBooks = mutableStateListOf<Book>()
+    val bookshelfBooks: List<Book> = _bookshelfBooks
 
-    // Adding all books to the libraryBooks list manually in a function
-    fun initializeLibrary() {
-        for (book in books) {
-            libraryBooks.add(book)
+    // A flag to ensure the library is only initialized once
+    private var isLibraryInitialized = false
+
+    init {
+        // Initialize the library books only once
+        if (!isLibraryInitialized) {
+            initializeLibrary()
+            isLibraryInitialized = true
         }
     }
 
-    // Moving a book from library to bookshelf
+    // Function to initialize the library with predefined books
+    fun initializeLibrary() {
+        _libraryBooks.addAll(books)
+    }
+
+    // Function to move a book from the library to the bookshelf
     fun moveBookToBookshelf(book: Book) {
-        // Removing the book from the library and add it to the bookshelf
-        libraryBooks.remove(book)
-        bookshelfBooks.add(book)
+        _libraryBooks.remove(book)
+        _bookshelfBooks.add(book)
     }
 
     fun updateExampleState(newText: String) {

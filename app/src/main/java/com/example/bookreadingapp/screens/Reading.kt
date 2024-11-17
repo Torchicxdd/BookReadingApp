@@ -3,12 +3,16 @@ package com.example.bookreadingapp.screens
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.bookreadingapp.R
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
@@ -51,6 +55,18 @@ fun Reading(
                 style = MaterialTheme.typography.displayLarge
             )
 
+            // Navigation buttons for Bookshelf, Table of Content, and Reading screens
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                BackToBookshelfButton(navController = navController)
+                GoToTableContentButton(navController = navController)
+                GoToSearchButton(navController = navController)
+            }
+
             Switch(
                 checked = viewModel.readingMode,
                 onCheckedChange = { viewModel.updateReadingMode() })
@@ -68,13 +84,6 @@ fun Reading(
                     text = context.getString(R.string.book_404),
                     style = MaterialTheme.typography.displayMedium
                 )
-            }
-            Button(onClick = {
-                navController.navigate(Routes.ContentTable.route) {
-                    popUpTo(Routes.Reading.route) { inclusive = true }
-                }
-            }) {
-                Text(text = "Return to Table of Content")
             }
         }
     }

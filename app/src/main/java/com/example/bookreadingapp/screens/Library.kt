@@ -24,6 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -46,9 +48,14 @@ fun Library(
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
-    // Ensuring library is populated when the composable is first launched
+    val libraryBooks = remember { mutableStateListOf<Book>() }
+
+    // Launch a side-effect to observe libraryBooks updates
     LaunchedEffect(Unit) {
-        viewModel.initializeLibrary()
+        // Here, instead of collectAsState, we directly access the ViewModel's StateFlow and update our list
+        viewModel.libraryBooks.forEach {
+            libraryBooks.add(it) // Add all books to the libraryBooks list
+        }
     }
 
     Column(

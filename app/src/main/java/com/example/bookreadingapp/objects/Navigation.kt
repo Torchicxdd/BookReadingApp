@@ -72,7 +72,7 @@ fun NavigationHost(
             Bookshelf(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.Search.route) {
-            Search(context, viewModel, adaptiveNavigationType)
+            Search(context, viewModel, navController, adaptiveNavigationType)
         }
         composable(Routes.ContentTable.route) {
             ContentTable(context, viewModel, navController, adaptiveNavigationType)
