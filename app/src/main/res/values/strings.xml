@@ -2,26 +2,37 @@
     <string name="app_name">Book Reading App</string>
     <string name="name">BookWorm</string>
 
-    <string name="url_wood">https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip</string>
-    <string name="url_plumbing">https://www.gutenberg.org/cache/epub/25269/pg25269-h.zip</string>
-    <string name="url_hardware">https://www.gutenberg.org/cache/epub/72897/pg72897-h.zip</string>
-    <string name="url_steam">https://www.gutenberg.org/cache/epub/22657/pg22657-h.zip</string>
-    <string name="url_dairy">https://www.gutenberg.org/cache/epub/27778/pg27778-h.zip</string>
-    <string name="url_mushroom">https://www.gutenberg.org/cache/epub/29086/pg29086-h.zip</string>
-    <string name="url_glass">https://www.gutenberg.org/cache/epub/63421/pg63421-h.zip</string>
+    <string-array name="download">
+        <item>https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/25269/pg25269-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/72897/pg72897-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/22657/pg22657-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/27778/pg27778-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/29086/pg29086-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/63421/pg63421-h.zip</item>
+    </string-array>
 
     <string name="home_icon_title">Home</string>
     <string name="library_icon_title">Library</string>
     <string name="search_icon_title">Search</string>
     <string name="table_content_icon_title">Table of Content</string>
     <string name="reading_mode_icon_title">Reading Mode</string>
+    <string name="bookshelf_icon_title">Bookshelf</string>
 
     <string name="home">Home Screen</string>
     <string name="content">Table of Content Screen</string>
     <string name="library">Library Screen</string>
     <string name="reading">Reading Screen</string>
     <string name="search">Search Screen</string>
+    <string name="bookshelf">Bookshelf Screen</string>
 
+    <string name="back_to_bookshelf">Back to Bookshelf</string>
+    <string name="go_to_search">Go to Search</string>
+    <string name="go_to_reading">Go to Reading</string>
+    <string name="go_to_table_of_content">Table of Content</string>
+
+    <string name="book_chosen">Book Chosen: %1$s</string>
+    <string name="searching_in_book">Searching for word in %1$s</string>
     <string name="wood">The Mechanical Properties of Wood by Samuel J. Record</string>
     <string name="plumbing">Elements of Plumbing by Samuel Edward Dibble</string>
     <string name="hardware">Hardware, estimating, and mill design by William S. Lowndes</string>
@@ -32,4 +43,23 @@
     <string name="book_404">Book not found</string>
     <string name="search_input">Search for</string>
 
+    <string name="welcome_message">Welcome to the BookWorm App!</string>
+    <string-array name="app_description">
+        <item>This app was created by Smadja Eliana, Parker David, Do Hoang Hai, and Maara Vanessa Purici.</item>
+        <item>It is our final project for the Mobile Development course during our 5th semester in Computer Science at Dawson College.</item>
+        <item>BookWorm allows you to discover, explore, and enjoy a collection of books right at your fingertips!</item>
+        <item>Start your reading journey today and immerse yourself in the world of knowledge and stories!</item>
+    </string-array>
+
+    <string name="how_to_use_title">How to use:</string>
+    <string-array name="how_to_use_steps">
+        <item>To see the available books, check out our library!</item>
+        <item>Once you’ve chosen a book, click on its cover.</item>
+        <item>This will take you to a new screen where you can:</item>
+        <item>Enter reading mode,</item>
+        <item>View the table of contents, or</item>
+        <item>Search for a word in the book.</item>
+    </string-array>
+    <string name="no_books_available">You did not download any books yet.</string>
+    <string name="no_books_to_download">No books available to download</string>
 </resources>

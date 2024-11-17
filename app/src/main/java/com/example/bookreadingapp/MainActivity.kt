@@ -1,14 +1,13 @@
 package com.example.bookreadingapp
 
 import android.os.Bundle
-import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -25,8 +24,8 @@ import com.example.bookreadingapp.objects.BottomNavBar
 import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.objects.PermanentNavDrawer
-import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.objects.TopAppBar
+import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
@@ -48,8 +47,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
-    viewModel: AppViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    viewModel: AppViewModel = viewModel()
 )  {
     val navController = rememberNavController()
     val context = LocalContext.current

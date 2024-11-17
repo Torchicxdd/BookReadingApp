@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Book Reading App</string>
+    <string name="name">BookWorm</string>
+
+    <string-array name="download">
+        <item>https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/25269/pg25269-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/72897/pg72897-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/22657/pg22657-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/27778/pg27778-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/29086/pg29086-h.zip</item>
+        <item>https://www.gutenberg.org/cache/epub/63421/pg63421-h.zip</item>
+    </string-array>
+
+    <string name="home_icon_title">Accueil</string>
+    <string name="library_icon_title">Bibliothèque</string>
+    <string name="search_icon_title">Recherche</string>
+    <string name="table_content_icon_title">Table des matières</string>
+    <string name="reading_mode_icon_title">Mode de lecture</string>
+    <string name="bookshelf_icon_title">Étagère</string>
+
+    <string name="home">Écran d\'accueil</string>
+    <string name="content">Écran de la table des matières</string>
+    <string name="library">Écran de la bibliothèque</string>
+    <string name="reading">Écran de lecture</string>
+    <string name="search">Écran de recherche</string>
+    <string name="bookshelf">Écran de l\'étagère</string>
+
+    <string name="back_to_bookshelf">Retour à la bibliothèque</string>
+    <string name="go_to_search">Aller à la recherche</string>
+    <string name="go_to_reading">Aller à la lecture</string>
+    <string name="go_to_table_of_content">Table des matières</string>
+
+    <string name="book_chosen">Livre choisi: %1$s</string>
+    <string name="searching_in_book">Recherche du mot dans %1$s</string>
+    <string name="wood">The Mechanical Properties of Wood by Samuel J. Record</string>
+    <string name="plumbing">Elements of Plumbing by Samuel Edward Dibble</string>
+    <string name="hardware">Hardware, estimating, and mill design by William S. Lowndes</string>
+    <string name="steam">Steam, Its Generation and Use by Babcock &amp; Wilcox Company</string>
+    <string name="dairy">Outlines of Dairy Bacteriology, 8th edition by H. L. Russell</string>
+    <string name="mushroom">The Mushroom, Edible and Otherwise by Miron Elisha Hard</string>
+
+    <string name="book_404">Livre non trouvé</string>
+    <string name="search_input">Rechercher</string>
+
+
+    <string name="welcome_message">Bienvenue dans l\'application BookWorm !</string>
+    <string-array name="app_description">
+        <item>Cette application a été créée par Smadja Eliana, Parker David, Do Hoang Hai et Maara Vanessa Purici.</item>
+        <item>C\'est notre projet final pour le cours de Développement Mobile pendant notre 5ème semestre en Informatique au Collège Dawson.</item>
+        <item>BookWorm vous permet de découvrir, explorer et profiter d\'une collection de livres directement sur votre appareil !</item>
+        <item>Commencez votre aventure de lecture dès aujourd\'hui et plongez dans le monde de la connaissance et des histoires !</item>
+    </string-array>
+
+    <string name="how_to_use_title">Comment utiliser :</string>
+    <string-array name="how_to_use_steps">
+        <item>Pour voir les livres disponibles, consultez notre bibliothèque !</item>
+        <item>Une fois que vous avez choisi un livre, cliquez sur sa couverture.</item>
+        <item>Cela vous amènera à un nouvel écran où vous pourrez :</item>
+        <item>Passer en mode lecture,</item>
+        <item>Voir la table des matières, ou</item>
+        <item>Rechercher un mot dans le livre.</item>
+    </string-array>
+
+    <string name="no_books_available">Vous n\'avez encore téléchargé aucun livre.</string>
+    <string name="no_books_to_download">Aucun livre disponible à télécharger</string>
+</resources>
