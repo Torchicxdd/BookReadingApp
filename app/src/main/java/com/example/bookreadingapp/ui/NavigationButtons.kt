@@ -1,14 +1,16 @@
-package com.example.bookreadingapp.ui.theme
+package com.example.bookreadingapp.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
+import com.example.bookreadingapp.R
 
 // Back to Bookshelf Button
 @Composable
 fun BackToBookshelfButton(navController: NavController) {
-    NavigationButton(text = "Back to Bookshelf") {
+    NavigationButton(text = stringResource(id = R.string.back_to_bookshelf)) {
         navController.navigate("bookshelf")
     }
 }
@@ -16,7 +18,7 @@ fun BackToBookshelfButton(navController: NavController) {
 // Go to Search Button
 @Composable
 fun GoToSearchButton(navController: NavController) {
-    NavigationButton(text = "Go to Search") {
+    NavigationButton(text = stringResource(id = R.string.go_to_search)) {
         navController.navigate("search")
     }
 }
@@ -24,7 +26,7 @@ fun GoToSearchButton(navController: NavController) {
 // Go to Reading Button
 @Composable
 fun GoToReadingButton(navController: NavController) {
-    NavigationButton(text = "Go to Reading") {
+    NavigationButton(text = stringResource(id = R.string.go_to_reading)) {
         navController.navigate("reading")
     }
 }
@@ -32,7 +34,7 @@ fun GoToReadingButton(navController: NavController) {
 // Go to Table of Content Button
 @Composable
 fun GoToTableContentButton(navController: NavController) {
-    NavigationButton(text = "Table of Content") {
+    NavigationButton(text = stringResource(id = R.string.go_to_table_of_content)) {
         navController.navigate("content_table")
     }
 }

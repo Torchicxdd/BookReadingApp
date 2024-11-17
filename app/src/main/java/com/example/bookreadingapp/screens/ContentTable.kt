@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,11 +20,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.bookreadingapp.objects.AppViewModel
-import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
-import com.example.bookreadingapp.ui.theme.BackToBookshelfButton
-import com.example.bookreadingapp.ui.theme.GoToReadingButton
-import com.example.bookreadingapp.ui.theme.GoToSearchButton
+import com.example.bookreadingapp.ui.BackToBookshelfButton
+import com.example.bookreadingapp.ui.GoToReadingButton
+import com.example.bookreadingapp.ui.GoToSearchButton
 
 @Composable
 fun ContentTable(
@@ -48,7 +46,12 @@ fun ContentTable(
         ) {
             // Title and selected book information
             Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
-            Text(text = "Book Chosen: ${stringResource(viewModel.selectedBookTitleResId)}")
+            Text(
+                text = stringResource(
+                    R.string.book_chosen,
+                    stringResource(viewModel.selectedBookTitleResId)
+                )
+            )
 
             // Navigation buttons for Bookshelf, Search, and Reading screens
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))

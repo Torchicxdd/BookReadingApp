@@ -15,30 +15,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.bookreadingapp.BookReadingApp
 import com.example.bookreadingapp.objects.AppViewModel
-import com.example.bookreadingapp.objects.Routes
-import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
-import com.example.bookreadingapp.ui.theme.BackToBookshelfButton
-import com.example.bookreadingapp.ui.theme.GoToReadingButton
-import com.example.bookreadingapp.ui.theme.GoToTableContentButton
+import com.example.bookreadingapp.ui.BackToBookshelfButton
+import com.example.bookreadingapp.ui.GoToReadingButton
+import com.example.bookreadingapp.ui.GoToTableContentButton
 import com.example.bookreadingapp.ui.theme.md_theme_dark_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_dark_surface
 import com.example.bookreadingapp.ui.theme.md_theme_light_onSurface
@@ -94,7 +86,12 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
             .padding(horizontal = dimensionResource(R.dimen.padding_small))
             .fillMaxWidth()
     ) {
-        Text(text = "Searching for word in ${stringResource(viewModel.selectedBookTitleResId)}")
+        Text(
+            text = stringResource(
+                id = R.string.searching_in_book,
+                stringResource(viewModel.selectedBookTitleResId)
+            )
+        )
         OutlinedTextField(
             value = viewModel.searchBarInput,
             singleLine = true,
