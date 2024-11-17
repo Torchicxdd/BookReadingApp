@@ -48,7 +48,12 @@ fun ContentTable(
         ) {
             // Title and selected book information
             Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
-            Text(text = "Book Chosen: ${stringResource(viewModel.selectedBookTitleResId)}")
+            Text(
+                text = stringResource(
+                    R.string.book_chosen,
+                    stringResource(viewModel.selectedBookTitleResId)
+                )
+            )
 
             // Navigation buttons for Bookshelf, Search, and Reading screens
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))

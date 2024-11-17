@@ -94,7 +94,12 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
             .padding(horizontal = dimensionResource(R.dimen.padding_small))
             .fillMaxWidth()
     ) {
-        Text(text = "Searching for word in ${stringResource(viewModel.selectedBookTitleResId)}")
+        Text(
+            text = stringResource(
+                id = R.string.searching_in_book,
+                stringResource(viewModel.selectedBookTitleResId)
+            )
+        )
         OutlinedTextField(
             value = viewModel.searchBarInput,
             singleLine = true,
