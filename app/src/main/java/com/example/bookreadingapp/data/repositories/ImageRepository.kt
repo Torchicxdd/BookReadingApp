@@ -4,11 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.ImageDao
 import com.example.bookreadingapp.data.entities.Image
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class ImagesRepository(private val imageDao: ImageDao) {
-
+class ImageRepository(private val imageDao: ImageDao) {
     val searchResults = MutableLiveData<List<Image>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -23,4 +24,15 @@ class ImagesRepository(private val imageDao: ImageDao) {
             imageDao.deleteImage(id)
         }
     }
+
+    fun findImage(id: Int) {
+        coroutineScope.launch(Dispatchers.Main) {
+            searchResults.value = asyncFind(id).await()
+        }
+    }
+
+    private fun asyncFind(id: Int) : Deferred<List<Image>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async imageDao.findImageById(id)
+        }
 }
