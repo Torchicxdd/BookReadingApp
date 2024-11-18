@@ -88,9 +88,11 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             val fileName = url.substringAfterLast("/")
             val file = repository.createFile(directoryName, fileName)
 
+            // Download zip file from url
             if (repository.downloadFile(url, file)) {
                 updateDirectoryContents(directoryName)
-                Log.e("DownloadViewModel", "File Downloaded")
+                Log.i("DownloadViewModel", "File Downloaded")
+
             } else {
                 Log.e("DownloadViewModel", "Failed to download file")
             }
@@ -105,7 +107,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     fun confirmDeletion(directoryName: String) {
         repository.deleteDirectoryContents(directoryName)
         updateDirectoryContents(directoryName)
-        Log.e("DownloadViewModel", "File directory deleted")
+        Log.i("DownloadViewModel", "${directoryName} File directory content deleted")
     }
 
 }

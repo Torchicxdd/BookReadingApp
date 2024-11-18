@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.objects.AppViewModel
@@ -64,22 +65,21 @@ fun TestFileDownload(downloadViewModel: DownloadViewModel) {
 
     val urlList = stringArrayResource(R.array.download)
 
-    Column {
+    Column (modifier = Modifier.padding(10.dp)){
         directoryContents.forEach { fileName ->
             Text(fileName)
         }
 
         Button(onClick = {
-            downloadViewModel.setupDownload("https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip", "TestDownload")
+            downloadViewModel.setupDownload("https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip", "TestDownloadDir")
         }) {
             Text("Download File")
         }
         Button(onClick = {
-            downloadViewModel.confirmDeletion("TestDownload")
+            downloadViewModel.confirmDeletion("TestDownloadDir")
         }) {
             Text("Delete Directory")
         }
-
     }
 }
 

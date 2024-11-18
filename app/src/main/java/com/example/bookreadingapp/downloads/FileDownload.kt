@@ -2,6 +2,7 @@ package com.example.bookreadingapp.downloads
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedOutputStream
@@ -11,11 +12,24 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
 
+private val TAG = "FileDownload"
+
 class FileDownload(private val context: Context) {
     // Create download folder if it doesn't exist, then saves file
     fun createFile(directoryName: String, fileName: String): File {
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!downloadFolder.exists()) downloadFolder.mkdirs()
+        downloadFolder.listFiles()?.forEach { file ->
+            if(file.exists()) {
+                try {
+                    ExtractFile.unzipFile(file, "unzipped", context)
+                } catch(e: IOException) {
+                    e.printStackTrace()
+                    e.message?.let { Log.e(TAG, it) }
+                }
+            }
+        }
+
         return File(downloadFolder, fileName)
     }
 
@@ -78,12 +92,16 @@ object ExtractFile {
         bos.close()
     }
 
-    fun unzipFile(zipFile: File, destinationDirectory: String) {
-        File(destinationDirectory).run {
-            if (!exists()) {
-                mkdirs()
-            }
+    fun unzipFile(zipFile: File, destinationDirectory: String, context: Context) {
+        val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), destinationDirectory)
+        Log.i(TAG, unzipFolder.exists().toString())
+        if (!unzipFolder.exists()) {
+            unzipFolder.mkdirs()
+            Log.i(TAG, "Created folder $destinationDirectory")
         }
+        Log.i(TAG, unzipFolder.exists().toString())
+        Log.i(TAG, unzipFolder.absolutePath)
+
 
         ZipFile(zipFile).use { zip ->
             zip.entries().asSequence().forEach { entry ->
