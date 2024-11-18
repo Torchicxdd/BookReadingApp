@@ -94,25 +94,27 @@ object ExtractFile {
 
     fun unzipFile(zipFile: File, destinationDirectory: String, context: Context) {
         val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), destinationDirectory)
-        Log.i(TAG, unzipFolder.exists().toString())
         if (!unzipFolder.exists()) {
             unzipFolder.mkdirs()
-            Log.i(TAG, "Created folder $destinationDirectory")
         }
-        Log.i(TAG, unzipFolder.exists().toString())
         Log.i(TAG, unzipFolder.absolutePath)
 
 
         ZipFile(zipFile).use { zip ->
             zip.entries().asSequence().forEach { entry ->
-                zip.getInputStream(entry).use { input ->
-                    val filePath = destinationDirectory + File.separator + entry.name
+                if(entry.name.contains(".html")) {
+                    Log.i(TAG, "Entry: $entry")
+                    zip.getInputStream(entry).use { input ->
+                        val filePath = unzipFolder.absolutePath + File.separator + entry.name
 
-                    if (!entry.isDirectory) {
-                        extractFile(input, filePath)
-                    } else {
-                        val dir = File(filePath)
-                        dir.mkdir()
+                        if (!entry.isDirectory) {
+                            extractFile(input, filePath)
+                        } else {
+                            val dir = File(filePath)
+                            dir.mkdir()
+                        }
+
+                        Log.i(TAG, File(filePath).readText())
                     }
                 }
             }
