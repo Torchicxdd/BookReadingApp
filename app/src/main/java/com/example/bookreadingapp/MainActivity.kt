@@ -60,10 +60,18 @@ fun BookReadingApp(
         else -> AdaptiveNavigationType.BOTTOM_NAVIGATION
     }
 
+    // Add a listener to navController which changes the canNavigateBack variable in viewmodel
+    navController.addOnDestinationChangedListener { _, _, _, ->
+        viewModel.canNavigateBack = navController.previousBackStackEntry != null
+    }
+
     Scaffold(
         topBar = {
             if(!viewModel.readingMode) {
-                TopAppBar()
+                TopAppBar(
+                    canNavigateBack = viewModel.canNavigateBack,
+                    navigateBack = { navController.navigateUp() }
+                )
             }
         },
         content = { padding ->

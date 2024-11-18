@@ -41,7 +41,8 @@ fun Bookshelf(
             onBookClick = { book ->
                 viewModel.updateBookTitle(book.title)
                 navController.navigate(Routes.ContentTable.route) {
-                    popUpTo(Routes.Library.route) { inclusive = true }
+                    launchSingleTop = true
+                    restoreState = true
                 }
             }
         )
