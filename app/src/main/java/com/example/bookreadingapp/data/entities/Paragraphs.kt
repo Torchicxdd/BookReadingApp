@@ -25,7 +25,8 @@ class Paragraphs {
     var text: String = ""
 
     constructor()
-    constructor(text: String) {
+    constructor(text: String, chapterId: Int) {
         this.text = text
+        this.chapterId = chapterId
     }
 }
