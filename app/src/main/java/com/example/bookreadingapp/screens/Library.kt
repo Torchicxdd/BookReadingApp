@@ -43,9 +43,9 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 fun Library(
     context: Context,
     viewModel: AppViewModel,
-    downloadViewModel: DownloadViewModel = viewModel(),
     navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    adaptiveNavigationType: AdaptiveNavigationType,
+    downloadViewModel: DownloadViewModel,
 ) {
     val urlList = stringArrayResource(R.array.download)
 
@@ -76,8 +76,10 @@ fun Library(
                         BookItem(book = book, onClick = {
                             // Move book to bookshelf and update viewModel
                             viewModel.moveBookToBookshelf(book)
-                            book.htmlFilePath = downloadViewModel.setupDownload(urlList[book.arrayIndex],
-                                "${urlList[book.arrayIndex].substringAfterLast("/").replace(".zip", "")}-dir")
+                            book.htmlFilePath = downloadViewModel.setupDownload(
+                                urlList[book.arrayIndex],
+                                "${urlList[book.arrayIndex].substringAfterLast("/").replace(".zip", "")}-dir"
+                            )
                         }, modifier = Modifier.testTag("book_item_${book.title}"))
                         Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
                     }

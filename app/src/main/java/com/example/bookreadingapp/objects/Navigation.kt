@@ -54,7 +54,8 @@ fun NavigationHost(
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier,
-    viewModel: AppViewModel = viewModel()
+    viewModel: AppViewModel = viewModel(),
+    downloadViewModel: DownloadViewModel
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
@@ -63,7 +64,7 @@ fun NavigationHost(
             Home(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel, navController, adaptiveNavigationType)
+            Library(context, viewModel, navController, adaptiveNavigationType, downloadViewModel)
         }
         composable(Routes.Bookshelf.route) {
             Bookshelf(context, viewModel, navController, adaptiveNavigationType)
@@ -160,6 +161,11 @@ fun PermanentNavDrawer(
     adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier = Modifier,
     viewModel: AppViewModel = viewModel(),
+<<<<<<< HEAD
+=======
+    downloadViewModel: DownloadViewModel,
+    modifier: Modifier = Modifier
+>>>>>>> e86cb02 (Download and extract file on book selection)
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -209,7 +215,9 @@ fun PermanentNavDrawer(
                     navController,
                     context,
                     adaptiveNavigationType,
-                    modifier = modifier.fillMaxSize())
+                    modifier = modifier.fillMaxSize(),
+                    downloadViewModel = downloadViewModel
+                )
             }
         },
         modifier = Modifier.testTag("nav_drawer")
