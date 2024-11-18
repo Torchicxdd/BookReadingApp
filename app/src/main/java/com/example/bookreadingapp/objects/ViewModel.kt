@@ -99,7 +99,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
                 e.message?.let { Log.e(TAG_DVM, it) }
             }
 
-            updateDirectoryContents(directoryName)
+            updateDirectoryContents("")
         }
     }
 
@@ -111,6 +111,6 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     fun confirmDeletion(directoryName: String) {
         repository.deleteDirectoryContents(directoryName)
         updateDirectoryContents(directoryName)
-        Log.i(TAG_DVM, "${directoryName} content deleted")
+        Log.i(TAG_DVM, "$directoryName content deleted")
     }
 }
