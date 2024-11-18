@@ -57,7 +57,8 @@ fun NavigationHost(
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier,
-    viewModel: AppViewModel = viewModel()
+    viewModel: AppViewModel = viewModel(),
+    downloadViewModel: DownloadViewModel
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
@@ -66,7 +67,7 @@ fun NavigationHost(
             Home(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel, navController, adaptiveNavigationType)
+            Library(context, viewModel, navController, adaptiveNavigationType, downloadViewModel)
         }
         composable(Routes.Bookshelf.route) {
             Bookshelf(context, viewModel, navController, adaptiveNavigationType)
@@ -159,6 +160,7 @@ fun PermanentNavDrawer(
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel = viewModel(),
+    downloadViewModel: DownloadViewModel,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -208,7 +210,9 @@ fun PermanentNavDrawer(
                     navController,
                     context,
                     adaptiveNavigationType,
-                    modifier = modifier.fillMaxSize())
+                    modifier = modifier.fillMaxSize(),
+                    downloadViewModel = downloadViewModel
+                )
             }
         }
     )

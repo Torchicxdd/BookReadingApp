@@ -49,11 +49,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BookReadingAppTheme {
-//                val windowSize = calculateWindowSizeClass(this)
-//                BookReadingApp(
-//                    windowSize = windowSize.widthSizeClass
-//                )
-                TestFileDownload(downloadViewModel)
+                val windowSize = calculateWindowSizeClass(this)
+                BookReadingApp(
+                    windowSize = windowSize.widthSizeClass,
+                    downloadViewModel = downloadViewModel
+                )
+//                TestFileDownload(downloadViewModel)
             }
         }
     }
@@ -89,7 +90,8 @@ fun TestFileDownload(downloadViewModel: DownloadViewModel) {
 @Composable
 fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
-    viewModel: AppViewModel = viewModel()
+    viewModel: AppViewModel = viewModel(),
+    downloadViewModel: DownloadViewModel
 )  {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -129,7 +131,8 @@ fun BookReadingApp(
                         adaptiveNavigationType,
                         modifier = Modifier
                             .padding(padding)
-                            .fillMaxSize())
+                            .fillMaxSize(),
+                        downloadViewModel = downloadViewModel)
                 }
                 if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
                     Box(
@@ -143,6 +146,7 @@ fun BookReadingApp(
                             adaptiveNavigationType,
                             Modifier
                                 .padding(padding),
+                            downloadViewModel = downloadViewModel
                         )
                     }
                 }
@@ -167,7 +171,8 @@ fun BookReadingApp(
 fun ReadingPreview() {
     BookReadingAppTheme {
         BookReadingApp(
-            windowSize = WindowWidthSizeClass.Expanded
+            windowSize = WindowWidthSizeClass.Expanded,
+            downloadViewModel = viewModel()
         )
     }
 }
