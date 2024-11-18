@@ -87,24 +87,19 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             val fileName = url.substringAfterLast("/")
             val file = repository.createFile(directoryName, fileName)
 
-
             // Download zip file from url
-            if (repository.downloadFile(url, file)) {
-                updateDirectoryContents(directoryName)
-                Log.i(TAG_DVM, "File Downloaded")
+            if (repository.downloadFile(url, file)) Log.i(TAG_DVM, "File Downloaded")
+                else Log.e(TAG_DVM, "Failed to download file")
 
-            } else {
-                Log.e(TAG_DVM, "Failed to download file")
-            }
-
-            Log.i(TAG_DVM, file.absolutePath)
-
+            // Extract zip file after downloading
             try {
                 repository.unzipFile(file, directoryName)
             } catch(e: IOException) {
                 e.printStackTrace()
                 e.message?.let { Log.e(TAG_DVM, it) }
             }
+
+            updateDirectoryContents(directoryName)
         }
     }
 

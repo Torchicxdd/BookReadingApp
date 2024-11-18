@@ -12,7 +12,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
 
-private const val TAG_FD = "FileDownload"
 private const val TAG_FE = "FileExtract"
 
 class FileDownload(private val context: Context) {

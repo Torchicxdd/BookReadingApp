@@ -67,13 +67,17 @@ fun TestFileDownload(downloadViewModel: DownloadViewModel) {
 
     val urlList = stringArrayResource(R.array.download)
 
-    Column (modifier = Modifier.padding(10.dp)){
+
+    Column (modifier = Modifier.padding(100.dp)){
         directoryContents.forEach { fileName ->
             Text(fileName)
         }
 
         Button(onClick = {
-            downloadViewModel.setupDownload("https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip", "TestDownloadDir2")
+            for (url in urlList) {
+                downloadViewModel.setupDownload(url,
+                    "${url.substringAfterLast("/").replace(".zip", "")}-directory")
+            }
         }) {
             Text("Download File")
         }
