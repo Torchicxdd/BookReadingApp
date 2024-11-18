@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
-import com.example.bookreadingapp.ui.BackToBookshelfButton
 import com.example.bookreadingapp.ui.GoToReadingButton
 import com.example.bookreadingapp.ui.GoToSearchButton
 
