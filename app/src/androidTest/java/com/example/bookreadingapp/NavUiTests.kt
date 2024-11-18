@@ -85,9 +85,9 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("library_button").performClick()
         composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755140").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755140").performClick()
-        composeTestRule.onNodeWithTag("book_item_2131755140").assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755164").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755164").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755164").assertIsNotDisplayed()
 
     }
 
@@ -98,7 +98,7 @@ class NavUiTests {
         testLibraryScreenBookClicking()
         composeTestRule.onNodeWithTag("bookshelf_button").performClick()
         composeTestRule.onNodeWithTag("bookshelf_screen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755140").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755164").assertIsDisplayed()
     }
 
     //test that clicking bookshelf book navigates to table of contents screen
@@ -106,7 +106,7 @@ class NavUiTests {
     fun testNavigateToTableOfContentScreenOnBookClick() {
         composeTestRule.waitForIdle()
         testNavigateToBookShelfScreenWithBook()
-        composeTestRule.onNodeWithTag("book_item_2131755140").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755164").performClick()
         composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
     }
 
