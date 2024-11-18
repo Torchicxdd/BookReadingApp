@@ -20,21 +20,10 @@ class FileDownload(private val context: Context) {
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!downloadFolder.exists()) downloadFolder.mkdirs()
 
-//        downloadFolder.listFiles()?.forEach { file ->
-//            if(file.exists() && file.isFile) {
-//                try {
-//                    ExtractFile.unzipFile(file, downloadFolder.absolutePath)
-//                } catch(e: IOException) {
-//                    e.printStackTrace()
-//                    e.message?.let { Log.e(TAG_FD, it) }
-//                }
-//            }
-//        }
-
         return File(downloadFolder, fileName)
     }
 
-    // Retrieve download folders
+    // List directory contents
     fun listDirectoryContents(directoryName: String): List<String> {
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         return downloadFolder.listFiles()?.map { it.name } ?: emptyList()
@@ -81,6 +70,7 @@ class FileDownload(private val context: Context) {
         }
     }
 
+    // Unzip file and saves to the same directory
     fun unzipFile(zipFile: File, directoryName: String) {
         val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!unzipFolder.exists()) {
@@ -91,7 +81,6 @@ class FileDownload(private val context: Context) {
         ZipFile(zipFile).use { zip ->
             zip.entries().asSequence().forEach { entry ->
                 if(entry.name.contains(".html")) {
-                    Log.i(TAG_FE, "Entry: $entry")
                     zip.getInputStream(entry).use { input ->
                         val filePath = unzipFolder.absolutePath + File.separator + entry.name
 

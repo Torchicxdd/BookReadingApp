@@ -65,10 +65,9 @@ fun TestFileDownload(downloadViewModel: DownloadViewModel) {
 
     val urlList = stringArrayResource(R.array.download)
 
-
     Column (modifier = Modifier.padding(100.dp)){
-        directoryContents.forEach { fileName ->
-            Text(fileName)
+        directoryContents.forEach { dirName ->
+            Text(dirName)
         }
 
         Button(onClick = {
@@ -90,7 +89,8 @@ fun TestFileDownload(downloadViewModel: DownloadViewModel) {
 @Composable
 fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
-    viewModel: AppViewModel = viewModel()
+    viewModel: AppViewModel = viewModel(),
+    downloadViewModel: DownloadViewModel = viewModel()
 )  {
     val navController = rememberNavController()
     val context = LocalContext.current
