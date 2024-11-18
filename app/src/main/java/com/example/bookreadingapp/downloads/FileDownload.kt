@@ -12,23 +12,25 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
 
-private val TAG = "FileDownload"
+private const val TAG_FD = "FileDownload"
+private const val TAG_FE = "FileExtract"
 
 class FileDownload(private val context: Context) {
     // Create download folder if it doesn't exist, then saves file
     fun createFile(directoryName: String, fileName: String): File {
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!downloadFolder.exists()) downloadFolder.mkdirs()
-        downloadFolder.listFiles()?.forEach { file ->
-            if(file.exists()) {
-                try {
-                    ExtractFile.unzipFile(file, "unzipped", context)
-                } catch(e: IOException) {
-                    e.printStackTrace()
-                    e.message?.let { Log.e(TAG, it) }
-                }
-            }
-        }
+
+//        downloadFolder.listFiles()?.forEach { file ->
+//            if(file.exists() && file.isFile) {
+//                try {
+//                    ExtractFile.unzipFile(file, downloadFolder.absolutePath)
+//                } catch(e: IOException) {
+//                    e.printStackTrace()
+//                    e.message?.let { Log.e(TAG_FD, it) }
+//                }
+//            }
+//        }
 
         return File(downloadFolder, fileName)
     }
@@ -75,35 +77,22 @@ class FileDownload(private val context: Context) {
     // Delete directory contents directly without IntentSender
     fun deleteDirectoryContents(directoryName: String) {
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
-        downloadFolder.listFiles()?.forEach { it.delete() }
-    }
-}
-
-object ExtractFile {
-    private const val BUFFER_SIZE = 4096
-
-    private fun extractFile(inputStream: InputStream, destFilePath: String) {
-        val bos = BufferedOutputStream(FileOutputStream(destFilePath))
-        val bytesIn = ByteArray(BUFFER_SIZE)
-        var read: Int
-        while (inputStream.read(bytesIn).also { read = it } != -1) {
-            bos.write(bytesIn, 0, read)
+        downloadFolder.listFiles()?.forEach {
+            it.delete()
         }
-        bos.close()
     }
 
-    fun unzipFile(zipFile: File, destinationDirectory: String, context: Context) {
-        val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), destinationDirectory)
+    fun unzipFile(zipFile: File, directoryName: String) {
+        val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!unzipFolder.exists()) {
             unzipFolder.mkdirs()
         }
-        Log.i(TAG, unzipFolder.absolutePath)
-
+        Log.i(TAG_FE, unzipFolder.absolutePath)
 
         ZipFile(zipFile).use { zip ->
             zip.entries().asSequence().forEach { entry ->
                 if(entry.name.contains(".html")) {
-                    Log.i(TAG, "Entry: $entry")
+                    Log.i(TAG_FE, "Entry: $entry")
                     zip.getInputStream(entry).use { input ->
                         val filePath = unzipFolder.absolutePath + File.separator + entry.name
 
@@ -114,10 +103,20 @@ object ExtractFile {
                             dir.mkdir()
                         }
 
-                        Log.i(TAG, File(filePath).readText())
+                        Log.i(TAG_FE, File(filePath).absolutePath)
                     }
                 }
             }
         }
+    }
+
+    private fun extractFile(inputStream: InputStream, destFilePath: String) {
+        val bos = BufferedOutputStream(FileOutputStream(destFilePath))
+        val bytesIn = ByteArray(4096) // BUFFER_SIZE = 4096
+        var read: Int
+        while (inputStream.read(bytesIn).also { read = it } != -1) {
+            bos.write(bytesIn, 0, read)
+        }
+        bos.close()
     }
 }
