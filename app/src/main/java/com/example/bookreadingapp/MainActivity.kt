@@ -94,6 +94,7 @@ fun BookReadingApp(
     viewModel: AppViewModel = viewModel(),
     navController: NavHostController = rememberNavController(),
     downloadViewModel: DownloadViewModel = viewModel()
+    viewModel: AppViewModel = viewModel()
 )  {
     val context = LocalContext.current
 

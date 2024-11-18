@@ -82,7 +82,8 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     val directoryContents: LiveData<List<String>> = _directoryContents
 
     // Function to set up file download
-    fun setupDownload(url: String, directoryName: String) {
+    fun setupDownload(url: String, directoryName: String) : String {
+        var downloadedFilePath = ""
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
             val file = repository.createFile(directoryName, fileName)
@@ -93,7 +94,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
             // Extract zip file after downloading
             try {
-                repository.unzipFile(file, directoryName)
+                downloadedFilePath = repository.unzipFile(file, directoryName)
             } catch(e: IOException) {
                 e.printStackTrace()
                 e.message?.let { Log.e(TAG_DVM, it) }
@@ -101,6 +102,8 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
             updateDirectoryContents("")
         }
+
+        return downloadedFilePath;
     }
 
     private fun updateDirectoryContents(directoryName: String) {
