@@ -10,6 +10,7 @@ class AppViewModelFactory(val application: Application): ViewModelProvider.Facto
             modelClass.isAssignableFrom(BookViewModel::class.java) -> BookViewModel(application) as T
             modelClass.isAssignableFrom(ChapterViewModel::class.java) -> ChapterViewModel(application) as T
             modelClass.isAssignableFrom(ImageViewModel::class.java) -> ImageViewModel(application) as T
+            modelClass.isAssignableFrom(ParagraphViewModel::class.java) -> ParagraphViewModel(application) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
