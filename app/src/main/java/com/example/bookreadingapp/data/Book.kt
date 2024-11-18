@@ -2,6 +2,8 @@ package com.example.bookreadingapp.data
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import com.example.bookreadingapp.R
 
 class Book (
