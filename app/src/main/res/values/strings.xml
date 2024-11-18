@@ -26,10 +26,8 @@
     <string name="search">Search Screen</string>
     <string name="bookshelf">Bookshelf Screen</string>
 
-    <string name="back_to_bookshelf">Back to Bookshelf</string>
     <string name="go_to_search">Go to Search</string>
     <string name="go_to_reading">Go to Reading</string>
-    <string name="go_to_table_of_content">Table of Content</string>
 
     <string name="book_chosen">Book Chosen: %1$s</string>
     <string name="searching_in_book">Searching for word in %1$s</string>

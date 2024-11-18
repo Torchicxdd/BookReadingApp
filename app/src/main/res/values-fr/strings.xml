@@ -27,10 +27,8 @@
     <string name="search">Écran de recherche</string>
     <string name="bookshelf">Écran de l\'étagère</string>
 
-    <string name="back_to_bookshelf">Retour à la bibliothèque</string>
     <string name="go_to_search">Aller à la recherche</string>
     <string name="go_to_reading">Aller à la lecture</string>
-    <string name="go_to_table_of_content">Table des matières</string>
 
     <string name="book_chosen">Livre choisi: %1$s</string>
     <string name="searching_in_book">Recherche du mot dans %1$s</string>
