@@ -71,7 +71,9 @@ class FileDownload(private val context: Context) {
     }
 
     // Unzip file and saves to the same directory
-    fun unzipFile(zipFile: File, directoryName: String) {
+    // Returns absolute path of unzipped file
+    fun unzipFile(zipFile: File, directoryName: String) : String {
+        var unzippedPath = ""
         val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!unzipFolder.exists()) {
             unzipFolder.mkdirs()
@@ -90,12 +92,15 @@ class FileDownload(private val context: Context) {
                             val dir = File(filePath)
                             dir.mkdir()
                         }
-
+                        // Need to change to also unzip images after
                         Log.i(TAG_FE, File(filePath).absolutePath)
+                        unzippedPath = File(filePath).absolutePath
                     }
                 }
             }
         }
+
+        return unzippedPath
     }
 
     private fun extractFile(inputStream: InputStream, destFilePath: String) {

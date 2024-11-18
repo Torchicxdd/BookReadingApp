@@ -9,7 +9,9 @@ class Book (
     @DrawableRes val imageResourceId: Int,
     @StringRes val title: Int,
     val arrayIndex: Int
-)
+) {
+    var htmlFilePath: String = ""
+}
 
 val books = listOf(
     Book(R.drawable.wood_cover, R.string.wood, 0),

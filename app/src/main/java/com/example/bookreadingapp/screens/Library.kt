@@ -28,21 +28,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.objects.AppViewModel
+import com.example.bookreadingapp.objects.DownloadViewModel
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 @Composable
 fun Library(
     context: Context,
     viewModel: AppViewModel,
+    downloadViewModel: DownloadViewModel = viewModel(),
     navController: NavController,
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
+    val urlList = stringArrayResource(R.array.download)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,6 +76,8 @@ fun Library(
                         BookItem(book = book, onClick = {
                             // Move book to bookshelf and update viewModel
                             viewModel.moveBookToBookshelf(book)
+                            book.htmlFilePath = downloadViewModel.setupDownload(urlList[book.arrayIndex],
+                                "${urlList[book.arrayIndex].substringAfterLast("/").replace(".zip", "")}-dir")
                         }, modifier = Modifier.testTag("book_item_${book.title}"))
                         Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
                     }

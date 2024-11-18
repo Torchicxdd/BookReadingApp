@@ -89,8 +89,7 @@ fun TestFileDownload(downloadViewModel: DownloadViewModel) {
 @Composable
 fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
-    viewModel: AppViewModel = viewModel(),
-    downloadViewModel: DownloadViewModel = viewModel()
+    viewModel: AppViewModel = viewModel()
 )  {
     val navController = rememberNavController()
     val context = LocalContext.current
