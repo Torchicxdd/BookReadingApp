@@ -107,6 +107,7 @@ fun BookReadingApp(
                         modifier = Modifier
                             .padding(padding)
                             .fillMaxSize(),
+                        viewModel = viewModel,
                         downloadViewModel = downloadViewModel)
                 }
                 if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
@@ -121,6 +122,7 @@ fun BookReadingApp(
                             adaptiveNavigationType,
                             Modifier
                                 .padding(padding),
+                            viewModel = viewModel,
                             downloadViewModel = downloadViewModel
                         )
                     }

@@ -10,11 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.bookreadingapp"
-<<<<<<< HEAD
-        minSdk = 26
-=======
         minSdk = 30
->>>>>>> 4617dd5 (Implement file download class from example)
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
