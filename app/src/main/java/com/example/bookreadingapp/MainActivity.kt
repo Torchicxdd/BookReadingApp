@@ -33,7 +33,7 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
     private val downloadViewModel: DownloadViewModel by viewModels {
-        DownloadViewModelFactory(this.applicationContext) // Use application context to prevent memory leaks
+        DownloadViewModelFactory(this.applicationContext)
     }
 
     @ExperimentalMaterial3WindowSizeClassApi

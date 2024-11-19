@@ -2,7 +2,6 @@ package com.example.bookreadingapp
 
 
 import android.content.Context
-import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -11,17 +10,13 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.bookreadingapp.download.DownloadViewModel
-import com.example.bookreadingapp.objects.DownloadViewModelFactory
+import com.example.bookreadingapp.download.FileDownload
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bookreadingapp.download.FileDownload
-import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -29,7 +24,6 @@ class NavUiTests {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-
     private var contextMock: Context = mock()
 
     @Before
