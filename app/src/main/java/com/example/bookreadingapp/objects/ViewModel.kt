@@ -1,21 +1,13 @@
 package com.example.bookreadingapp.objects
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
-import com.example.bookreadingapp.downloads.FileDownload
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.IOException
 
 class AppViewModel : ViewModel() {
     var exampleState by mutableStateOf("This is the state before being changed")
@@ -76,47 +68,5 @@ class AppViewModel : ViewModel() {
         if (searchBarInput.isNotBlank()) {
             searchResultText = "Searching for the word $searchBarInput"
         }
-    }
-}
-
-private const val TAG_DVM = "DownloadViewModel"
-class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
-    private val _directoryContents = MutableLiveData<List<String>>()
-    val directoryContents: LiveData<List<String>> = _directoryContents
-
-    // Function to set up file download
-    fun setupDownload(url: String, directoryName: String) : String {
-        var downloadedFilePath = ""
-        viewModelScope.launch(Dispatchers.IO) {
-            val fileName = url.substringAfterLast("/")
-            val file = repository.createFile(directoryName, fileName)
-
-            // Download zip file from url
-            if (repository.downloadFile(url, file)) Log.i(TAG_DVM, "File Downloaded")
-                else Log.e(TAG_DVM, "Failed to download file")
-
-            // Extract zip file after downloading
-            try {
-                downloadedFilePath = repository.unzipFile(file, directoryName)
-            } catch(e: IOException) {
-                e.printStackTrace()
-                e.message?.let { Log.e(TAG_DVM, it) }
-            }
-
-            updateDirectoryContents("")
-        }
-
-        return downloadedFilePath;
-    }
-
-    private fun updateDirectoryContents(directoryName: String) {
-        val contents = repository.listDirectoryContents(directoryName)
-        _directoryContents.postValue(contents)
-    }
-
-    fun confirmDeletion(directoryName: String) {
-        repository.deleteDirectoryContents(directoryName)
-        updateDirectoryContents(directoryName)
-        Log.i(TAG_DVM, "$directoryName content deleted")
     }
 }

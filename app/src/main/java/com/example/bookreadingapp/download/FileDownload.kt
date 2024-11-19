@@ -1,8 +1,10 @@
-package com.example.bookreadingapp.downloads
+package com.example.bookreadingapp.download
 
 import android.content.Context
 import android.os.Environment
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedOutputStream
@@ -11,10 +13,12 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
+import kotlinx.coroutines.channels.*
 
 private const val TAG_FE = "FileExtract"
 
 class FileDownload(private val context: Context) {
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     // Create download folder if it doesn't exist, then saves file
     fun createFile(directoryName: String, fileName: String): File {
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
@@ -71,13 +75,14 @@ class FileDownload(private val context: Context) {
     }
 
     // Unzip file and saves to the same directory
-    // Returns absolute path of unzipped file
+    // Returns absolute path of unzipped html file
     fun unzipFile(zipFile: File, directoryName: String) : String {
         var unzippedPath = ""
         val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!unzipFolder.exists()) {
             unzipFolder.mkdirs()
         }
+        // Log where unzipped content will be placed
         Log.i(TAG_FE, unzipFolder.absolutePath)
 
         ZipFile(zipFile).use { zip ->
@@ -93,7 +98,8 @@ class FileDownload(private val context: Context) {
                             dir.mkdir()
                         }
                         // Need to change to also unzip images after
-                        Log.i(TAG_FE, File(filePath).absolutePath)
+                        // Log location of the unzipped html file
+                        Log.i(TAG_FE, File(filePath).absolutePath + " Exists: " + File(filePath).exists())
                         unzippedPath = File(filePath).absolutePath
                     }
                 }

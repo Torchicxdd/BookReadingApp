@@ -29,7 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
-import com.example.bookreadingapp.objects.DownloadViewModel
+import com.example.bookreadingapp.download.DownloadViewModel
 import com.example.bookreadingapp.objects.DownloadViewModelFactory
 import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
@@ -54,7 +54,6 @@ class MainActivity : ComponentActivity() {
                     windowSize = windowSize.widthSizeClass,
                     downloadViewModel = downloadViewModel
                 )
-//                TestFileDownload(downloadViewModel)
             }
         }
     }

@@ -29,6 +29,8 @@ import com.example.bookreadingapp.utils.AdaptiveNavigationType
 import com.example.bookreadingapp.ui.BackToBookshelfButton
 import com.example.bookreadingapp.ui.GoToSearchButton
 import com.example.bookreadingapp.ui.GoToTableContentButton
+import java.io.File
+import java.io.IOException
 
 @Composable
 fun Reading(
