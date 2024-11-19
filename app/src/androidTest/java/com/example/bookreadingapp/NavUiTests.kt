@@ -26,7 +26,7 @@ class NavUiTests {
     private lateinit var navController: TestNavHostController
 
     @Before
-    fun setUP() {
+    fun setUp() {
         composeTestRule.setContent {
             // Setup test navigator
             // https://github.com/google-developer-training/basic-android-kotlin-compose-training-cupcake/blob/main/app/src/androidTest/java/com/example/cupcake/test/CupcakeScreenNavigationTest.kt
@@ -83,6 +83,7 @@ class NavUiTests {
         // Wait for idle state to ensure UI is rendered
         composeTestRule.waitForIdle()
 
+        composeTestRule.onNodeWithTag("nav_bar").assertIsDisplayed()
         composeTestRule.onNodeWithTag("home_button").assertIsDisplayed()
         composeTestRule.onNodeWithTag("library_button").assertIsDisplayed()
         composeTestRule.onNodeWithTag("bookshelf_button").assertIsDisplayed()
@@ -94,6 +95,7 @@ class NavUiTests {
 
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("Back_Button").assertIsNotDisplayed()
+        navController.assertCurrentRouteName(Routes.Home.route)
     }
 
     //test that library button click brings to library screen
@@ -103,11 +105,10 @@ class NavUiTests {
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
-
         navigateToLibrary()
-
         composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.Library.route)
     }
 
     //test that bookshelf is empty initially
@@ -119,7 +120,6 @@ class NavUiTests {
         navigateToBookshelf()
         composeTestRule.onNodeWithTag("no_books_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("empty_bookshelf_text").assertIsDisplayed()
-
     }
 
 //test that clicking book in library downloads it
@@ -134,7 +134,6 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
         composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
         composeTestRule.onNodeWithTag("book_item_2131755162").assertIsNotDisplayed()
-
     }
 
 //test that downloaded book is displayed on bookshelf

@@ -88,7 +88,9 @@ fun BottomNavBar(
     context: Context,
     modifier: Modifier = Modifier
 ) {
-    NavigationBar {
+    NavigationBar(
+        modifier = modifier.testTag("nav_bar")
+    ) {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
         val barItems = NavBarItems.getBarItems(context)
@@ -125,7 +127,9 @@ fun NavRail(
     val currentRoute = backStackEntry?.destination?.route
     val barItems = NavBarItems.getBarItems(context)
 
-    NavigationRail {
+    NavigationRail(
+        modifier = modifier.testTag("nav_rail")
+    ) {
         Spacer(Modifier.weight(1f))
         barItems.forEach { navItem ->
             NavigationRailItem(
@@ -142,6 +146,7 @@ fun NavRail(
                 icon = {
                     Icon(imageVector = navItem.image, contentDescription = navItem.title)
                 },
+                modifier = navItem.modifier
             )
         }
         Spacer(Modifier.weight(1f))
@@ -153,8 +158,8 @@ fun PermanentNavDrawer(
     navController: NavHostController,
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
+    modifier: Modifier = Modifier,
     viewModel: AppViewModel = viewModel(),
-    modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -187,7 +192,8 @@ fun PermanentNavDrawer(
                                         contentDescription = navItem.title
                                     )
                                 },
-                                label = { Text(text = navItem.title) }
+                                label = { Text(text = navItem.title) },
+                                modifier = navItem.modifier
                             )
                         }
                     }
@@ -205,7 +211,8 @@ fun PermanentNavDrawer(
                     adaptiveNavigationType,
                     modifier = modifier.fillMaxSize())
             }
-        }
+        },
+        modifier = Modifier.testTag("nav_drawer")
     )
 }
 
