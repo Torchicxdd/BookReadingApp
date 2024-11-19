@@ -1,42 +1,26 @@
 package com.example.bookreadingapp.data.repositories
 
-<<<<<<< HEAD
 import androidx.lifecycle.LiveData
-=======
->>>>>>> f38457c (Start book repository)
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.BooksDao
 import com.example.bookreadingapp.data.entities.Books
 import kotlinx.coroutines.CoroutineScope
-<<<<<<< HEAD
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-=======
-import kotlinx.coroutines.Dispatchers
->>>>>>> f38457c (Start book repository)
 import kotlinx.coroutines.launch
 
 class BooksRepository(private val booksDao: BooksDao) {
     val searchResults = MutableLiveData<List<Books>>()
-<<<<<<< HEAD
     val allBooks: LiveData<List<Books>> = booksDao.getAllBooks()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    /**
-     * Method used to insert new books to the database
-     */
-=======
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
->>>>>>> f38457c (Start book repository)
     fun insertBook(newBook: Books) {
         coroutineScope.launch(Dispatchers.IO) {
             booksDao.insertBook(newBook)
         }
     }
 
-<<<<<<< HEAD
     /**
      * Method used to delete books from the database
      */
@@ -96,6 +80,4 @@ class BooksRepository(private val booksDao: BooksDao) {
         coroutineScope.async(Dispatchers.IO) {
             return@async booksDao.findBookByNameAndAuthor(title, author)
         }
-=======
->>>>>>> f38457c (Start book repository)
 }
