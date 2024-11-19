@@ -1,15 +1,19 @@
 package com.example.bookreadingapp
 
-
 import android.content.Context
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.download.FileDownload
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import org.junit.Before
 import org.junit.Rule
@@ -24,6 +28,7 @@ class NavUiTests {
     @get:Rule
     val composeTestRule = createComposeRule()
     private var contextMock: Context = mock()
+    private lateinit var navController: TestNavHostController
 
     @Before
     fun setUP() {
@@ -39,7 +44,7 @@ class NavUiTests {
             BookReadingAppTheme {
                 BookReadingApp(
                     windowSize = WindowWidthSizeClass.Compact,
-                    navController = navController
+                    navController = navController,
                     downloadViewModel = downloadViewModel
                 )
             }
