@@ -1,19 +1,19 @@
 package com.example.bookreadingapp.objects
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import NavBarItems
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -37,14 +37,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.bookreadingapp.R
+import com.example.bookreadingapp.ui.DownloadViewModel
+import com.example.bookreadingapp.screens.Bookshelf
 import com.example.bookreadingapp.screens.ContentTable
 import com.example.bookreadingapp.screens.Home
 import com.example.bookreadingapp.screens.Library
-import com.example.bookreadingapp.screens.Bookshelf
 import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bookreadingapp.R
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 
@@ -54,7 +54,8 @@ fun NavigationHost(
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier,
-    viewModel: AppViewModel = viewModel()
+    viewModel: AppViewModel,
+    downloadViewModel: DownloadViewModel
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
@@ -63,7 +64,7 @@ fun NavigationHost(
             Home(context, viewModel, adaptiveNavigationType)
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel, navController, adaptiveNavigationType)
+            Library(context, viewModel, navController, adaptiveNavigationType, downloadViewModel)
         }
         composable(Routes.Bookshelf.route) {
             Bookshelf(context, viewModel, navController, adaptiveNavigationType)
@@ -158,8 +159,9 @@ fun PermanentNavDrawer(
     navController: NavHostController,
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
-    modifier: Modifier = Modifier,
-    viewModel: AppViewModel = viewModel(),
+    viewModel: AppViewModel,
+    downloadViewModel: DownloadViewModel,
+    modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -209,7 +211,10 @@ fun PermanentNavDrawer(
                     navController,
                     context,
                     adaptiveNavigationType,
-                    modifier = modifier.fillMaxSize())
+                    modifier = modifier.fillMaxSize(),
+                    viewModel = viewModel,
+                    downloadViewModel = downloadViewModel
+                )
             }
         },
         modifier = Modifier.testTag("nav_drawer")

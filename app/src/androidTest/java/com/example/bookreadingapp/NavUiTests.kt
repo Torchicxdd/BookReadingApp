@@ -1,4 +1,6 @@
 package com.example.bookreadingapp
+
+import android.content.Context
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
@@ -10,11 +12,14 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.bookreadingapp.objects.Routes
+import com.example.bookreadingapp.download.FileDownload
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
 
 
 @RunWith(AndroidJUnit4::class)
@@ -22,11 +27,14 @@ class NavUiTests {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-
+    private var contextMock: Context = mock()
     private lateinit var navController: TestNavHostController
 
     @Before
-    fun setUp() {
+    fun setUP() {
+        val repository = FileDownload(contextMock)
+        val downloadViewModel = DownloadViewModel(repository)
+
         composeTestRule.setContent {
             // Setup test navigator
             // https://github.com/google-developer-training/basic-android-kotlin-compose-training-cupcake/blob/main/app/src/androidTest/java/com/example/cupcake/test/CupcakeScreenNavigationTest.kt
@@ -36,7 +44,8 @@ class NavUiTests {
             BookReadingAppTheme {
                 BookReadingApp(
                     windowSize = WindowWidthSizeClass.Compact,
-                    navController = navController
+                    navController = navController,
+                    downloadViewModel = downloadViewModel
                 )
             }
         }
@@ -52,12 +61,12 @@ class NavUiTests {
 
     private fun clickLibraryBook() {
         navigateToLibrary()
-        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755163").performClick()
     }
 
     private fun clickBookshelfBook() {
         navigateToBookshelf()
-        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755163").performClick()
     }
 
     private fun navigateToTableOfContents() {
@@ -131,9 +140,9 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
         navigateToLibrary()
         composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
-        composeTestRule.onNodeWithTag("book_item_2131755162").assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755163").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755163").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755163").assertIsNotDisplayed()
     }
 
 //test that downloaded book is displayed on bookshelf
@@ -143,7 +152,7 @@ class NavUiTests {
         clickLibraryBook()
         navigateToBookshelf()
         composeTestRule.onNodeWithTag("bookshelf_screen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755163").assertIsDisplayed()
     }
 
     //test that clicking bookshelf book navigates to table of contents screen

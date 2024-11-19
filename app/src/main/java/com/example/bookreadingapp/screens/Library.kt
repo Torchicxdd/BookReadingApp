@@ -23,17 +23,20 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.objects.AppViewModel
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 @Composable
@@ -41,8 +44,12 @@ fun Library(
     context: Context,
     viewModel: AppViewModel,
     navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    adaptiveNavigationType: AdaptiveNavigationType,
+    downloadViewModel: DownloadViewModel,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val urlList = stringArrayResource(R.array.download)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +77,9 @@ fun Library(
                         BookItem(book = book, onClick = {
                             // Move book to bookshelf and update viewModel
                             viewModel.moveBookToBookshelf(book)
-                        }, modifier = Modifier.testTag("book_item_${book.title}"))
+                            book.htmlFilePath = downloadBookFiles(downloadViewModel, urlList[book.arrayIndex])
+                        },
+                        modifier = Modifier.testTag("book_item_${book.title}"))
                         Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
                     }
                 }
@@ -78,6 +87,17 @@ fun Library(
         }
     }
 }
+
+private fun downloadBookFiles(
+    downloadViewModel: DownloadViewModel,
+    url: String
+) : String {
+    return downloadViewModel.setupDownload(
+        url,
+        "${url.substringAfterLast("/").replace(".zip", "")}-dir"
+    )
+}
+
 
 @Composable
 fun NoBooksToDownloadMessage(context: Context) {

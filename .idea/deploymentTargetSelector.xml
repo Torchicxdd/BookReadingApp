@@ -5,19 +5,13 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="appNavHost_clickBackLibrary_navigatesToHomeScreen()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="appNavHost_clickBackBookshelf_navigatesToHomeScreen()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="NavUiTests">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="NavRailUITests">
+      <SelectionState runConfigName="testBottomNavigationIsVisible()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testNavDrawerIsVisisble()">
+      <SelectionState runConfigName="testLibraryScreenBookClicking()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

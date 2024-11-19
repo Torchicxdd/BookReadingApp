@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.objects
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,7 +11,7 @@ import com.example.bookreadingapp.data.books
 
 class AppViewModel : ViewModel() {
     var readingMode by mutableStateOf(false)
-    var selectedBookTitleResId by mutableStateOf(0)
+    var selectedBookTitleResId by mutableIntStateOf(0)
     var searchBarInput by mutableStateOf("")
     var searchResultText by mutableStateOf("")
 
@@ -62,7 +63,7 @@ class AppViewModel : ViewModel() {
 
     fun performSearch() {
         if (searchBarInput.isNotBlank()) {
-            searchResultText = "Searching for the word ${searchBarInput}"
+            searchResultText = "Searching for the word $searchBarInput"
         }
     }
 }

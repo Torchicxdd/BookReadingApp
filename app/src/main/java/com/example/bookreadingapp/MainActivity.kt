@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,11 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
+import com.example.bookreadingapp.objects.DownloadViewModelFactory
 import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.objects.PermanentNavDrawer
@@ -31,6 +33,10 @@ import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
+    private val downloadViewModel: DownloadViewModel by viewModels {
+        DownloadViewModelFactory(this.applicationContext)
+    }
+
     @ExperimentalMaterial3WindowSizeClassApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +45,8 @@ class MainActivity : ComponentActivity() {
             BookReadingAppTheme {
                 val windowSize = calculateWindowSizeClass(this)
                 BookReadingApp(
-                    windowSize = windowSize.widthSizeClass
+                    windowSize = windowSize.widthSizeClass,
+                    downloadViewModel = downloadViewModel
                 )
             }
         }
@@ -50,7 +57,8 @@ class MainActivity : ComponentActivity() {
 fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
     viewModel: AppViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    downloadViewModel: DownloadViewModel
 )  {
     val context = LocalContext.current
 
@@ -97,7 +105,9 @@ fun BookReadingApp(
                         adaptiveNavigationType,
                         modifier = Modifier
                             .padding(padding)
-                            .fillMaxSize())
+                            .fillMaxSize(),
+                        viewModel = viewModel,
+                        downloadViewModel = downloadViewModel)
                 }
                 if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
                     Box(
@@ -111,6 +121,8 @@ fun BookReadingApp(
                             adaptiveNavigationType,
                             Modifier
                                 .padding(padding),
+                            viewModel = viewModel,
+                            downloadViewModel = downloadViewModel
                         )
                     }
                 }
@@ -132,10 +144,11 @@ fun BookReadingApp(
     heightDp = 800
 )
 @Composable
-fun GreetingPreview() {
+fun ReadingPreview() {
     BookReadingAppTheme {
         BookReadingApp(
-            windowSize = WindowWidthSizeClass.Expanded
+            windowSize = WindowWidthSizeClass.Expanded,
+            downloadViewModel = viewModel()
         )
     }
 }
