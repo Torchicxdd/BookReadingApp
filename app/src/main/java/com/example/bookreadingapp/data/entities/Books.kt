@@ -20,6 +20,7 @@ class Books {
 
     constructor()
     constructor(title: String, author: String, coverImage: String) {
+
         this.title = title
         this.author = author
         this.coverImage = coverImage
