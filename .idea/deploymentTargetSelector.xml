@@ -11,6 +11,9 @@
       <SelectionState runConfigName="appNavHost_clickBackLibrary_navigatesToHomeScreen()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="appNavHost_clickBackBookshelf_navigatesToHomeScreen()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

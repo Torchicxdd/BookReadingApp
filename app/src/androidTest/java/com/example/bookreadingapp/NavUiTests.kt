@@ -50,6 +50,29 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("bookshelf_button").performClick()
     }
 
+    private fun clickLibraryBook() {
+        navigateToLibrary()
+        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
+    }
+
+    private fun clickBookshelfBook() {
+        navigateToBookshelf()
+        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
+    }
+
+    private fun navigateToTableOfContents() {
+        clickLibraryBook()
+        clickBookshelfBook()
+    }
+
+    private fun navigateToReadingScreen() {
+        composeTestRule.onNodeWithTag("go_to_reading_button").performClick()
+    }
+
+    private fun navigateToSearchScreen() {
+        composeTestRule.onNodeWithTag("go_to_search_button").performClick()
+    }
+
     private fun performNavigateUp() {
         composeTestRule.onNodeWithTag("Back_Button").performClick()
     }
@@ -118,7 +141,7 @@ class NavUiTests {
     @Test
     fun testNavigateToBookShelfScreenWithBook() {
         composeTestRule.waitForIdle()
-        testLibraryScreenBookClicking()
+        clickLibraryBook()
         navigateToBookshelf()
         composeTestRule.onNodeWithTag("bookshelf_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
@@ -128,29 +151,30 @@ class NavUiTests {
     @Test
     fun testNavigateToTableOfContentScreenOnBookClick() {
         composeTestRule.waitForIdle()
-        testNavigateToBookShelfScreenWithBook()
-        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
+        clickLibraryBook()
+        clickBookshelfBook()
         composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.ContentTable.route)
     }
 
-
-
-//test that reading button navigates to reading screen
+    //test that reading button navigates to reading screen
     @Test
     fun testNavigateToReadingScreenFromTableContent() {
-        testNavigateToTableOfContentScreenOnBookClick()
+        navigateToTableOfContents()
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithTag("go_to_reading_button").performClick()
+        navigateToReadingScreen()
         composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.Reading.route)
     }
 
-//test that reading mode works and removes navbar
+    //test that reading mode works and removes navbar
     @Test
     fun testReadingModeButton() {
-        testNavigateToReadingScreenFromTableContent()
+        navigateToTableOfContents()
+        navigateToReadingScreen()
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("home_button").assertIsDisplayed()
@@ -166,16 +190,16 @@ class NavUiTests {
     }
 
 
-//test that search button navigates to search screen
+    //test that search button navigates to search screen
     @Test
     fun testNavigateToSearchScreen() {
-        testNavigateToTableOfContentScreenOnBookClick()
+        navigateToTableOfContents()
+        navigateToSearchScreen()
         composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag("go_to_search_button").performClick()
 
         composeTestRule.onNodeWithTag("search_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.Search.route)
     }
 
     //-------- Navigation with Up button
@@ -196,4 +220,10 @@ class NavUiTests {
     }
 
     @Test
+    fun appNavHost_clickBackTableOfContents_navigatesToBookShelf() {
+        navigateToTableOfContents()
+        performNavigateUp()
+        composeTestRule.onNodeWithTag("bookshelf_screen").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.Bookshelf.route)
+    }
 }
