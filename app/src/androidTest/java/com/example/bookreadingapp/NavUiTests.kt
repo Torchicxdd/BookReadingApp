@@ -1,11 +1,15 @@
 package com.example.bookreadingapp
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import org.junit.Before
 import org.junit.Rule
@@ -19,16 +23,35 @@ class NavUiTests {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    private lateinit var navController: TestNavHostController
 
     @Before
     fun setUP() {
         composeTestRule.setContent {
+            // Setup test navigator
+            // https://github.com/google-developer-training/basic-android-kotlin-compose-training-cupcake/blob/main/app/src/androidTest/java/com/example/cupcake/test/CupcakeScreenNavigationTest.kt
+            navController = TestNavHostController(LocalContext.current).apply {
+                navigatorProvider.addNavigator(ComposeNavigator())
+            }
             BookReadingAppTheme {
                 BookReadingApp(
-                    windowSize = WindowWidthSizeClass.Compact
+                    windowSize = WindowWidthSizeClass.Compact,
+                    navController = navController
                 )
             }
         }
+    }
+
+    private fun navigateToLibrary() {
+        composeTestRule.onNodeWithTag("library_button").performClick()
+    }
+
+    private fun navigateToBookshelf() {
+        composeTestRule.onNodeWithTag("bookshelf_button").performClick()
+    }
+
+    private fun performNavigateUp() {
+        composeTestRule.onNodeWithTag("Back_Button").performClick()
     }
 
     //tests that all navigation buttons are visible
@@ -47,6 +70,7 @@ class NavUiTests {
     fun testInitialNavigationToHomeScreen() {
 
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Back_Button").assertIsNotDisplayed()
     }
 
     //test that library button click brings to library screen
@@ -57,9 +81,10 @@ class NavUiTests {
 
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
 
-        composeTestRule.onNodeWithTag("library_button").performClick()
+        navigateToLibrary()
 
         composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
     }
 
     //test that bookshelf is empty initially
@@ -68,9 +93,7 @@ class NavUiTests {
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
-
-        composeTestRule.onNodeWithTag("bookshelf_button").performClick()
-
+        navigateToBookshelf()
         composeTestRule.onNodeWithTag("no_books_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("empty_bookshelf_text").assertIsDisplayed()
 
@@ -83,7 +106,7 @@ class NavUiTests {
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("library_button").performClick()
+        navigateToLibrary()
         composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
         composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
@@ -96,7 +119,7 @@ class NavUiTests {
     fun testNavigateToBookShelfScreenWithBook() {
         composeTestRule.waitForIdle()
         testLibraryScreenBookClicking()
-        composeTestRule.onNodeWithTag("bookshelf_button").performClick()
+        navigateToBookshelf()
         composeTestRule.onNodeWithTag("bookshelf_screen").assertIsDisplayed()
         composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
     }
@@ -108,6 +131,7 @@ class NavUiTests {
         testNavigateToBookShelfScreenWithBook()
         composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
         composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
     }
 
 
@@ -120,6 +144,7 @@ class NavUiTests {
 
         composeTestRule.onNodeWithTag("go_to_reading_button").performClick()
         composeTestRule.onNodeWithTag("reading_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
     }
 
 //test that reading mode works and removes navbar
@@ -150,6 +175,25 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("go_to_search_button").performClick()
 
         composeTestRule.onNodeWithTag("search_screen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Back_Button").assertIsDisplayed()
     }
 
+    //-------- Navigation with Up button
+    @Test
+    fun appNavHost_clickBackLibrary_navigatesToHomeScreen() {
+        navigateToLibrary()
+        performNavigateUp()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.Home.route)
+    }
+
+    @Test
+    fun appNavHost_clickBackBookshelf_navigatesToHomeScreen() {
+        navigateToBookshelf()
+        performNavigateUp()
+        composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.Home.route)
+    }
+
+    @Test
 }
