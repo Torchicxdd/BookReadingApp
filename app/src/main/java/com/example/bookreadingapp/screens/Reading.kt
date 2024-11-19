@@ -22,6 +22,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.example.bookreadingapp.data.books
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
+<<<<<<< HEAD
+=======
+import com.example.bookreadingapp.ui.BackToBookshelfButton
+import com.example.bookreadingapp.ui.GoToSearchButton
+import com.example.bookreadingapp.ui.GoToTableContentButton
+import java.io.File
+import java.io.IOException
+>>>>>>> ae83029 (Add coroutineScope field to FileDownload class)
 
 @Composable
 fun Reading(

@@ -17,12 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.objects.AppViewModel
-import com.example.bookreadingapp.objects.DownloadViewModel
 import com.example.bookreadingapp.objects.Routes
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
