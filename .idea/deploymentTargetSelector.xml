@@ -13,9 +13,12 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+<<<<<<< HEAD
       <SelectionState runConfigName="NavUiTests">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+=======
+>>>>>>> a9b10f1 (Create images entity)
     </selectionStates>
   </component>
 </project>
