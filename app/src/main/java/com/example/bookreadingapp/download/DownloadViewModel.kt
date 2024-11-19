@@ -40,12 +40,12 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
         return downloadedFilePath;
     }
 
-    private fun updateDirectoryContents(directoryName: String) {
+    private suspend fun updateDirectoryContents(directoryName: String) {
         val contents = repository.listDirectoryContents(directoryName)
         _directoryContents.postValue(contents)
     }
 
-    fun confirmDeletion(directoryName: String) {
+    suspend fun confirmDeletion(directoryName: String) {
         repository.deleteDirectoryContents(directoryName)
         updateDirectoryContents(directoryName)
         Log.i(TAG_DVM, "$directoryName content deleted")
