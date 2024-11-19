@@ -20,6 +20,7 @@ abstract class BooksAppRoomDatabase: RoomDatabase() {
     abstract fun imageDao(): ImageDao
     abstract fun paragraphDao(): ParagraphDao
 
+
     companion object {
         private var INSTANCE: BooksAppRoomDatabase? = null
         fun getInstance(context: Context): BooksAppRoomDatabase {
