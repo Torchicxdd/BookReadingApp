@@ -50,7 +50,6 @@ class NavUiTests {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-
     @Before
     fun setUp() {
         composeTestRule.setContent {

@@ -6,32 +6,25 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.bookreadingapp.download.DownloadViewModel
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
-import com.example.bookreadingapp.download.DownloadViewModel
 import com.example.bookreadingapp.objects.DownloadViewModelFactory
 import com.example.bookreadingapp.objects.NavRail
 import com.example.bookreadingapp.objects.NavigationHost
@@ -57,33 +50,6 @@ class MainActivity : ComponentActivity() {
                     downloadViewModel = downloadViewModel
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun TestFileDownload(downloadViewModel: DownloadViewModel) {
-    val directoryContents by downloadViewModel.directoryContents.observeAsState(emptyList())
-
-    val urlList = stringArrayResource(R.array.download)
-
-    Column (modifier = Modifier.padding(100.dp)){
-        directoryContents.forEach { dirName ->
-            Text(dirName)
-        }
-
-        Button(onClick = {
-            for (url in urlList) {
-                downloadViewModel.setupDownload(url,
-                    "${url.substringAfterLast("/").replace(".zip", "")}-directory")
-            }
-        }) {
-            Text("Download File")
-        }
-        Button(onClick = {
-            downloadViewModel.confirmDeletion("TestDownloadDir2")
-        }) {
-            Text("Delete Directory")
         }
     }
 }

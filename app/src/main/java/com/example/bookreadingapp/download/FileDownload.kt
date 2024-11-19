@@ -17,7 +17,10 @@ import java.util.zip.ZipFile
 private const val TAG_FE = "FileExtract"
 
 class FileDownload(private val context: Context) {
-    // Create download folder if it doesn't exist, then saves file
+    // Operations wrapped with withContext(Dispatchers.IO) {} causes the coroutine to switch to
+    // the IO dispatcher for IO manipulation/Network request tasks
+
+    // Create download folder if it doesn't exist, then saves file to that folder
     suspend fun createFile(directoryName: String, fileName: String): File {
         var downloadFolder: File
         withContext(Dispatchers.IO) {
@@ -28,7 +31,7 @@ class FileDownload(private val context: Context) {
         return File(downloadFolder, fileName)
     }
 
-    // List directory contents
+    // Returns a list of a folder's content
     suspend fun listDirectoryContents(directoryName: String): List<String> {
         var folderToRead: File
         withContext(Dispatchers.IO) {
@@ -38,7 +41,8 @@ class FileDownload(private val context: Context) {
         return folderToRead.listFiles()?.map { it.name } ?: emptyList()
     }
 
-    // Request content from url and saves to file location
+    // Request content from url and saves to file to its own folder created with createFile()
+    // Returns a boolean representing if the request was successful
     suspend fun downloadFile(url: String, file: File): Boolean {
         var downloadSuccess : Boolean
         withContext(Dispatchers.IO) {
@@ -86,7 +90,7 @@ class FileDownload(private val context: Context) {
         }
     }
 
-    // Unzip file and saves to the same directory
+    // Unzip file and saves to the same folder
     // Returns absolute path of unzipped html file
     suspend fun unzipFile(zipFile: File, directoryName: String) : String {
         var unzippedPath = ""
@@ -100,6 +104,7 @@ class FileDownload(private val context: Context) {
 
             ZipFile(zipFile).use { zip ->
                 zip.entries().asSequence().forEach { entry ->
+                    // Only extracts html files for now
                     if(entry.name.contains(".html")) {
                         zip.getInputStream(entry).use { input ->
                             val filePath = unzipFolder.absolutePath + File.separator + entry.name

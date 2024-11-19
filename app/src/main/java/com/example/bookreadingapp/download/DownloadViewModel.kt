@@ -37,7 +37,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             updateDirectoryContents("")
         }
 
-        return downloadedFilePath;
+        return downloadedFilePath
     }
 
     private suspend fun updateDirectoryContents(directoryName: String) {
