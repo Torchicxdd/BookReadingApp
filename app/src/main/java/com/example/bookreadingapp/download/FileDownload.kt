@@ -100,25 +100,23 @@ class FileDownload(private val context: Context) {
                 unzipFolder.mkdirs()
             }
             // Log where unzipped content will be placed
-            Log.i(TAG_FE, unzipFolder.absolutePath)
+//            Log.i(TAG_FE, unzipFolder.absolutePath)
 
             ZipFile(zipFile).use { zip ->
                 zip.entries().asSequence().forEach { entry ->
-                    // Only extracts html files for now
-                    if(entry.name.contains(".html")) {
-                        zip.getInputStream(entry).use { input ->
-                            val filePath = unzipFolder.absolutePath + File.separator + entry.name
-
-                            if (!entry.isDirectory) {
-                                extractFile(input, filePath)
-                            } else {
-                                val dir = File(filePath)
-                                dir.mkdir()
-                            }
-                            // Need to change to also unzip images after
-                            // Log location of the unzipped html file
-                            Log.i(TAG_FE, File(filePath).absolutePath + " Exists: " + File(filePath).exists())
-                            unzippedPath = File(filePath).absolutePath
+                    zip.getInputStream(entry).use { input ->
+                        // Create images directory
+                        File(unzipFolder.absolutePath + File.separator + "images").mkdir()
+                        val destFilePath = unzipFolder.absolutePath + File.separator + entry.name
+                        if (!entry.isDirectory) {
+                            extractFile(input, destFilePath)
+                        } else {
+                            val dir = File(destFilePath)
+                            dir.mkdir()
+                        }
+                        Log.i(TAG_FE, entry.name)
+                        if (entry.name.contains(".html")) {
+                            unzippedPath = File(destFilePath).absolutePath
                         }
                     }
                 }
