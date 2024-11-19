@@ -61,12 +61,12 @@ class NavUiTests {
 
     private fun clickLibraryBook() {
         navigateToLibrary()
-        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755163").performClick()
     }
 
     private fun clickBookshelfBook() {
         navigateToBookshelf()
-        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755163").performClick()
     }
 
     private fun navigateToTableOfContents() {
@@ -140,9 +140,9 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("home_screen").assertIsDisplayed()
         navigateToLibrary()
         composeTestRule.onNodeWithTag("library_screen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755162").performClick()
-        composeTestRule.onNodeWithTag("book_item_2131755162").assertIsNotDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755163").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755163").performClick()
+        composeTestRule.onNodeWithTag("book_item_2131755163").assertIsNotDisplayed()
     }
 
 //test that downloaded book is displayed on bookshelf
@@ -152,7 +152,7 @@ class NavUiTests {
         clickLibraryBook()
         navigateToBookshelf()
         composeTestRule.onNodeWithTag("bookshelf_screen").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("book_item_2131755162").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("book_item_2131755163").assertIsDisplayed()
     }
 
     //test that clicking bookshelf book navigates to table of contents screen
