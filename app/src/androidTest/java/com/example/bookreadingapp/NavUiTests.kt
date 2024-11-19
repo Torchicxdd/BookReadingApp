@@ -8,6 +8,7 @@ import com.example.bookreadingapp.objects.TopAppBar
 
 import android.content.Context
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -42,6 +43,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bookreadingapp.download.FileDownload
+import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -50,8 +56,13 @@ class NavUiTests {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    private var contextMock: Context = mock()
+
     @Before
-    fun setUp() {
+    fun setUP() {
+        val repository = FileDownload(contextMock)
+        val downloadViewModel = DownloadViewModel(repository)
+
         composeTestRule.setContent {
             // Setup test navigator
             // https://github.com/google-developer-training/basic-android-kotlin-compose-training-cupcake/blob/main/app/src/androidTest/java/com/example/cupcake/test/CupcakeScreenNavigationTest.kt
@@ -62,6 +73,7 @@ class NavUiTests {
                 BookReadingApp(
                     windowSize = WindowWidthSizeClass.Compact,
                     navController = navController
+                    downloadViewModel = downloadViewModel
                 )
             }
         }
