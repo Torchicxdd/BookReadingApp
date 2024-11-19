@@ -14,27 +14,40 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
 import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG_FE = "FileExtract"
 
 class FileDownload(private val context: Context) {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
     // Create download folder if it doesn't exist, then saves file
-    fun createFile(directoryName: String, fileName: String): File {
-        val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
-        if (!downloadFolder.exists()) downloadFolder.mkdirs()
+    suspend fun createFile(directoryName: String, fileName: String): File {
+        var downloadFolder: File = File("")
+        withContext(Dispatchers.IO) {
+            downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
+            if (!downloadFolder.exists()) downloadFolder.mkdirs()
+        }
 
         return File(downloadFolder, fileName)
     }
 
     // List directory contents
-    fun listDirectoryContents(directoryName: String): List<String> {
-        val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
-        return downloadFolder.listFiles()?.map { it.name } ?: emptyList()
+    suspend fun listDirectoryContents(directoryName: String): List<String> {
+        var folderToRead: File = File("")
+        withContext(Dispatchers.IO) {
+            folderToRead = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
+        }
+
+        return folderToRead.listFiles()?.map { it.name } ?: emptyList()
     }
 
     // Request content from url and saves to file location
-    fun downloadFile(url: String, file: File): Boolean {
+    suspend fun downloadFile(url: String, file: File): Boolean {
+        coroutineScope.launch(Dispatchers.Main) {
+
+        }
         try {
             val client = OkHttpClient()
             val request = Request.Builder().url(url).build()
@@ -67,7 +80,10 @@ class FileDownload(private val context: Context) {
     }
 
     // Delete directory contents directly without IntentSender
-    fun deleteDirectoryContents(directoryName: String) {
+    suspend fun deleteDirectoryContents(directoryName: String) {
+        coroutineScope.launch(Dispatchers.Main) {
+
+        }
         val downloadFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         downloadFolder.listFiles()?.forEach {
             it.delete()
@@ -76,7 +92,10 @@ class FileDownload(private val context: Context) {
 
     // Unzip file and saves to the same directory
     // Returns absolute path of unzipped html file
-    fun unzipFile(zipFile: File, directoryName: String) : String {
+    suspend fun unzipFile(zipFile: File, directoryName: String) : String {
+        coroutineScope.launch(Dispatchers.Main) {
+
+        }
         var unzippedPath = ""
         val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
         if (!unzipFolder.exists()) {
