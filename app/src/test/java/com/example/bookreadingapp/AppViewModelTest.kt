@@ -35,13 +35,6 @@ class AppViewModelTest {
     }
 
     @Test
-    // Testing that updating the example state changes the value as expected
-    fun updateExampleState_stateIsUpdatedCorrectly() {
-        viewModel.updateExampleState("New State")
-        assertEquals("New State", viewModel.exampleState)
-    }
-
-    @Test
     // Testing that the reading mode is toggled correctly (false to true, and back to false)
     fun updateReadingMode_readingModeIsToggledCorrectly() {
         viewModel.updateReadingMode()

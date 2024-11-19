@@ -9,7 +9,6 @@ import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
 
 class AppViewModel : ViewModel() {
-    var exampleState by mutableStateOf("This is the state before being changed")
     var readingMode by mutableStateOf(false)
     var selectedBookTitleResId by mutableStateOf(0)
     var searchBarInput by mutableStateOf("")
@@ -47,10 +46,6 @@ class AppViewModel : ViewModel() {
     fun moveBookToBookshelf(book: Book) {
         _libraryBooks.remove(book)
         _bookshelfBooks.add(book)
-    }
-
-    fun updateExampleState(newText: String) {
-        exampleState = newText
     }
 
     fun updateReadingMode() {
