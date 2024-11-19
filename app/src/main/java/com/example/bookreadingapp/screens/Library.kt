@@ -23,11 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -40,11 +36,8 @@ import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.download.DownloadViewModel
-import com.example.bookreadingapp.download.FileDownload
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.launch
 
 @Composable
 fun Library(

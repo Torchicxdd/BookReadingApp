@@ -24,10 +24,6 @@ class NavUiTests {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val downloadViewModel: DownloadViewModel by viewModels {
-        DownloadViewModelFactory(this.applicationContext) // Use application context to prevent memory leaks
-    }
-
     @Before
     fun setUP() {
         composeTestRule.setContent {
