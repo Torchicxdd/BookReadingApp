@@ -19,10 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.bookreadingapp.download.DownloadViewModel
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
 import com.example.bookreadingapp.objects.DownloadViewModelFactory

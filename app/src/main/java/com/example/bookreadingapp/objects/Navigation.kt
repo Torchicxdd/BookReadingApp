@@ -38,7 +38,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bookreadingapp.R
-import com.example.bookreadingapp.download.DownloadViewModel
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.screens.Bookshelf
 import com.example.bookreadingapp.screens.ContentTable
 import com.example.bookreadingapp.screens.Home

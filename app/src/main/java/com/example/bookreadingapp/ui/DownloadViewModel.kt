@@ -1,10 +1,11 @@
-package com.example.bookreadingapp.download
+package com.example.bookreadingapp.ui
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookreadingapp.download.FileDownload
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException

@@ -35,8 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.download.DownloadViewModel
 import com.example.bookreadingapp.objects.AppViewModel
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.utils.AdaptiveNavigationType
 
 @Composable

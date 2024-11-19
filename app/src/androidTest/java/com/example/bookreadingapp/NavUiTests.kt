@@ -1,44 +1,14 @@
 package com.example.bookreadingapp
-import androidx.test.espresso.base.Default
-import com.example.bookreadingapp.MainActivity
-import com.example.bookreadingapp.objects.BottomNavBar
-import com.example.bookreadingapp.objects.PermanentNavDrawer
-import com.example.bookreadingapp.objects.TopAppBar
 
 
 import android.content.Context
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.Navigation
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-
-import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.example.bookreadingapp.objects.AppViewModel
-import com.example.bookreadingapp.objects.NavigationHost
 import com.example.bookreadingapp.objects.Routes
-import com.example.bookreadingapp.screens.ContentTable
-import com.example.bookreadingapp.screens.Home
-import com.example.bookreadingapp.screens.Library
-import com.example.bookreadingapp.screens.Reading
-import com.example.bookreadingapp.screens.Search
-import com.example.bookreadingapp.download.DownloadViewModel
 import com.example.bookreadingapp.download.FileDownload
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import org.junit.Before

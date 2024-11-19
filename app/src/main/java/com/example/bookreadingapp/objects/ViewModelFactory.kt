@@ -3,7 +3,7 @@ package com.example.bookreadingapp.objects
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.bookreadingapp.download.DownloadViewModel
+import com.example.bookreadingapp.ui.DownloadViewModel
 import com.example.bookreadingapp.download.FileDownload
 
 class DownloadViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
