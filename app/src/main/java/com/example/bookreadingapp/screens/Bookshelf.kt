@@ -54,13 +54,14 @@ fun NoBooksAvailableMessage(context: Context) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(dimensionResource(R.dimen.padding_medium)),
+            .testTag("no_books_screen"),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = context.getString(R.string.no_books_available),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.testTag("empty_bookshelf_text")
         )
     }
 }

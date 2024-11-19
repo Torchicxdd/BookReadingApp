@@ -48,7 +48,8 @@ fun Reading(
 
             Switch(
                 checked = viewModel.readingMode,
-                onCheckedChange = { viewModel.updateReadingMode() })
+                onCheckedChange = { viewModel.updateReadingMode() },
+                modifier = Modifier.testTag("reading_mode_button"))
 
             val book = books.find { it.title == bookTitleResId }
 
