@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -91,7 +92,6 @@ fun BottomNavBar(
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
         val barItems = NavBarItems.getBarItems(context)
-        //Text("BottomNavBar", modifier = Modifier.testTag("bottom_nav_bar"))
         barItems.forEach { navItem ->
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
@@ -237,7 +237,10 @@ fun TopAppBar(
         },
         navigationIcon = {
             if (canNavigateBack) {
-                IconButton(onClick = navigateBack) {
+                IconButton(
+                    onClick = navigateBack,
+                    modifier = modifier.testTag("Back_Button")
+                ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back_button)

@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.objects.AppViewModel
 import com.example.bookreadingapp.objects.BottomNavBar
@@ -47,9 +49,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
-    viewModel: AppViewModel = viewModel()
+    viewModel: AppViewModel = viewModel(),
+    navController: NavHostController = rememberNavController()
 )  {
-    val navController = rememberNavController()
     val context = LocalContext.current
 
     // Adaptive navigation type depending on screen size
