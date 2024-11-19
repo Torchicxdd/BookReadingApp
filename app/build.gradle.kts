@@ -60,12 +60,17 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation("androidx.compose.foundation:foundation-layout-android:1.5.4")
+<<<<<<< HEAD
     implementation(libs.androidx.room.common)
     annotationProcessor("androidx.room:room-compiler:2.6.0")
     kapt("androidx.room:room-compiler:2.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
+=======
+    annotationProcessor("androidx.room:room-compiler:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+>>>>>>> b94c586 (Made Books class)
 
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
