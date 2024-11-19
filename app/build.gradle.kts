@@ -61,6 +61,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation("androidx.compose.foundation:foundation-layout-android:1.5.4")
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     implementation(libs.androidx.room.common)
     annotationProcessor("androidx.room:room-compiler:2.6.0")
@@ -71,6 +72,9 @@ dependencies {
 =======
     implementation(libs.androidx.room.common)
 >>>>>>> 663c421 (add chapters entity)
+=======
+    implementation(libs.androidx.room.common)
+>>>>>>> 03b3c38 (add chapters entity)
     annotationProcessor("androidx.room:room-compiler:2.6.0")
     kapt("androidx.room:room-compiler:2.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
