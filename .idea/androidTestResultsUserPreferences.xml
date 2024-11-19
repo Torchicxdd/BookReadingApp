@@ -144,6 +144,7 @@
                   <entry key="Pixel_6_API_34" value="120" />
                   <entry key="Resizable_Experimental_API_34" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="incar T10Pro" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
