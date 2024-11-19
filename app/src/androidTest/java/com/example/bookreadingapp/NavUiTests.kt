@@ -226,4 +226,22 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("bookshelf_screen").assertIsDisplayed()
         navController.assertCurrentRouteName(Routes.Bookshelf.route)
     }
+
+    @Test
+    fun appNavHost_clickBackSearch_navigatesToTableOfContents() {
+        navigateToTableOfContents()
+        navigateToSearchScreen()
+        performNavigateUp()
+        composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.ContentTable.route)
+    }
+
+    @Test
+    fun appNavHost_clickBackReading_navigatesToTableOfContents() {
+        navigateToTableOfContents()
+        navigateToReadingScreen()
+        performNavigateUp()
+        composeTestRule.onNodeWithTag("content_screen").assertIsDisplayed()
+        navController.assertCurrentRouteName(Routes.ContentTable.route)
+    }
 }
