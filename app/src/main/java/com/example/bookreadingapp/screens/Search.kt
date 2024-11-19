@@ -50,8 +50,6 @@ fun Search(
                 .fillMaxWidth()
         ) {
             Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
-            Text(text = viewModel.exampleState, style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.testTag("search_viewmodel_text"))
         }
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_small)))
         SearchBar(viewModel, context)
