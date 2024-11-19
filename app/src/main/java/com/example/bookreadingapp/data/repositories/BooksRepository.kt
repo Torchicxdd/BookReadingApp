@@ -15,6 +15,9 @@ class BooksRepository(private val booksDao: BooksDao) {
     val allBooks: LiveData<List<Books>> = booksDao.getAllBooks()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
+    /**
+     * Method used to insert new books to the database
+     */
     fun insertBook(newBook: Books) {
         coroutineScope.launch(Dispatchers.IO) {
             booksDao.insertBook(newBook)
