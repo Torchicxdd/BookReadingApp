@@ -38,16 +38,14 @@ import com.example.bookreadingapp.screens.Home
 import com.example.bookreadingapp.screens.Library
 import com.example.bookreadingapp.screens.Reading
 import com.example.bookreadingapp.screens.Search
+import com.example.bookreadingapp.download.DownloadViewModel
+import com.example.bookreadingapp.download.FileDownload
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bookreadingapp.download.FileDownload
-import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -55,7 +53,6 @@ class NavUiTests {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-
     private var contextMock: Context = mock()
 
     @Before
