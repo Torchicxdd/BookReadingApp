@@ -1,6 +1,7 @@
 package com.example.bookreadingapp
 
 
+import android.content.Context
 import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.test.assertIsDisplayed
@@ -16,6 +17,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bookreadingapp.download.FileDownload
+import java.io.File
 
 
 @RunWith(AndroidJUnit4::class)
@@ -24,12 +30,18 @@ class NavUiTests {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    private var contextMock: Context = mock()
+
     @Before
     fun setUP() {
+        val repository = FileDownload(contextMock)
+        val downloadViewModel = DownloadViewModel(repository)
+
         composeTestRule.setContent {
             BookReadingAppTheme {
                 BookReadingApp(
-                    windowSize = WindowWidthSizeClass.Compact
+                    windowSize = WindowWidthSizeClass.Compact,
+                    downloadViewModel = downloadViewModel
                 )
             }
         }
