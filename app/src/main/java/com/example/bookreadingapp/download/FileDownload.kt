@@ -99,8 +99,6 @@ class FileDownload(private val context: Context) {
             if (!unzipFolder.exists()) {
                 unzipFolder.mkdirs()
             }
-            // Log where unzipped content will be placed
-//            Log.i(TAG_FE, unzipFolder.absolutePath)
 
             ZipFile(zipFile).use { zip ->
                 zip.entries().asSequence().forEach { entry ->
@@ -114,7 +112,7 @@ class FileDownload(private val context: Context) {
                             val dir = File(destFilePath)
                             dir.mkdir()
                         }
-                        Log.i(TAG_FE, entry.name)
+
                         if (entry.name.contains(".html")) {
                             unzippedPath = File(destFilePath).absolutePath
                         }
