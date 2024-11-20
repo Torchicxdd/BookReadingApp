@@ -44,7 +44,7 @@ class FileDownload(private val context: Context) {
     // Request content from url and saves to file to its own folder created with createFile()
     // Returns a boolean representing if the request was successful
     suspend fun downloadFile(url: String, file: File): Boolean {
-        var downloadSuccess : Boolean
+        var downloadSuccess : Boolean = false
         withContext(Dispatchers.IO) {
             try {
                 val client = OkHttpClient()
@@ -52,8 +52,8 @@ class FileDownload(private val context: Context) {
                 val response = client.newCall(request).execute()
 
                 // Returns false if network request was unsuccessful
-                if (!response.isSuccessful || response.body == null) {
-                    downloadSuccess = false
+                if (!response.isSuccessful || response.body!!.contentLength() == 0L) {
+                    return@withContext false
                 }
                 response.body!!.byteStream().use { inputStream ->
                     FileOutputStream(file).use { outputStream ->
@@ -63,7 +63,6 @@ class FileDownload(private val context: Context) {
                 downloadSuccess = true
             } catch(e: IOException) {
                 e.printStackTrace()
-                downloadSuccess = false
             }
         }
         return downloadSuccess

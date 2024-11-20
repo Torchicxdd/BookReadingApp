@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 import org.mockito.kotlin.mock
 import java.io.File
 
@@ -45,8 +46,39 @@ class FileDownloadTest {
         val url = mockWebServer.url("/").toString()
         val result = fileDownload.downloadFile(url, testFile)
 
+        // Test that true is returned and that file exists with content
         assertTrue(result)
         assertTrue(testFile.exists())
         assertTrue(testFile.readText() == "fake content")
     }
+
+    @Test
+    fun downloadFiles_downloadFailedWithErrorCode() = runTest {
+        val mockResponse = MockResponse()
+            .setResponseCode(404)
+        mockWebServer.enqueue(mockResponse)
+
+        val url = mockWebServer.url("/").toString()
+        val result = fileDownload.downloadFile(url, testFile)
+
+        // Test that false is returned and length of file is 0
+        assertFalse(result)
+        assertTrue(testFile.length() == 0L)
+    }
+
+    @Test
+    fun downloadFiles_dowloadFailedWithEmptyResponseBody() = runTest {
+        val mockResponse = MockResponse()
+            .setResponseCode(204)
+            .setBody("")
+        mockWebServer.enqueue(mockResponse)
+
+        val url = mockWebServer.url("/").toString()
+        val result = fileDownload.downloadFile(url, testFile)
+
+        // Test that false is returned and length of file is 0
+        assertFalse(result)
+        assertTrue(testFile.length() == 0L)
+    }
+
 }
