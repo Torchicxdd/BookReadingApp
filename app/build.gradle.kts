@@ -61,6 +61,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation("androidx.compose.foundation:foundation-layout-android:1.5.4")
     implementation(libs.androidx.room.common)
+    testImplementation(libs.junit.jupiter)
     annotationProcessor("androidx.room:room-compiler:2.6.0")
     kapt("androidx.room:room-compiler:2.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
@@ -80,14 +81,15 @@ dependencies {
 
     implementation(libs.androidx.navigation.testing)
 
-    testImplementation ("junit:junit:4.13.2")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("org.mockito:mockito-core:4.8.0")
     testImplementation("org.mockito:mockito-android:4.8.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
+    testImplementation("org.mockito:mockito-inline:4.8.0")
 
     testImplementation ("androidx.arch.core:core-testing:2.1.0")
-
     testImplementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
     testImplementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
 
