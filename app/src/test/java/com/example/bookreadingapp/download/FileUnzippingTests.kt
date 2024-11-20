@@ -80,7 +80,7 @@ class FileUnzippingTests {
     fun tearDown() {
         // Deleting the created zip file and destination folder after the test
         zipFileMock.delete()
-        unzipDestinationFolder.deleteRecursively()
+        unzipDestinationFolder.delete()
     }
 
     /**
