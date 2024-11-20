@@ -22,6 +22,7 @@ import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
+// Main composable function for the bookshelf screen
 @Composable
 fun Bookshelf(
     context: Context,
@@ -47,6 +48,7 @@ fun Bookshelf(
     }
 }
 
+// Composable function to display a message when no books are available
 @Composable
 fun NoBooksAvailableMessage(context: Context) {
     Column(
@@ -64,6 +66,7 @@ fun NoBooksAvailableMessage(context: Context) {
     }
 }
 
+// Composable function to display the available books in a grid layout
 @Composable
 fun BooksAvailable(
     books: List<Book>,

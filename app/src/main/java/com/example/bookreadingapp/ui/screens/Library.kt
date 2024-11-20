@@ -39,6 +39,7 @@ import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
+// Composable function that represents the main screen of the Library
 @Composable
 fun Library(
     context: Context,
@@ -87,7 +88,7 @@ fun Library(
         }
     }
 }
-
+// Function to download book files from the provided URL
 private fun downloadBookFiles(
     downloadViewModel: DownloadViewModel,
     url: String
@@ -98,7 +99,7 @@ private fun downloadBookFiles(
     )
 }
 
-
+// Composable to display a message when there are no books to download
 @Composable
 fun NoBooksToDownloadMessage(context: Context) {
     Column(
@@ -115,6 +116,7 @@ fun NoBooksToDownloadMessage(context: Context) {
     }
 }
 
+// Composable to display a book item (cover and title)
 @Composable
 fun BookItem(
     book: Book,
@@ -144,7 +146,7 @@ fun BookItem(
         }
     }
 }
-
+// Composable to display the book cover image
 @Composable
 fun BookCover(
     @DrawableRes bookCover: Int,
@@ -165,6 +167,7 @@ fun BookCover(
     }
 }
 
+// Composable to display the book title
 @Composable
 fun BookInformation(
     @StringRes bookTitle: Int,
