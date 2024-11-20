@@ -14,8 +14,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
 
-private const val TAG_FE = "FileExtract"
-
 class FileDownload(private val context: Context) {
     // Operations wrapped with withContext(Dispatchers.IO) {} causes the coroutine to switch to
     // the IO dispatcher for IO manipulation/Network request tasks
