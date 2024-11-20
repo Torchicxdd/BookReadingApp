@@ -38,6 +38,7 @@ class FileDownloadTest {
 
     @Test
     fun downloadFiles_downloadSuccessfully() = runTest {
+        // Create fake successful response
         val mockResponse = MockResponse()
             .setResponseCode(200)
             .setBody("fake content")
@@ -54,6 +55,7 @@ class FileDownloadTest {
 
     @Test
     fun downloadFiles_downloadFailedWithErrorCode() = runTest {
+        // Create fake error response
         val mockResponse = MockResponse()
             .setResponseCode(404)
         mockWebServer.enqueue(mockResponse)
@@ -68,6 +70,7 @@ class FileDownloadTest {
 
     @Test
     fun downloadFiles_dowloadFailedWithEmptyResponseBody() = runTest {
+        // Create fake successful response with empty body
         val mockResponse = MockResponse()
             .setResponseCode(204)
             .setBody("")
