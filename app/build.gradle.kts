@@ -85,9 +85,9 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("org.mockito:mockito-core:4.8.0")
     testImplementation("org.mockito:mockito-android:4.8.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
 
     testImplementation ("androidx.arch.core:core-testing:2.1.0")
-
     testImplementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
     testImplementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
 
