@@ -8,9 +8,6 @@
       <SelectionState runConfigName="NavUiTests">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="NavRailUITests">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="NavDrawerUITests">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>

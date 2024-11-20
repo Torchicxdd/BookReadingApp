@@ -1,5 +1,6 @@
 package com.example.bookreadingapp
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.objects.BottomNavBar
@@ -31,6 +33,7 @@ import com.example.bookreadingapp.ui.objects.PermanentNavDrawer
 import com.example.bookreadingapp.ui.objects.TopAppBar
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+
 
 class MainActivity : ComponentActivity() {
     private val downloadViewModel: DownloadViewModel by viewModels {
@@ -51,91 +54,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Composable
-fun BookReadingApp(
-    windowSize: WindowWidthSizeClass,
-    viewModel: AppViewModel = viewModel(),
-    navController: NavHostController = rememberNavController(),
-    downloadViewModel: DownloadViewModel
-)  {
-    val context = LocalContext.current
-
-    // Adaptive navigation type depending on screen size
-    val adaptiveNavigationType = when (windowSize) {
-        WindowWidthSizeClass.Compact -> AdaptiveNavigationType.BOTTOM_NAVIGATION
-        WindowWidthSizeClass.Medium -> AdaptiveNavigationType.NAVIGATION_RAIL
-        WindowWidthSizeClass.Expanded -> AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER
-        else -> AdaptiveNavigationType.BOTTOM_NAVIGATION
-    }
-
-    // Add a listener to navController which changes the canNavigateBack variable in viewmodel
-    navController.addOnDestinationChangedListener { _, _, _, ->
-        viewModel.canNavigateBack = navController.previousBackStackEntry != null
-    }
-
-    Scaffold(
-        topBar = {
-            if(!viewModel.readingMode) {
-                TopAppBar(
-                    canNavigateBack = viewModel.canNavigateBack,
-                    navigateBack = { navController.navigateUp() }
-                )
-            }
-        },
-        content = { padding ->
-            Row {
-                // Navigation rail if medium screen size
-                if (adaptiveNavigationType == AdaptiveNavigationType.NAVIGATION_RAIL
-                    && !viewModel.readingMode) {
-                    NavRail(
-                        navController,
-                        context,
-                        modifier = Modifier
-                            .padding(padding)
-                            .fillMaxHeight()
-                    )
-                }
-                // Permanent Navigation Drawer is expanded screen size
-                if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-                    PermanentNavDrawer(
-                        navController,
-                        context,
-                        adaptiveNavigationType,
-                        modifier = Modifier
-                            .padding(padding)
-                            .fillMaxSize(),
-                        viewModel = viewModel,
-                        downloadViewModel = downloadViewModel)
-                }
-                if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding)
-                    ) {
-                        NavigationHost(
-                            navController,
-                            context,
-                            adaptiveNavigationType,
-                            Modifier
-                                .padding(padding),
-                            viewModel = viewModel,
-                            downloadViewModel = downloadViewModel
-                        )
-                    }
-                }
-            }
-        },
-        bottomBar = {
-            // Bottom bar if compact screen size
-            if (adaptiveNavigationType == AdaptiveNavigationType.BOTTOM_NAVIGATION
-                && !viewModel.readingMode) {
-                BottomNavBar(navController, context)
-            }
-        }
-    )
 }
 
 @Preview(
