@@ -14,8 +14,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
 
-private const val TAG_FE = "FileExtract"
-
 class FileDownload(private val context: Context) {
     // Operations wrapped with withContext(Dispatchers.IO) {} causes the coroutine to switch to
     // the IO dispatcher for IO manipulation/Network request tasks
@@ -98,8 +96,6 @@ class FileDownload(private val context: Context) {
             if (!unzipFolder.exists()) {
                 unzipFolder.mkdirs()
             }
-            // Log where unzipped content will be placed
-//            Log.i(TAG_FE, unzipFolder.absolutePath)
 
             ZipFile(zipFile).use { zip ->
                 zip.entries().asSequence().forEach { entry ->
@@ -113,7 +109,7 @@ class FileDownload(private val context: Context) {
                             val dir = File(destFilePath)
                             dir.mkdir()
                         }
-                        Log.i(TAG_FE, entry.name)
+
                         if (entry.name.contains(".html")) {
                             unzippedPath = File(destFilePath).absolutePath
                         }
