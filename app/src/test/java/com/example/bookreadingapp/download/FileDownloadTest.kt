@@ -5,10 +5,9 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.Assert.assertTrue
 import org.mockito.kotlin.mock
 import java.io.File
 
@@ -46,8 +45,8 @@ class FileDownloadTest {
         val url = mockWebServer.url("/").toString()
         val result = fileDownload.downloadFile(url, testFile)
 
-        Assert.assertTrue(result)
-        Assert.assertTrue(testFile.exists())
-        Assert.assertTrue(testFile.readText() == "fake content")
+        assertTrue(result)
+        assertTrue(testFile.exists())
+        assertTrue(testFile.readText() == "fake content")
     }
 }
