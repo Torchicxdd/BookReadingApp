@@ -21,16 +21,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.bookreadingapp.ui.DownloadViewModel
-import com.example.bookreadingapp.objects.AppViewModel
-import com.example.bookreadingapp.objects.BottomNavBar
-import com.example.bookreadingapp.objects.DownloadViewModelFactory
-import com.example.bookreadingapp.objects.NavRail
-import com.example.bookreadingapp.objects.NavigationHost
-import com.example.bookreadingapp.objects.PermanentNavDrawer
-import com.example.bookreadingapp.objects.TopAppBar
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
+import com.example.bookreadingapp.ui.objects.BottomNavBar
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModelFactory
+import com.example.bookreadingapp.ui.objects.NavRail
+import com.example.bookreadingapp.ui.objects.NavigationHost
+import com.example.bookreadingapp.ui.objects.PermanentNavDrawer
+import com.example.bookreadingapp.ui.objects.TopAppBar
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
-import com.example.bookreadingapp.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
 class MainActivity : ComponentActivity() {
     private val downloadViewModel: DownloadViewModel by viewModels {

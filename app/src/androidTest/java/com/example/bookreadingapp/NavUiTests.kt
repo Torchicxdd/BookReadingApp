@@ -11,9 +11,9 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.bookreadingapp.objects.Routes
-import com.example.bookreadingapp.download.FileDownload
-import com.example.bookreadingapp.ui.DownloadViewModel
+import com.example.bookreadingapp.ui.objects.Routes
+import com.example.bookreadingapp.data.download.FileDownload
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import org.junit.Before
 import org.junit.Rule

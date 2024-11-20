@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.download
 
 import android.content.Context
+import com.example.bookreadingapp.data.download.FileDownload
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before

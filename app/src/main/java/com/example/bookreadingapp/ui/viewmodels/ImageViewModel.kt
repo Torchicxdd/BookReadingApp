@@ -1,7 +1,6 @@
-package com.example.bookreadingapp.ui
+package com.example.bookreadingapp.ui.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bookreadingapp.data.BooksAppRoomDatabase
