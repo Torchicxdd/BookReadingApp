@@ -32,6 +32,9 @@ import com.example.bookreadingapp.ui.theme.md_theme_light_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_light_surface
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
+/**
+ * Search screen to use search function
+ */
 @Composable
 fun Search(
     context: Context,
@@ -56,6 +59,9 @@ fun Search(
     }
 }
 
+/**
+ * Search bar for user to type in search queries
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(viewModel: AppViewModel, context: Context) {
@@ -106,6 +112,9 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
     }
 }
 
+/**
+ * Display for finding a word in the text
+ */
 @Composable
 fun DisplayFoundWord(text: String) {
     Text(

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
+// The main screen of the app, which houses all the content and UI components.
 @Composable
 fun Home(
     context: Context,
@@ -51,6 +52,7 @@ fun Home(
     }
 }
 
+// A composable function that holds the dynamic content for the home screen
 @Composable
 fun HomeContent(
     context: Context
@@ -70,6 +72,7 @@ fun HomeContent(
     }
 }
 
+// Displays a card containing the app description
 @Composable
 fun Description(
     context: Context
@@ -112,6 +115,7 @@ fun Description(
     }
 }
 
+// Displays a card with instructions on how to use the app
 @Composable
 fun HowToUse(
     context: Context

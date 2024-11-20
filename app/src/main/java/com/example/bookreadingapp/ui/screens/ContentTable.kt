@@ -24,6 +24,11 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 import com.example.bookreadingapp.ui.utils.GoToReadingButton
 import com.example.bookreadingapp.ui.utils.GoToSearchButton
 
+/**
+ * Table of contents page
+ * Accessed when a book is clicked
+ * Allows navigation to reading mode and search screens
+ */
 @Composable
 fun ContentTable(
     context: Context,
