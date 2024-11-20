@@ -23,6 +23,9 @@ import com.example.bookreadingapp.data.books
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
+/**
+ * Reading screen containing the book to read
+ */
 @Composable
 fun Reading(
     context: Context,
@@ -46,6 +49,7 @@ fun Reading(
                 style = MaterialTheme.typography.displayLarge
             )
 
+            // Reading mode button
             Switch(
                 checked = viewModel.readingMode,
                 onCheckedChange = { viewModel.updateReadingMode() },
@@ -69,6 +73,9 @@ fun Reading(
     }
 }
 
+/**
+ * Book display on the reading screen
+ */
 @Composable
 fun BookDisplay(
     @DrawableRes imageResourceId: Int,
