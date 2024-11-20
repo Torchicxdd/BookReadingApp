@@ -14,8 +14,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipFile
 
-private const val TAG_FE = "FileExtract"
-
 class FileDownload(private val context: Context) {
     // Operations wrapped with withContext(Dispatchers.IO) {} causes the coroutine to switch to
     // the IO dispatcher for IO manipulation/Network request tasks
@@ -44,7 +42,7 @@ class FileDownload(private val context: Context) {
     // Request content from url and saves to file to its own folder created with createFile()
     // Returns a boolean representing if the request was successful
     suspend fun downloadFile(url: String, file: File): Boolean {
-        var downloadSuccess : Boolean
+        var downloadSuccess : Boolean = false
         withContext(Dispatchers.IO) {
             try {
                 val client = OkHttpClient()
@@ -52,8 +50,8 @@ class FileDownload(private val context: Context) {
                 val response = client.newCall(request).execute()
 
                 // Returns false if network request was unsuccessful
-                if (!response.isSuccessful || response.body == null) {
-                    downloadSuccess = false
+                if (!response.isSuccessful || response.body!!.contentLength() == 0L) {
+                    return@withContext false
                 }
                 response.body!!.byteStream().use { inputStream ->
                     FileOutputStream(file).use { outputStream ->
@@ -63,7 +61,6 @@ class FileDownload(private val context: Context) {
                 downloadSuccess = true
             } catch(e: IOException) {
                 e.printStackTrace()
-                downloadSuccess = false
             }
         }
         return downloadSuccess
@@ -99,8 +96,6 @@ class FileDownload(private val context: Context) {
             if (!unzipFolder.exists()) {
                 unzipFolder.mkdirs()
             }
-            // Log where unzipped content will be placed
-//            Log.i(TAG_FE, unzipFolder.absolutePath)
 
             ZipFile(zipFile).use { zip ->
                 zip.entries().asSequence().forEach { entry ->
@@ -114,7 +109,7 @@ class FileDownload(private val context: Context) {
                             val dir = File(destFilePath)
                             dir.mkdir()
                         }
-                        Log.i(TAG_FE, entry.name)
+
                         if (entry.name.contains(".html")) {
                             unzippedPath = File(destFilePath).absolutePath
                         }
