@@ -1,6 +1,6 @@
 package com.example.bookreadingapp
 
-import com.example.bookreadingapp.objects.AppViewModel
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

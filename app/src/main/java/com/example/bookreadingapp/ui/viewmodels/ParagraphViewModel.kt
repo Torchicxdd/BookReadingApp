@@ -1,10 +1,9 @@
-package com.example.bookreadingapp.ui
+package com.example.bookreadingapp.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bookreadingapp.data.BooksAppRoomDatabase
-import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.repositories.ParagraphsRepository
 

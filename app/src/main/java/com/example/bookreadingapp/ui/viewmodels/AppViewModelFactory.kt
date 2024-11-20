@@ -1,4 +1,4 @@
-package com.example.bookreadingapp.ui
+package com.example.bookreadingapp.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

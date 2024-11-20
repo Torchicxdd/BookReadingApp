@@ -1,4 +1,4 @@
-package com.example.bookreadingapp.objects
+package com.example.bookreadingapp.ui.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
