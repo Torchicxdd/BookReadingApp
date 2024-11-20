@@ -49,6 +49,10 @@ import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
 
+/**
+ * Navigation Host for the application
+ * Contains all the composables that can be navigated to
+ */
 @Composable
 fun NavigationHost(
     navController: NavHostController,
@@ -83,7 +87,11 @@ fun NavigationHost(
     }
 }
 
-
+/**
+ * Bottom bar of the app
+ * Contains buttons with all the NavBarItems in it
+ * Used when window size is compact
+ */
 @Composable
 fun BottomNavBar(
     navController: NavHostController,
@@ -96,6 +104,7 @@ fun BottomNavBar(
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
         val barItems = NavBarItems.getBarItems(context)
+        // Loops through all the NavBarItems and places them on the bottom bar
         barItems.forEach { navItem ->
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
@@ -119,6 +128,11 @@ fun BottomNavBar(
     }
 }
 
+/**
+ * Navigation rail of the app
+ * Contains buttons with all the NavBarItems in it
+ * Used when window size is medium
+ */
 @Composable
 fun NavRail(
     navController: NavHostController,
@@ -133,6 +147,7 @@ fun NavRail(
         modifier = modifier.testTag("nav_rail")
     ) {
         Spacer(Modifier.weight(1f))
+        // Loops through all the NavBarItems and places them on the bottom bar
         barItems.forEach { navItem ->
             NavigationRailItem(
                 selected = currentRoute == navItem.route,
@@ -155,6 +170,11 @@ fun NavRail(
     }
 }
 
+/**
+ * Navigation permanent drawer of the app
+ * Contains buttons with all the NavBarItems in it
+ * Used when window size is expanded
+ */
 @Composable
 fun PermanentNavDrawer(
     navController: NavHostController,
@@ -173,6 +193,7 @@ fun PermanentNavDrawer(
             if (!viewModel.readingMode) {
                 PermanentDrawerSheet {
                     Spacer(Modifier.weight(1f))
+                    // Loops through all the NavBarItems and places them on the bottom bar
                     barItems.forEach { navItem ->
                             Box(
                                 modifier = Modifier
@@ -204,6 +225,7 @@ fun PermanentNavDrawer(
                 }
             }
         },
+        // Content on the screen when using nav drawer
         content = {
             Box(
                 modifier = modifier
