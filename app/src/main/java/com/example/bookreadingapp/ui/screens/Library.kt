@@ -43,10 +43,9 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 @Composable
 fun Library(
     context: Context,
-    viewModel: AppViewModel,
-    navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType,
-    downloadViewModel: DownloadViewModel,
+    libraryBooks: List<Book>,
+    moveBookToBookshelf: (Book) -> Unit,
+    setupDownload: (String, String) -> String
 ) {
     val coroutineScope = rememberCoroutineScope()
     val urlList = stringArrayResource(R.array.download)
@@ -65,7 +64,7 @@ fun Library(
         }
 
         // Check if the library has books
-        if (viewModel.libraryBooks.isEmpty()) {
+        if (libraryBooks.isEmpty()) {
             NoBooksToDownloadMessage(context)
         } else {
             // LazyVerticalGrid for the book items
@@ -74,11 +73,11 @@ fun Library(
                 modifier = Modifier
                     .fillMaxSize(),
                 content = {
-                    items(viewModel.libraryBooks) { book ->
+                    items(libraryBooks) { book ->
                         BookItem(book = book, onClick = {
                             // Move book to bookshelf and update viewModel
-                            viewModel.moveBookToBookshelf(book)
-                            book.htmlFilePath = downloadBookFiles(downloadViewModel, urlList[book.arrayIndex])
+                            moveBookToBookshelf(book)
+                            book.htmlFilePath = downloadBookFiles(setupDownload, urlList[book.arrayIndex])
                         },
                         modifier = Modifier.testTag("book_item_${book.title}"))
                         Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
@@ -90,10 +89,10 @@ fun Library(
 }
 // Function to download book files from the provided URL
 private fun downloadBookFiles(
-    downloadViewModel: DownloadViewModel,
+    setupDownload: (String, String) -> String,
     url: String
 ) : String {
-    return downloadViewModel.setupDownload(
+    return setupDownload(
         url,
         "${url.substringAfterLast("/").replace(".zip", "")}-dir"
     )
