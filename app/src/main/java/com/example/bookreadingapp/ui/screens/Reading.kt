@@ -17,11 +17,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.books
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
-import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
 /**
  * Reading screen containing the book to read
@@ -29,11 +26,10 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 @Composable
 fun Reading(
     context: Context,
-    viewModel: AppViewModel,
-    navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    @StringRes bookTitle: Int,
+    isInReadingMode: Boolean,
+    toggleReadingMode: () -> Unit,
 ) {
-    val bookTitleResId = viewModel.selectedBookTitleResId
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,11 +47,11 @@ fun Reading(
 
             // Reading mode button
             Switch(
-                checked = viewModel.readingMode,
-                onCheckedChange = { viewModel.updateReadingMode() },
+                checked = isInReadingMode,
+                onCheckedChange = { toggleReadingMode() },
                 modifier = Modifier.testTag("reading_mode_button"))
 
-            val book = books.find { it.title == bookTitleResId }
+            val book = books.find { it.title == bookTitle }
 
             if (book != null) {
                 BookDisplay(
