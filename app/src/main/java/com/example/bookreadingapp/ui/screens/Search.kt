@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,13 +25,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.navigation.NavController
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.theme.md_theme_dark_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_dark_surface
 import com.example.bookreadingapp.ui.theme.md_theme_light_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_light_surface
-import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
 /**
  * Search screen to use search function
@@ -38,9 +36,11 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 @Composable
 fun Search(
     context: Context,
-    viewModel: AppViewModel,
-    navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    @StringRes selectedBookTitle: Int,
+    searchBarInput: String,
+    updateSearchBar: (String) -> Unit,
+    performSearch: () -> Unit,
+    searchResult: String
 ) {
     Column(
         modifier = Modifier
@@ -55,7 +55,14 @@ fun Search(
             Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
         }
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_small)))
-        SearchBar(viewModel, context)
+        SearchBar(
+            context = context,
+            selectedBookTitle = selectedBookTitle,
+            searchBarInput = searchBarInput,
+            updateSearchBar = updateSearchBar,
+            performSearch = performSearch,
+            searchResult = searchResult
+        )
     }
 }
 
@@ -64,7 +71,14 @@ fun Search(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(viewModel: AppViewModel, context: Context) {
+fun SearchBar(
+    context: Context,
+    @StringRes selectedBookTitle: Int,
+    searchBarInput: String,
+    updateSearchBar: (String) -> Unit,
+    performSearch: () -> Unit,
+    searchResult: String
+) {
     // Determine if dark theme is active
     val darkTheme = isSystemInDarkTheme()
     Column(
@@ -76,11 +90,11 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
         Text(
             text = stringResource(
                 id = R.string.searching_in_book,
-                stringResource(viewModel.selectedBookTitleResId)
+                stringResource(selectedBookTitle)
             )
         )
         OutlinedTextField(
-            value = viewModel.searchBarInput,
+            value = searchBarInput,
             singleLine = true,
             shape = shapes.large,
             modifier = Modifier.fillMaxWidth(),
@@ -89,7 +103,7 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
                 focusedBorderColor =  if (darkTheme) md_theme_dark_onSurface else md_theme_light_onSurface,
                 containerColor = if (darkTheme) md_theme_dark_surface else md_theme_light_surface
             ),
-            onValueChange = { viewModel.updateSearchBarInput(it) },
+            onValueChange = { updateSearchBar(it) },
             placeholder = {
                 Text(
                     text = context.getString(R.string.search_input),
@@ -101,13 +115,13 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    viewModel.performSearch()
+                    performSearch()
                 }
             )
         )
         // Display the search result if it's not empty
-        if (viewModel.searchResultText.isNotEmpty()) {
-            DisplayFoundWord(viewModel.searchResultText)
+        if (searchResult.isNotEmpty()) {
+            DisplayFoundWord(searchResult)
         }
     }
 }
