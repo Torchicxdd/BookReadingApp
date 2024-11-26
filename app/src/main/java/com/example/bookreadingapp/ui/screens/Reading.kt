@@ -3,10 +3,13 @@ package com.example.bookreadingapp.ui.screens
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -70,6 +73,7 @@ fun Reading(
                 )
             }
         }
+        ChapterNavigation()
     }
 }
 
@@ -93,5 +97,32 @@ fun BookDisplay(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium))
         )
+    }
+}
+
+/**
+ * The button used to navigate through a chapter
+ */
+@Composable
+fun ChapterNavigation() {
+    Row(
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ){
+        Button(
+           onClick = {/** TO DO: Go back to previous chapter (page?) */}
+        ){
+            Text(
+                text="<"
+            )
+        }
+
+        Button(
+            onClick = {/** TO DO: Go back to next chapter (page?) */}
+        ){
+            Text(
+                text=">"
+            )
+        }
     }
 }
