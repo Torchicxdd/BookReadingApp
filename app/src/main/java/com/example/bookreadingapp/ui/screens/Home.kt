@@ -20,15 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
 // The main screen of the app, which houses all the content and UI components.
 @Composable
 fun Home(
-    context: Context,
-    viewModel: AppViewModel,
-    adaptiveNavigationType: AdaptiveNavigationType
+    context: Context
 ) {
     Column(
         modifier = Modifier
