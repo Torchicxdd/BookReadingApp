@@ -18,8 +18,10 @@ import com.example.bookreadingapp.ui.objects.BottomNavBar
 import com.example.bookreadingapp.ui.objects.NavRail
 import com.example.bookreadingapp.ui.objects.NavigationHost
 import com.example.bookreadingapp.ui.objects.PermanentNavDrawer
+import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.objects.TopAppBar
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import okhttp3.Route
 
 /**
  * The main composable function that drives the UI layout and navigation based on screen size.
@@ -49,6 +51,9 @@ fun BookReadingApp(
     // Listen for destination changes to update the back navigation state
     navController.addOnDestinationChangedListener { _, _, _, ->
         viewModel.canNavigateBack = navController.previousBackStackEntry != null
+        if (navController.currentDestination?.route != Routes.Reading.route && viewModel.readingMode) {
+            viewModel.readingMode = false
+        }
     }
 
     Scaffold(
@@ -57,7 +62,9 @@ fun BookReadingApp(
             if (!viewModel.readingMode) {
                 TopAppBar(
                     canNavigateBack = viewModel.canNavigateBack,
-                    navigateBack = { navController.navigateUp() }
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
                 )
             }
         },
@@ -110,7 +117,7 @@ fun AdaptiveContent(
         }
         // Display the main content for smaller screens or when in reading mode
         if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
-            ContentNavigationHost(navController, context, modifier, adaptiveNavigationType, viewModel, downloadViewModel)
+            ContentNavigationHost(navController, context, modifier, viewModel, downloadViewModel)
         }
     }
 }
@@ -177,7 +184,6 @@ fun ContentNavigationHost(
     navController: NavHostController,
     context: Context,
     modifier: Modifier,
-    adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel
 ) {
@@ -189,7 +195,6 @@ fun ContentNavigationHost(
         NavigationHost(
             navController,
             context,
-            adaptiveNavigationType,
             Modifier,
             viewModel = viewModel,
             downloadViewModel = downloadViewModel

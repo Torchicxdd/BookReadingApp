@@ -57,7 +57,6 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 fun NavigationHost(
     navController: NavHostController,
     context: Context,
-    adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel
@@ -110,7 +109,7 @@ fun NavigationHost(
                 context = context,
                 bookTitle =  viewModel.selectedBookTitleResId,
                 isInReadingMode =  viewModel.readingMode,
-                toggleReadingMode =  { viewModel.updateReadingMode() }
+                toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode }
             )
         }
 
@@ -261,9 +260,8 @@ fun PermanentNavDrawer(
                 modifier = modifier
             ) {
                 NavigationHost(
-                    navController,
-                    context,
-                    adaptiveNavigationType,
+                    navController = navController,
+                    context = context,
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
                     downloadViewModel = downloadViewModel

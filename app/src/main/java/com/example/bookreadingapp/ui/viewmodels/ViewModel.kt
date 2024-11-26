@@ -49,10 +49,6 @@ class AppViewModel : ViewModel() {
         _bookshelfBooks.add(book)
     }
 
-    fun updateReadingMode() {
-        readingMode = !readingMode
-    }
-
     fun updateBookTitle(resId: Int) {
         selectedBookTitleResId = resId
     }
