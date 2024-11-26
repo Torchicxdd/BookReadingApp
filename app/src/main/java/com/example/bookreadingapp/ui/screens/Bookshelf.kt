@@ -26,23 +26,19 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 @Composable
 fun Bookshelf(
     context: Context,
-    viewModel: AppViewModel,
-    navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    bookshelfBooks: List<Book>,
+    updateBookTitle: (Int) -> Unit,
+    navigateToTableOfContents: () -> Unit
 ) {
     // Check if the bookshelf has any books
-    if (viewModel.bookshelfBooks.isEmpty()) {
+    if (bookshelfBooks.isEmpty()) {
         NoBooksAvailableMessage(context = context)
     } else {
         BooksAvailable(
-            books = viewModel.bookshelfBooks,
-            navController = navController,
+            books = bookshelfBooks,
             onBookClick = { book ->
-                viewModel.updateBookTitle(book.title)
-                navController.navigate(Routes.ContentTable.route) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
+                updateBookTitle(book.title)
+                navigateToTableOfContents()
             }
         )
     }
@@ -70,7 +66,6 @@ fun NoBooksAvailableMessage(context: Context) {
 @Composable
 fun BooksAvailable(
     books: List<Book>,
-    navController: NavController,
     onBookClick: (Book) -> Unit
 ) {
     Column(
