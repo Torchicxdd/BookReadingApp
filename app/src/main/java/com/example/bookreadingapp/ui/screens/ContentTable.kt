@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Text
 import com.example.bookreadingapp.R
@@ -18,9 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
-import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 import com.example.bookreadingapp.ui.utils.GoToReadingButton
 import com.example.bookreadingapp.ui.utils.GoToSearchButton
 
@@ -32,9 +30,9 @@ import com.example.bookreadingapp.ui.utils.GoToSearchButton
 @Composable
 fun ContentTable(
     context: Context,
-    viewModel: AppViewModel,
-    navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    @StringRes selectedBookTitle: Int,
+    navigateToSearch: () -> Unit,
+    navigateToReading: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -53,7 +51,7 @@ fun ContentTable(
             Text(
                 text = stringResource(
                     R.string.book_chosen,
-                    stringResource(viewModel.selectedBookTitleResId)
+                    stringResource(selectedBookTitle)
                 )
             )
 
@@ -64,8 +62,8 @@ fun ContentTable(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                GoToSearchButton(navController = navController)
-                GoToReadingButton(navController = navController)
+                GoToSearchButton(navigateToSearch)
+                GoToReadingButton(navigateToReading)
             }
         }
     }
