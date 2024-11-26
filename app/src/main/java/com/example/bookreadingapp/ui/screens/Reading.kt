@@ -3,12 +3,12 @@ package com.example.bookreadingapp.ui.screens
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,29 +27,25 @@ import com.example.bookreadingapp.data.books
 fun Reading(
     context: Context,
     @StringRes bookTitle: Int,
-    isInReadingMode: Boolean,
     toggleReadingMode: () -> Unit,
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .testTag("reading_screen")
+            .clickable {
+                toggleReadingMode()
+            }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .testTag("reading_screen")
         ) {
             Text(
                 text = context.getString(R.string.reading),
                 style = MaterialTheme.typography.displayLarge
             )
-
-            // Reading mode button
-            Switch(
-                checked = isInReadingMode,
-                onCheckedChange = { toggleReadingMode() },
-                modifier = Modifier.testTag("reading_mode_button"))
 
             val book = books.find { it.title == bookTitle }
 

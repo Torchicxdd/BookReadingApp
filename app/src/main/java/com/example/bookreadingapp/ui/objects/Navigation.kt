@@ -108,7 +108,6 @@ fun NavigationHost(
             Reading(
                 context = context,
                 bookTitle =  viewModel.selectedBookTitleResId,
-                isInReadingMode =  viewModel.readingMode,
                 toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode }
             )
         }
