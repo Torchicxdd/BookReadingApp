@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace = "com.example.bookreadingapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.bookreadingapp"
-        minSdk = 24
+        minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -56,25 +56,40 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.6.0")
+    implementation("androidx.room:room-ktx:2.6.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation("androidx.compose.foundation:foundation-layout-android:1.5.4")
+    implementation(libs.androidx.room.common)
+    testImplementation(libs.junit.jupiter)
+    annotationProcessor("androidx.room:room-compiler:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+
+
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("androidx.navigation:navigation-compose:2.5.3")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.compose.material3:material3-window-size-class")
+    implementation(libs.androidx.runtime.livedata)
     androidTestImplementation ("androidx.navigation:navigation-compose:2.6.0") // Or the latest stable version
     androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.5.0") // Or the latest version
 
     implementation(libs.androidx.navigation.testing)
 
-    testImplementation ("junit:junit:4.13.2")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("org.mockito:mockito-core:4.8.0")
     testImplementation("org.mockito:mockito-android:4.8.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
+    testImplementation("org.mockito:mockito-inline:4.8.0")
 
     testImplementation ("androidx.arch.core:core-testing:2.1.0")
-
     testImplementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
     testImplementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
 
