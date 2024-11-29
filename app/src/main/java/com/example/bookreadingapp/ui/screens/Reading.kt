@@ -18,6 +18,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
+import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
 
 /**
@@ -25,8 +26,9 @@ import com.example.bookreadingapp.data.books
  */
 @Composable
 fun Reading(
-    context: Context,
-    @StringRes bookTitle: Int,
+    @StringRes readingScreenTitle: Int,
+    @StringRes bookNotFoundText: Int,
+    book: Book?,
     toggleReadingMode: () -> Unit,
 ) {
     Box(
@@ -43,11 +45,9 @@ fun Reading(
                 .testTag("reading_screen")
         ) {
             Text(
-                text = context.getString(R.string.reading),
+                text = stringResource(readingScreenTitle),
                 style = MaterialTheme.typography.displayLarge
             )
-
-            val book = books.find { it.title == bookTitle }
 
             if (book != null) {
                 BookDisplay(
@@ -57,7 +57,7 @@ fun Reading(
             } else {
                 // Handling the case where the book is not found
                 Text(
-                    text = context.getString(R.string.book_404),
+                    text = stringResource(bookNotFoundText),
                     style = MaterialTheme.typography.displayMedium
                 )
             }
