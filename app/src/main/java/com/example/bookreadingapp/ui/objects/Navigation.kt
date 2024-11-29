@@ -77,23 +77,24 @@ fun NavigationHost(
         }
         composable(Routes.Bookshelf.route) {
             Bookshelf(
-                context = context,
                 bookshelfBooks = viewModel.bookshelfBooks,
                 updateBook = { viewModel.updateBook(it) },
                 navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
                     launchSingleTop = true
                     restoreState = true
-                } }
+                } },
+                noBooksAvailable = R.string.no_books_available
             )
         }
         composable(Routes.Search.route) {
             Search(
-                context = context,
-                selectedBookTitle = viewModel.selectedBookTitleResId,
+                book = viewModel.selectedBook,
+                searchScreenTitle = R.string.search,
                 searchBarInput = viewModel.searchBarInput,
                 updateSearchBar = { viewModel.updateSearchBarInput(it) },
                 performSearch = { viewModel.performSearch() },
-                searchResult = viewModel.searchResultText
+                searchResult = viewModel.searchResultText,
+                searchInput = R.string.search_input
             )
         }
         composable(Routes.ContentTable.route) {

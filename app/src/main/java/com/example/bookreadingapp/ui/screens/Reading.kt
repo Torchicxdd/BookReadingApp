@@ -49,18 +49,10 @@ fun Reading(
                 style = MaterialTheme.typography.displayLarge
             )
 
-            if (book != null) {
-                BookDisplay(
-                    imageResourceId = book.imageResourceId,
-                    titleResourceId = book.title
-                )
-            } else {
-                // Handling the case where the book is not found
-                Text(
-                    text = stringResource(bookNotFoundText),
-                    style = MaterialTheme.typography.displayMedium
-                )
-            }
+            BookDisplay(
+                imageResourceId = book!!.imageResourceId,
+                titleResourceId = book.title
+            )
         }
     }
 }

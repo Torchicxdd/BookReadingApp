@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.theme.md_theme_dark_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_dark_surface
 import com.example.bookreadingapp.ui.theme.md_theme_light_onSurface
@@ -35,8 +36,9 @@ import com.example.bookreadingapp.ui.theme.md_theme_light_surface
  */
 @Composable
 fun Search(
-    context: Context,
-    @StringRes selectedBookTitle: Int,
+    book: Book?,
+    @StringRes searchInput: Int,
+    @StringRes searchScreenTitle: Int,
     searchBarInput: String,
     updateSearchBar: (String) -> Unit,
     performSearch: () -> Unit,
@@ -52,16 +54,16 @@ fun Search(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
+            Text(text = stringResource(searchScreenTitle), style = MaterialTheme.typography.displayLarge)
         }
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_small)))
         SearchBar(
-            context = context,
-            selectedBookTitle = selectedBookTitle,
+            book = book,
             searchBarInput = searchBarInput,
             updateSearchBar = updateSearchBar,
             performSearch = performSearch,
-            searchResult = searchResult
+            searchResult = searchResult,
+            searchInput = searchInput
         )
     }
 }
@@ -72,12 +74,12 @@ fun Search(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
-    context: Context,
-    @StringRes selectedBookTitle: Int,
+    book: Book?,
     searchBarInput: String,
     updateSearchBar: (String) -> Unit,
     performSearch: () -> Unit,
-    searchResult: String
+    searchResult: String,
+    @StringRes searchInput: Int,
 ) {
     // Determine if dark theme is active
     val darkTheme = isSystemInDarkTheme()
@@ -90,7 +92,7 @@ fun SearchBar(
         Text(
             text = stringResource(
                 id = R.string.searching_in_book,
-                stringResource(selectedBookTitle)
+                stringResource(book!!.title)
             )
         )
         OutlinedTextField(
@@ -106,7 +108,7 @@ fun SearchBar(
             onValueChange = { updateSearchBar(it) },
             placeholder = {
                 Text(
-                    text = context.getString(R.string.search_input),
+                    text = stringResource(searchInput),
                     style = MaterialTheme.typography.bodyLarge
                 )
             },

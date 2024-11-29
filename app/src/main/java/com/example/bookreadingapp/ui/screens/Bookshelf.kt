@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,14 +26,14 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 // Main composable function for the bookshelf screen
 @Composable
 fun Bookshelf(
-    context: Context,
     bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
-    navigateToTableOfContents: () -> Unit
+    navigateToTableOfContents: () -> Unit,
+    @StringRes noBooksAvailable: Int
 ) {
     // Check if the bookshelf has any books
     if (bookshelfBooks.isEmpty()) {
-        NoBooksAvailableMessage(context = context)
+        NoBooksAvailableMessage(noBooksAvailable)
     } else {
         BooksAvailable(
             books = bookshelfBooks,
@@ -46,7 +47,9 @@ fun Bookshelf(
 
 // Composable function to display a message when no books are available
 @Composable
-fun NoBooksAvailableMessage(context: Context) {
+fun NoBooksAvailableMessage(
+    @StringRes noBooksAvailable: Int
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +58,7 @@ fun NoBooksAvailableMessage(context: Context) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = context.getString(R.string.no_books_available),
+            text = stringResource(noBooksAvailable),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.testTag("empty_bookshelf_text")
         )
