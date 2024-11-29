@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +40,7 @@ fun Reading(
     adaptiveNavigationType: AdaptiveNavigationType
 ) {
     val bookTitleResId = viewModel.selectedBookTitleResId
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .testTag("reading_screen")
@@ -73,7 +76,15 @@ fun Reading(
                 )
             }
         }
-        ChapterNavigation()
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+        // Display the chapter navigation only if not in reading mode
+        if (!viewModel.readingMode) {
+            ChapterNavigation(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(dimensionResource(R.dimen.padding_small))
+            )
+        }
     }
 }
 
@@ -104,24 +115,33 @@ fun BookDisplay(
  * The button used to navigate through a chapter
  */
 @Composable
-fun ChapterNavigation() {
+fun ChapterNavigation(modifier: Modifier = Modifier) {
     Row(
-        verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.SpaceBetween
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = dimensionResource(R.dimen.spacer_padding))
     ){
         Button(
-           onClick = {/** TO DO: Go back to previous chapter (page?) */}
+            onClick = {/** TO DO: Go back to previous chapter (page?) */},
+            modifier = Modifier
+                .padding(horizontal = dimensionResource(R.dimen.spacer_padding))
         ){
             Text(
-                text="<"
+                text="<",
+                style = MaterialTheme.typography.labelSmall
             )
         }
 
         Button(
-            onClick = {/** TO DO: Go back to next chapter (page?) */}
+            onClick = {/** TO DO: Go back to next chapter (page?) */},
+            modifier = Modifier
+                .padding(horizontal = dimensionResource(R.dimen.spacer_padding))
         ){
             Text(
-                text=">"
+                text=">",
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }
