@@ -1,6 +1,5 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -19,15 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.data.books
 
 /**
  * Reading screen containing the book to read
  */
 @Composable
 fun Reading(
-    @StringRes readingScreenTitle: Int,
-    @StringRes bookNotFoundText: Int,
     book: Book?,
     toggleReadingMode: () -> Unit,
 ) {
@@ -45,7 +41,7 @@ fun Reading(
                 .testTag("reading_screen")
         ) {
             Text(
-                text = stringResource(readingScreenTitle),
+                text = stringResource(R.string.reading),
                 style = MaterialTheme.typography.displayLarge
             )
 

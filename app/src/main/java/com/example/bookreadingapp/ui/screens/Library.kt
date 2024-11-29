@@ -1,6 +1,5 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.content.Context
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -23,7 +22,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -32,22 +30,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
-import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
 // Composable function that represents the main screen of the Library
 @Composable
 fun Library(
-    context: Context,
     libraryBooks: List<Book>,
     moveBookToBookshelf: (Book) -> Unit,
     setupDownload: (String, String) -> String
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val urlList = stringArrayResource(R.array.download)
 
     Column(
@@ -60,12 +52,12 @@ fun Library(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = context.getString(R.string.library), style = MaterialTheme.typography.displayLarge)
+            Text(text = stringResource(R.string.library), style = MaterialTheme.typography.displayLarge)
         }
 
         // Check if the library has books
         if (libraryBooks.isEmpty()) {
-            NoBooksToDownloadMessage(context)
+            NoBooksToDownloadMessage()
         } else {
             // LazyVerticalGrid for the book items
             LazyVerticalGrid(
@@ -100,7 +92,7 @@ private fun downloadBookFiles(
 
 // Composable to display a message when there are no books to download
 @Composable
-fun NoBooksToDownloadMessage(context: Context) {
+fun NoBooksToDownloadMessage() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -109,7 +101,7 @@ fun NoBooksToDownloadMessage(context: Context) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = context.getString(R.string.no_books_to_download),
+            text = stringResource(R.string.no_books_to_download),
             style = MaterialTheme.typography.bodyLarge
         )
     }

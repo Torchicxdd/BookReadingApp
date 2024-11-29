@@ -1,11 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.content.Context
-import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import com.example.bookreadingapp.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,13 +13,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.theme.md_theme_dark_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_dark_surface
@@ -37,8 +35,6 @@ import com.example.bookreadingapp.ui.theme.md_theme_light_surface
 @Composable
 fun Search(
     book: Book?,
-    @StringRes searchInput: Int,
-    @StringRes searchScreenTitle: Int,
     searchBarInput: String,
     updateSearchBar: (String) -> Unit,
     performSearch: () -> Unit,
@@ -54,7 +50,7 @@ fun Search(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = stringResource(searchScreenTitle), style = MaterialTheme.typography.displayLarge)
+            Text(text = stringResource(R.string.search), style = MaterialTheme.typography.displayLarge)
         }
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_small)))
         SearchBar(
@@ -63,7 +59,6 @@ fun Search(
             updateSearchBar = updateSearchBar,
             performSearch = performSearch,
             searchResult = searchResult,
-            searchInput = searchInput
         )
     }
 }
@@ -78,8 +73,7 @@ fun SearchBar(
     searchBarInput: String,
     updateSearchBar: (String) -> Unit,
     performSearch: () -> Unit,
-    searchResult: String,
-    @StringRes searchInput: Int,
+    searchResult: String
 ) {
     // Determine if dark theme is active
     val darkTheme = isSystemInDarkTheme()
@@ -108,7 +102,7 @@ fun SearchBar(
             onValueChange = { updateSearchBar(it) },
             placeholder = {
                 Text(
-                    text = stringResource(searchInput),
+                    text = stringResource(R.string.search_input),
                     style = MaterialTheme.typography.bodyLarge
                 )
             },

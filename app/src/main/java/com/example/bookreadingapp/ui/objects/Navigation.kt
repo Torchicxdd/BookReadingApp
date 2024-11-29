@@ -65,11 +65,10 @@ fun NavigationHost(
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home(context = context)
+            Home()
         }
         composable(Routes.Library.route) {
             Library(
-                context = context,
                 libraryBooks = viewModel.libraryBooks,
                 moveBookToBookshelf = { viewModel.moveBookToBookshelf(it) },
                 setupDownload = { url: String, dir: String -> downloadViewModel.setupDownload(url, dir) }
@@ -82,33 +81,27 @@ fun NavigationHost(
                 navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
                     launchSingleTop = true
                     restoreState = true
-                } },
-                noBooksAvailable = R.string.no_books_available
+                } }
             )
         }
         composable(Routes.Search.route) {
             Search(
                 book = viewModel.selectedBook,
-                searchScreenTitle = R.string.search,
                 searchBarInput = viewModel.searchBarInput,
                 updateSearchBar = { viewModel.updateSearchBarInput(it) },
                 performSearch = { viewModel.performSearch() },
-                searchResult = viewModel.searchResultText,
-                searchInput = R.string.search_input
+                searchResult = viewModel.searchResultText
             )
         }
         composable(Routes.ContentTable.route) {
             ContentTable(
-                context = context,
-                selectedBookTitle = viewModel.selectedBookTitleResId,
+                book = viewModel.selectedBook,
                 navigateToSearch =  { navController.navigate(Routes.Search.route) },
                 navigateToReading =  { navController.navigate(Routes.Reading.route) }
             )
         }
         composable(Routes.Reading.route) {
             Reading(
-                readingScreenTitle = R.string.reading,
-                bookNotFoundText = R.string.book_404,
                 book = viewModel.selectedBook,
                 toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode }
             )
