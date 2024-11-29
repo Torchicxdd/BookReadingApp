@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
@@ -26,9 +28,7 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
 // The main screen of the app, which houses all the content and UI components.
 @Composable
-fun Home(
-    context: Context
-) {
+fun Home() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,23 +39,21 @@ fun Home(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = context.getString(R.string.home), style = MaterialTheme.typography.displayLarge)
+            Text(text = stringResource(R.string.home), style = MaterialTheme.typography.displayLarge)
         }
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            HomeContent(context)
+            HomeContent()
         }
     }
 }
 
 // A composable function that holds the dynamic content for the home screen
 @Composable
-fun HomeContent(
-    context: Context
-) {
+fun HomeContent(){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -66,16 +64,14 @@ fun HomeContent(
                 )
             )
     ) {
-        Description(context)
-        HowToUse(context)
+        Description()
+        HowToUse()
     }
 }
 
 // Displays a card containing the app description
 @Composable
-fun Description(
-    context: Context
-) {
+fun Description() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,7 +88,7 @@ fun Description(
                 .padding(horizontal = dimensionResource(R.dimen.padding_medium))
         ) {
             Text(
-                text = context.getString(R.string.welcome_message),
+                text = stringResource(R.string.welcome_message),
                 style = MaterialTheme.typography.displayMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -100,7 +96,7 @@ fun Description(
             )
 
             // App description
-            val descriptionArray = context.resources.getStringArray(R.array.app_description)
+            val descriptionArray = stringArrayResource(R.array.app_description)
             descriptionArray.forEach { descriptionItem ->
                 Text(
                     text = descriptionItem,
@@ -116,9 +112,7 @@ fun Description(
 
 // Displays a card with instructions on how to use the app
 @Composable
-fun HowToUse(
-    context: Context
-) {
+fun HowToUse() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -135,7 +129,7 @@ fun HowToUse(
                 .padding(horizontal = dimensionResource(R.dimen.padding_medium))
         ) {
             Text(
-                text = context.getString(R.string.welcome_message),
+                text = stringResource(R.string.welcome_message),
                 style = MaterialTheme.typography.displayMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -143,7 +137,7 @@ fun HowToUse(
             )
 
             // "How to Use" steps
-            val howToUseStepsArray = context.resources.getStringArray(R.array.how_to_use_steps)
+            val howToUseStepsArray = stringArrayResource(R.array.how_to_use_steps)
             howToUseStepsArray.forEachIndexed { index, step ->
                 Text(
                     text = "${index + 1}. $step",
