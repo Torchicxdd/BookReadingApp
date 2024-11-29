@@ -79,7 +79,7 @@ fun NavigationHost(
             Bookshelf(
                 context = context,
                 bookshelfBooks = viewModel.bookshelfBooks,
-                updateBookTitle = { viewModel.updateBookTitle(it) },
+                updateBook = { viewModel.updateBook(it) },
                 navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
                     launchSingleTop = true
                     restoreState = true
@@ -106,8 +106,9 @@ fun NavigationHost(
         }
         composable(Routes.Reading.route) {
             Reading(
-                context = context,
-                bookTitle =  viewModel.selectedBookTitleResId,
+                readingScreenTitle = R.string.reading,
+                bookNotFoundText = R.string.book_404,
+                book = viewModel.selectedBook,
                 toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode }
             )
         }

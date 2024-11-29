@@ -27,7 +27,7 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 fun Bookshelf(
     context: Context,
     bookshelfBooks: List<Book>,
-    updateBookTitle: (Int) -> Unit,
+    updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit
 ) {
     // Check if the bookshelf has any books
@@ -37,7 +37,7 @@ fun Bookshelf(
         BooksAvailable(
             books = bookshelfBooks,
             onBookClick = { book ->
-                updateBookTitle(book.title)
+                updateBook(book)
                 navigateToTableOfContents()
             }
         )
