@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -112,7 +113,7 @@ fun BookDisplay(
 }
 
 /**
- * The button used to navigate through a chapter
+ * The buttons used to navigate through a chapter
  */
 @Composable
 fun ChapterNavigation(modifier: Modifier = Modifier) {
