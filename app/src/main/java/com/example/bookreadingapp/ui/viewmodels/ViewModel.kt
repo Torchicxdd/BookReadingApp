@@ -16,8 +16,6 @@ class AppViewModel : ViewModel() {
     var selectedBook by mutableStateOf<Book?>(null)
     var searchBarInput by mutableStateOf("")
     var searchResultText by mutableStateOf("")
-    // State to track which book is being downloaded
-    var currentDownloadingBook by mutableStateOf<Book?>(null)
 
     // MutableStateList to hold the books in the library
     private val _libraryBooks = mutableStateListOf<Book>()
@@ -46,6 +44,13 @@ class AppViewModel : ViewModel() {
         _libraryBooks.addAll(books)
     }
 
+    // Function to move a book from the library to the bookshelf
+    // Learned about .add and .remove from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
+    fun moveBookToBookshelf(book: Book) {
+        _libraryBooks.remove(book)
+        _bookshelfBooks.add(book)
+    }
+
     fun updateBook(book: Book) {
         selectedBook = book
     }
@@ -60,27 +65,4 @@ class AppViewModel : ViewModel() {
         }
     }
 
-    fun updateCurrentDownloadingBook(book: Book?) {
-        currentDownloadingBook = book
-    }
-
-    // Function to add a book to the bookshelf ensuring that it doesn't already exists
-    // Learned about .add and .contains from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
-    fun onDownloadCompleteBookshelf() {
-        currentDownloadingBook?.let { book ->
-            Log.d("DownloadStatus for Bookshelf", "Download complete for: ${book.title}")
-            if (!_bookshelfBooks.contains(book)) {
-                _bookshelfBooks.add(book)
-            }
-        }
-    }
-
-    // Function to add a book to the bookshelf ensuring that it doesn't already exists
-    // Learned about .remove from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
-    fun onDownloadCompleteLibrary() {
-        currentDownloadingBook?.let { book ->
-            Log.d("DownloadStatus for Library", "Download complete for: ${book.title}")
-            _libraryBooks.remove(book)
-        }
-    }
 }

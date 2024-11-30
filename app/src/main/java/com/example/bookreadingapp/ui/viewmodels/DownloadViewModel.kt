@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.download.FileDownload
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -30,9 +31,12 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
     // Function to set up file download
     // Returns the absolute path of the downloaded and extracted html file
-    fun setupDownload(url: String, directoryName: String) : String {
-        var downloadedFilePath = ""
-
+    fun setupDownload(
+        url: String,
+        directoryName: String,
+        book: Book,
+        moveBookToBookshelf: (Book) -> Unit
+    ){
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
             val file = repository.createFile(directoryName, fileName)
@@ -56,11 +60,18 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
             // Extract zip file after downloading
             try {
-                downloadedFilePath = repository.unzipFile(file, directoryName){ progress ->
+                val downloadedFilePath = repository.unzipFile(file, directoryName){ progress ->
                     viewModelScope.launch {
                         _progressPercentage.emit(progress)
                     }
                 }
+                if (downloadedFilePath.isNotEmpty()) {
+                    book.htmlFilePath = downloadedFilePath
+                    moveBookToBookshelf(book)
+                } else {
+                    Log.e(TAG_DVM, "Download file path is empty, book was not moved to bookshelf")
+                }
+
             } catch(e: IOException) {
                 e.printStackTrace()
                 e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
@@ -69,12 +80,17 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             _isDownloading.value = false
             updateDirectoryContents("")
         }
-
-        return downloadedFilePath
     }
 
     private suspend fun updateDirectoryContents(directoryName: String) {
         val contents = repository.listDirectoryContents(directoryName)
         _directoryContents.postValue(contents)
     }
+
+    suspend fun confirmDeletion(directoryName: String) {
+        repository.deleteDirectoryContents(directoryName)
+        updateDirectoryContents(directoryName)
+        Log.i(TAG_DVM, "$directoryName content deleted")
+    }
+
 }

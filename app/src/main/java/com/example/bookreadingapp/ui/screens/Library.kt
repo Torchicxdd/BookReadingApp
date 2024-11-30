@@ -36,33 +36,19 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.theme.Shapes
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 
 // Composable function that represents the main screen of the Library
 @Composable
 fun Library(
     libraryBooks: List<Book>,
-    setupDownload: (String, String) -> String,
     downloadViewModel: DownloadViewModel,
-    updateCurrentDownloadingBook: (Book?) -> Unit,
-    onDownloadCompleteLibrary: () -> Unit,
-    onDownloadCompleteBookshelf: () -> Unit,
+    viewModel: AppViewModel
 ) {
     val urlList = stringArrayResource(R.array.download)
     val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
     val isDownloading by downloadViewModel.isDownloading.collectAsState()
-
-    // Check if download is complete, if so, move book to bookshelf
-    LaunchedEffect(isDownloading) {
-        if (!isDownloading) {
-            // Remove book from library when download completes
-            onDownloadCompleteLibrary()
-            // Adds book to bookshelf when download completes
-            onDownloadCompleteBookshelf()
-            // Clear currentlyDownload after removing it from the library
-            updateCurrentDownloadingBook(null)
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -96,8 +82,15 @@ fun Library(
                     items(libraryBooks) { book ->
                         BookItem(book = book, onClick = {
                             // Starts downloading only if this book is not already being downloaded
-                            updateCurrentDownloadingBook(book)
-                            book.htmlFilePath = downloadBookFiles(setupDownload, urlList[book.arrayIndex])
+                            //viewModel.updateCurrentDownloadingBook(book)
+                            val url = urlList[book.arrayIndex]
+                            downloadViewModel.setupDownload(
+                                url = url,
+                                directoryName = "${url.substringAfterLast("/").replace(".zip", "")}-dir",
+                                book = book,
+                                moveBookToBookshelf = { viewModel.moveBookToBookshelf(book) }
+                            )
+
                         },
                         modifier = Modifier.testTag("book_item_${book.title}"))
                         Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")

@@ -28,26 +28,12 @@ fun Bookshelf(
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     downloadViewModel: DownloadViewModel,
-    updateCurrentDownloadingBook: (Book?) -> Unit,
-    onDownloadCompleteLibrary: () -> Unit,
-    onDownloadCompleteBookshelf: () -> Unit
 ) {
     val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
     val isDownloading by downloadViewModel.isDownloading.collectAsState()
-    var books: List<Book> = bookshelfBooks
-    // Check if download is complete, if so, move book to bookshelf
-    LaunchedEffect(isDownloading) {
-        if (!isDownloading) {
-            // Remove book from library when download completes
-            onDownloadCompleteLibrary()
-            // Adds book to bookshelf when download completes
-            onDownloadCompleteBookshelf()
-            // Clear currentlyDownload after removing it from the library
-            updateCurrentDownloadingBook(null)
-        }
-    }
+
     BooksAvailable(
-        books = books,
+        books = bookshelfBooks,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()
