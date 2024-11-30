@@ -2,19 +2,11 @@ package com.example.bookreadingapp.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,8 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -34,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.extensions.detectedTapWithoutSwipe
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 
 
 /**
@@ -119,26 +108,22 @@ fun ChapterNavigation(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = dimensionResource(R.dimen.spacer_padding))
+            .padding(horizontal = dimensionResource(R.dimen.padding_medium))
     ){
         Button(
             onClick = {/** TO DO: Go back to previous chapter (page?) */},
-            modifier = Modifier
-                .padding(horizontal = dimensionResource(R.dimen.spacer_padding))
         ){
             Text(
-                text="<",
+                text = stringResource(R.string.prev_chap),
                 style = MaterialTheme.typography.labelSmall
             )
         }
 
         Button(
             onClick = {/** TO DO: Go back to next chapter (page?) */},
-            modifier = Modifier
-                .padding(horizontal = dimensionResource(R.dimen.spacer_padding))
         ){
             Text(
-                text=">",
+                text = stringResource(R.string.next_chap),
                 style = MaterialTheme.typography.labelSmall
             )
         }
