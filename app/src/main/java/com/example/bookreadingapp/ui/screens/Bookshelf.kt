@@ -28,9 +28,10 @@ fun Bookshelf(
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     downloadViewModel: DownloadViewModel,
+    updateCurrentDownloadingBook: (Book?) -> Unit,
+    onDownloadCompleteLibrary: () -> Unit,
     onDownloadCompleteBookshelf: () -> Unit
 ) {
-    val progressMessage by downloadViewModel.progressMessage.collectAsState()
     val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
     val isDownloading by downloadViewModel.isDownloading.collectAsState()
     var books: List<Book> = bookshelfBooks
@@ -38,7 +39,11 @@ fun Bookshelf(
     LaunchedEffect(isDownloading) {
         if (!isDownloading) {
             // Trigger move to bookshelf when download completes
-            books = bookshelfBooks
+            onDownloadCompleteLibrary()
+            // Trigger move to bookshelf when download completes
+            onDownloadCompleteBookshelf()
+            // Clear currentlyDownload after removing it from the library
+            updateCurrentDownloadingBook(null)
         }
     }
     BooksAvailable(
@@ -47,9 +52,7 @@ fun Bookshelf(
             updateBook(book)
             navigateToTableOfContents()
         },
-        downloadViewModel,
         isDownloading,
-        progressMessage,
         progressPercentage
     )
 }
@@ -77,9 +80,7 @@ fun NoBooksAvailableMessage(){
 fun BooksAvailable(
     books: List<Book>,
     onBookClick: (Book) -> Unit,
-    downloadViewModel: DownloadViewModel,
     isDownloading: Boolean,
-    progressMessage: String,
     progressPercentage: Int
 ) {
     Column(
@@ -100,8 +101,7 @@ fun BooksAvailable(
             // Display progress message if download or unzip is ongoing
             if (isDownloading) {
                 ProgressMessage(
-                    progress = progressPercentage,
-                    message = progressMessage
+                    progress = progressPercentage
                 )
             }
         }

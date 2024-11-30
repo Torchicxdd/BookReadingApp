@@ -22,9 +22,6 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _directoryContents = MutableLiveData<List<String>>()
     val directoryContents: LiveData<List<String>> = _directoryContents
 
-    private val _progressMessage = MutableStateFlow("")
-    val progressMessage: StateFlow<String> = _progressMessage
-
     private val _progressPercentage = MutableStateFlow(0)
     val progressPercentage: StateFlow<Int> get() = _progressPercentage
 
@@ -47,7 +44,6 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             // Download zip file from url with progress update
             if (repository.downloadFile(url, file) { progress ->
                     viewModelScope.launch {
-                        _progressMessage.emit("Downloading...")
                         _progressPercentage.emit(progress)
                     }
                 }
@@ -56,25 +52,21 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             }
             else {
                 Log.e(TAG_DVM, "Failed to download file")
-                _progressMessage.emit("Failed to download file")
             }
 
             // Extract zip file after downloading
             try {
                 downloadedFilePath = repository.unzipFile(file, directoryName){ progress ->
                     viewModelScope.launch {
-                        _progressMessage.emit("Unzipping...")
                         _progressPercentage.emit(progress)
                     }
                 }
             } catch(e: IOException) {
                 e.printStackTrace()
                 e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
-                _progressMessage.emit("Failed to extract file")
             }
 
             _isDownloading.value = false
-            _progressMessage.emit("")
             updateDirectoryContents("")
         }
 

@@ -86,6 +86,8 @@ fun NavigationHost(
                     restoreState = true
                 } },
                 downloadViewModel,
+                updateCurrentDownloadingBook = { viewModel.updateCurrentDownloadingBook(it) },
+                onDownloadCompleteLibrary = {viewModel.onDownloadCompleteLibrary()},
                 onDownloadCompleteBookshelf = {viewModel.onDownloadCompleteBookshelf()}
             )
         }

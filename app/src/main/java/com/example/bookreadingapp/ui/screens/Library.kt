@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.ui.theme.Shapes
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 
 // Composable function that represents the main screen of the Library
@@ -48,7 +49,6 @@ fun Library(
     onDownloadCompleteBookshelf: () -> Unit,
 ) {
     val urlList = stringArrayResource(R.array.download)
-    val progressMessage by downloadViewModel.progressMessage.collectAsState()
     val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
     val isDownloading by downloadViewModel.isDownloading.collectAsState()
 
@@ -75,15 +75,14 @@ fun Library(
                 .fillMaxWidth()
         ) {
             Text(text = stringResource(R.string.library), style = MaterialTheme.typography.displayLarge)
+
             // Display progress message if download or unzip is ongoing
             if (isDownloading) {
                 ProgressMessage(
-                    progress = progressPercentage,
-                    message = progressMessage
+                    progress = progressPercentage
                 )
             }
         }
-
         // Check if the library has books
         if (libraryBooks.isEmpty()) {
             NoBooksToDownloadMessage()
@@ -209,22 +208,19 @@ fun BookInformation(
 }
 
 @Composable
-fun ProgressMessage(progress: Int, message: String) {
+fun ProgressMessage(progress: Int) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxSize()
-            .testTag("bookshelf_screen"),
+            .testTag("bookshelf_screen")
+            .padding(dimensionResource(R.dimen.padding_small))
+            .fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium)),
+                .padding(dimensionResource(R.dimen.padding_small))
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium
-            )
             Text(
                 text = stringResource(R.string.download_progress, progress),
                 style = MaterialTheme.typography.bodyLarge
