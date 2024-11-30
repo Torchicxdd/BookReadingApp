@@ -16,13 +16,16 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.ui.objects.Routes
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 
 // Main composable function for the bookshelf screen
 @Composable
 fun Bookshelf(
     bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
-    navigateToTableOfContents: () -> Unit
+    navigateToTableOfContents: () -> Unit,
+    downloadViewModel: DownloadViewModel
 ) {
     // Check if the bookshelf has any books
     if (bookshelfBooks.isEmpty()) {
@@ -33,7 +36,8 @@ fun Bookshelf(
             onBookClick = { book ->
                 updateBook(book)
                 navigateToTableOfContents()
-            }
+            },
+            downloadViewModel
         )
     }
 }
@@ -60,7 +64,8 @@ fun NoBooksAvailableMessage(){
 @Composable
 fun BooksAvailable(
     books: List<Book>,
-    onBookClick: (Book) -> Unit
+    onBookClick: (Book) -> Unit,
+    downloadViewModel: DownloadViewModel
 ) {
     Column(
         modifier = Modifier
@@ -72,6 +77,12 @@ fun BooksAvailable(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(R.string.bookshelf), style = MaterialTheme.typography.displayLarge)
+            // Display progress message if download or unzip is ongoing
+            if (downloadViewModel.isDownloading) {
+                ProgressMessage(
+                    progress = downloadViewModel.totalProgress
+                )
+            }
         }
 
         // LazyVerticalGrid to display books in a grid
