@@ -65,4 +65,5 @@
     <string name="no_books_available">Vous n\'avez encore téléchargé aucun livre.</string>
     <string name="no_books_to_download">Aucun livre disponible à télécharger</string>
     <string name="back_button">Revenir</string>
+    <string name="download_progress">Download and Unzip Progress: %1$d%%</string>
 </resources>

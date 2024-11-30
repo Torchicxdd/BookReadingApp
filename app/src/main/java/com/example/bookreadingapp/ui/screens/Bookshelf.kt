@@ -21,6 +21,7 @@ import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 
 // Main composable function for the bookshelf screen
 @Composable
@@ -28,7 +29,8 @@ fun Bookshelf(
     context: Context,
     viewModel: AppViewModel,
     navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    adaptiveNavigationType: AdaptiveNavigationType,
+    downloadViewModel: DownloadViewModel,
 ) {
     // Check if the bookshelf has any books
     if (viewModel.bookshelfBooks.isEmpty()) {
@@ -43,7 +45,9 @@ fun Bookshelf(
                     launchSingleTop = true
                     restoreState = true
                 }
-            }
+            },
+            context,
+            downloadViewModel
         )
     }
 }
@@ -71,7 +75,9 @@ fun NoBooksAvailableMessage(context: Context) {
 fun BooksAvailable(
     books: List<Book>,
     navController: NavController,
-    onBookClick: (Book) -> Unit
+    onBookClick: (Book) -> Unit,
+    context: Context,
+    downloadViewModel: DownloadViewModel,
 ) {
     Column(
         modifier = Modifier
@@ -83,6 +89,13 @@ fun BooksAvailable(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(R.string.bookshelf), style = MaterialTheme.typography.displayLarge)
+            // Display progress message if download or unzip is ongoing
+            if (downloadViewModel.isDownloading) {
+                ProgressMessage(
+                    progress = downloadViewModel.totalProgress.value,
+                    context = context
+                )
+            }
         }
 
         // LazyVerticalGrid to display books in a grid

@@ -23,7 +23,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -51,6 +55,17 @@ fun Library(
     val coroutineScope = rememberCoroutineScope()
     val urlList = stringArrayResource(R.array.download)
 
+    // Callback to move the book once download and unzip are finished
+    downloadViewModel.onDownloadComplete = {
+        // After download and unzip complete, moves the book to the bookshelf
+        val book = viewModel.currentDownloadingBook
+        if (book != null) {
+            viewModel.moveBookToBookshelf(book)
+            // Resets the download state after moving to bookshelf
+            viewModel.currentDownloadingBook = null
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,6 +77,13 @@ fun Library(
                 .fillMaxWidth()
         ) {
             Text(text = context.getString(R.string.library), style = MaterialTheme.typography.displayLarge)
+            // Display progress message if download or unzip is ongoing
+            if (downloadViewModel.isDownloading) {
+                ProgressMessage(
+                    progress = downloadViewModel.totalProgress.value,
+                    context = context
+                )
+            }
         }
 
         // Check if the library has books
@@ -76,9 +98,12 @@ fun Library(
                 content = {
                     items(viewModel.libraryBooks) { book ->
                         BookItem(book = book, onClick = {
-                            // Move book to bookshelf and update viewModel
-                            viewModel.moveBookToBookshelf(book)
-                            book.htmlFilePath = downloadBookFiles(downloadViewModel, urlList[book.arrayIndex])
+                            // Starts downloading only if this book is not already being downloaded
+                            if (viewModel.currentDownloadingBook == null) {
+                                viewModel.currentDownloadingBook = book
+                                downloadViewModel.collectProgressUpdates()
+                                book.htmlFilePath = downloadBookFiles(downloadViewModel, urlList[book.arrayIndex])
+                            }
                         },
                         modifier = Modifier.testTag("book_item_${book.title}"))
                         Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
@@ -184,6 +209,21 @@ fun BookInformation(
             modifier = Modifier
                 .padding(dimensionResource(R.dimen.padding_medium)
                 )
+        )
+    }
+}
+
+@Composable
+fun ProgressMessage(progress: Int, context: Context) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(dimensionResource(R.dimen.padding_medium)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = context.getString(R.string.download_progress, progress),
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
