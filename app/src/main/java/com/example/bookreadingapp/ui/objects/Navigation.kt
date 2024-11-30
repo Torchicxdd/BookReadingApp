@@ -103,7 +103,8 @@ fun NavigationHost(
         composable(Routes.Reading.route) {
             Reading(
                 book = viewModel.selectedBook,
-                toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode }
+                readingMode = viewModel.readingMode,
+                toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode },
             )
         }
 
