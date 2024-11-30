@@ -20,11 +20,11 @@ class AppViewModel : ViewModel() {
 
     // MutableStateList to hold the books in the library
     private val _libraryBooks = mutableStateListOf<Book>()
-    val libraryBooks: List<Book> = _libraryBooks
+    val libraryBooks: List<Book> get() = _libraryBooks
 
     // MutableStateList to hold the books in the bookshelf
     private val _bookshelfBooks = mutableStateListOf<Book>()
-    val bookshelfBooks: List<Book> = _bookshelfBooks
+    val bookshelfBooks: List<Book> get() = _bookshelfBooks
 
     // A flag to ensure the library is only initialized once
     private var isLibraryInitialized = false
@@ -41,15 +41,22 @@ class AppViewModel : ViewModel() {
 
     // Function to initialize the library with predefined books
     // Learned about .addAll from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
-    fun initializeLibrary() {
+    private fun initializeLibrary() {
         _libraryBooks.addAll(books)
     }
 
-    // Function to move a book from the library to the bookshelf
-    // Learned about .add and .remove from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
-    fun moveBookToBookshelf(book: Book) {
+    // Function to add a book to the bookshelf ensuring that it doesn't already exists
+    // Learned about .add and .contains from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
+    private fun addBookToBookshelf(book: Book) {
+        if (!_bookshelfBooks.contains(book)) {
+            _bookshelfBooks.add(book)
+        }
+    }
+
+    // Function to remove a book from the library
+    // Learned about .remove from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
+    private fun removeBookFromLibrary(book: Book) {
         _libraryBooks.remove(book)
-        _bookshelfBooks.add(book)
     }
 
     fun updateBook(book: Book) {
@@ -68,5 +75,17 @@ class AppViewModel : ViewModel() {
 
     fun updateCurrentDownloadingBook(book: Book?) {
         currentDownloadingBook = book
+    }
+
+    // Handles download completion
+    fun onDownloadCompleteBookshelf() {
+        currentDownloadingBook?.let { book ->
+            addBookToBookshelf(book)
+        }
+    }
+    fun onDownloadCompleteLibrary() {
+        currentDownloadingBook?.let { book ->
+            removeBookFromLibrary(book)
+        }
     }
 }

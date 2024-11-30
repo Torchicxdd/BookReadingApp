@@ -10,13 +10,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 
 // Main composable function for the bookshelf screen
@@ -25,21 +25,24 @@ fun Bookshelf(
     bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    onDownloadCompleteBookshelf: () -> Unit
 ) {
-    // Check if the bookshelf has any books
-    if (bookshelfBooks.isEmpty()) {
-        NoBooksAvailableMessage()
-    } else {
-        BooksAvailable(
-            books = bookshelfBooks,
-            onBookClick = { book ->
-                updateBook(book)
-                navigateToTableOfContents()
-            },
-            downloadViewModel
-        )
+    // Check if download is complete, if so, move book to bookshelf
+    LaunchedEffect(downloadViewModel.progressPercentage.value) {
+        if (downloadViewModel.progressPercentage.value == 100) {
+            // Trigger move to bookshelf when download completes
+            onDownloadCompleteBookshelf()
+        }
     }
+    BooksAvailable(
+        books = bookshelfBooks,
+        onBookClick = { book ->
+            updateBook(book)
+            navigateToTableOfContents()
+        },
+        downloadViewModel
+    )
 }
 
 // Composable function to display a message when no books are available
@@ -77,14 +80,18 @@ fun BooksAvailable(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(R.string.bookshelf), style = MaterialTheme.typography.displayLarge)
+            // Check if the bookshelf has any books
+            if (books.isEmpty() && !downloadViewModel.isDownloading) {
+                NoBooksAvailableMessage()
+            }
+
             // Display progress message if download or unzip is ongoing
             if (downloadViewModel.isDownloading) {
                 ProgressMessage(
-                    progress = downloadViewModel.totalProgress
+                    progress = downloadViewModel.progressPercentage.value
                 )
             }
         }
-
         // LazyVerticalGrid to display books in a grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
