@@ -23,6 +23,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -46,10 +48,13 @@ fun Library(
     onDownloadCompleteBookshelf: () -> Unit,
 ) {
     val urlList = stringArrayResource(R.array.download)
+    val progressMessage by downloadViewModel.progressMessage.collectAsState()
+    val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
+    val isDownloading by downloadViewModel.isDownloading.collectAsState()
 
     // Check if download is complete, if so, move book to bookshelf
-    LaunchedEffect(downloadViewModel.isDownloading) {
-        if (!downloadViewModel.isDownloading) {
+    LaunchedEffect(isDownloading) {
+        if (!isDownloading) {
             // Trigger move to bookshelf when download completes
             onDownloadCompleteLibrary()
             // Trigger move to bookshelf when download completes
@@ -71,9 +76,10 @@ fun Library(
         ) {
             Text(text = stringResource(R.string.library), style = MaterialTheme.typography.displayLarge)
             // Display progress message if download or unzip is ongoing
-            if (downloadViewModel.isDownloading) {
+            if (isDownloading) {
                 ProgressMessage(
-                    progress = downloadViewModel.progressPercentage.value
+                    progress = progressPercentage,
+                    message = progressMessage
                 )
             }
         }
@@ -203,7 +209,7 @@ fun BookInformation(
 }
 
 @Composable
-fun ProgressMessage(progress: Int) {
+fun ProgressMessage(progress: Int, message: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -215,6 +221,10 @@ fun ProgressMessage(progress: Int) {
                 .padding(dimensionResource(R.dimen.padding_medium)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium
+            )
             Text(
                 text = stringResource(R.string.download_progress, progress),
                 style = MaterialTheme.typography.bodyLarge

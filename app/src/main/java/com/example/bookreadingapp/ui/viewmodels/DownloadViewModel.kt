@@ -12,6 +12,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.data.download.FileDownload
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -20,14 +22,14 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _directoryContents = MutableLiveData<List<String>>()
     val directoryContents: LiveData<List<String>> = _directoryContents
 
-    private val _progressMessage = MutableLiveData<String>()
-    val progressMessage: LiveData<String> = _progressMessage
+    private val _progressMessage = MutableStateFlow("")
+    val progressMessage: StateFlow<String> = _progressMessage
 
-    private val _progressPercentage = mutableStateOf(0)
-    val progressPercentage: MutableState<Int> get() = _progressPercentage
+    private val _progressPercentage = MutableStateFlow(0)
+    val progressPercentage: StateFlow<Int> get() = _progressPercentage
 
-    private val _isDownloading = mutableStateOf(false)
-    val isDownloading: Boolean get() = _isDownloading.value
+    private val _isDownloading = MutableStateFlow(false)
+    val isDownloading: StateFlow<Boolean> get() = _isDownloading
 
     // Function to set up file download
     // Returns the absolute path of the downloaded and extracted html file
@@ -39,28 +41,40 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             val file = repository.createFile(directoryName, fileName)
 
             // Initialize progress
-            _progressMessage.postValue("Preparing to download...")
-            _progressPercentage.value = 0
-            _isDownloading.value = true
+            _progressPercentage.emit(0)
+            _isDownloading.emit(true)
 
             // Download zip file from url with progress update
             if (repository.downloadFile(url, file) { progress ->
-                    _progressPercentage.value = progress
+                    viewModelScope.launch {
+                        _progressMessage.emit("Downloading...")
+                        _progressPercentage.emit(progress)
+                    }
                 }
-            ) Log.i(TAG_DVM, "File Downloaded")
-            else Log.e(TAG_DVM, "Failed to download file")
+            ){
+                Log.i(TAG_DVM, "File Downloaded")
+            }
+            else {
+                Log.e(TAG_DVM, "Failed to download file")
+                _progressMessage.emit("Failed to download file")
+            }
 
             // Extract zip file after downloading
             try {
                 downloadedFilePath = repository.unzipFile(file, directoryName){ progress ->
-                    _progressPercentage.value = progress
+                    viewModelScope.launch {
+                        _progressMessage.emit("Unzipping...")
+                        _progressPercentage.emit(progress)
+                    }
                 }
             } catch(e: IOException) {
                 e.printStackTrace()
-                e.message?.let { Log.e(TAG_DVM, it) }
+                e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
+                _progressMessage.emit("Failed to extract file")
             }
 
             _isDownloading.value = false
+            _progressMessage.emit("")
             updateDirectoryContents("")
         }
 

@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -28,10 +30,13 @@ fun Bookshelf(
     downloadViewModel: DownloadViewModel,
     onDownloadCompleteBookshelf: () -> Unit
 ) {
+    val progressMessage by downloadViewModel.progressMessage.collectAsState()
+    val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
+    val isDownloading by downloadViewModel.isDownloading.collectAsState()
     var books: List<Book> = bookshelfBooks
     // Check if download is complete, if so, move book to bookshelf
-    LaunchedEffect(downloadViewModel.isDownloading) {
-        if (!downloadViewModel.isDownloading) {
+    LaunchedEffect(isDownloading) {
+        if (!isDownloading) {
             // Trigger move to bookshelf when download completes
             books = bookshelfBooks
         }
@@ -42,7 +47,10 @@ fun Bookshelf(
             updateBook(book)
             navigateToTableOfContents()
         },
-        downloadViewModel
+        downloadViewModel,
+        isDownloading,
+        progressMessage,
+        progressPercentage
     )
 }
 
@@ -69,7 +77,10 @@ fun NoBooksAvailableMessage(){
 fun BooksAvailable(
     books: List<Book>,
     onBookClick: (Book) -> Unit,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    isDownloading: Boolean,
+    progressMessage: String,
+    progressPercentage: Int
 ) {
     Column(
         modifier = Modifier
@@ -82,14 +93,15 @@ fun BooksAvailable(
         ) {
             Text(text = stringResource(R.string.bookshelf), style = MaterialTheme.typography.displayLarge)
             // Check if the bookshelf has any books
-            if (books.isEmpty() && !downloadViewModel.isDownloading) {
+            if (books.isEmpty() && !isDownloading) {
                 NoBooksAvailableMessage()
             }
 
             // Display progress message if download or unzip is ongoing
-            if (downloadViewModel.isDownloading) {
+            if (isDownloading) {
                 ProgressMessage(
-                    progress = downloadViewModel.progressPercentage.value
+                    progress = progressPercentage,
+                    message = progressMessage
                 )
             }
         }
