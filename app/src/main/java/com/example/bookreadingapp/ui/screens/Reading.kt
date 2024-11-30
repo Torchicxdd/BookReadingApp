@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -106,32 +109,6 @@ fun BookDisplay(
     }
 }
 
-/**
- * The button used to navigate through a chapter
- */
-@Composable
-fun ChapterNavigation() {
-    Row(
-        verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ){
-        Button(
-           onClick = {/** TO DO: Go back to previous chapter (page?) */}
-        ){
-            Text(
-                text="<"
-            )
-        }
-
-        Button(
-            onClick = {/** TO DO: Go back to next chapter (page?) */}
-        ){
-            Text(
-                text=">"
-            )
-        }
-    }
-}
 /**
  * The button used to navigate through a chapter
  */
