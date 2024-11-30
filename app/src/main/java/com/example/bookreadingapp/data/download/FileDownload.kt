@@ -56,7 +56,9 @@ class FileDownload(private val context: Context) {
                     return@withContext false
                 }
 
+                // Total bytes to download
                 val totalBytes = response.body!!.contentLength()
+                // Tracking the amount of downloaded bytes
                 var downloadedBytes = 0L
 
                 response.body!!.byteStream().use { inputStream ->
@@ -81,6 +83,7 @@ class FileDownload(private val context: Context) {
 
         while (input.read(buffer).also { length = it } > 0) {
             output.write(buffer, 0, length)
+            // Tracking the total downloaded bytes
             totalDownloaded += length
 
             // Update progress (50% max for download)
@@ -112,7 +115,9 @@ class FileDownload(private val context: Context) {
 
             ZipFile(zipFile).use { zip ->
                 val entries = zip.entries().asSequence().toList()
+                // Getting the total number of files in the zip
                 val totalEntries = entries.size
+                // Tracking the amount of processed files
                 var processedEntries = 0
                 for (entry in entries) {
                     zip.getInputStream(entry).use { input ->

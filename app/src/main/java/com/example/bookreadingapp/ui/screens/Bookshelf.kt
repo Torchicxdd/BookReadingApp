@@ -38,9 +38,9 @@ fun Bookshelf(
     // Check if download is complete, if so, move book to bookshelf
     LaunchedEffect(isDownloading) {
         if (!isDownloading) {
-            // Trigger move to bookshelf when download completes
+            // Remove book from library when download completes
             onDownloadCompleteLibrary()
-            // Trigger move to bookshelf when download completes
+            // Adds book to bookshelf when download completes
             onDownloadCompleteBookshelf()
             // Clear currentlyDownload after removing it from the library
             updateCurrentDownloadingBook(null)
