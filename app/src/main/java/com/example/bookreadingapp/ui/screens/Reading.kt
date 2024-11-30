@@ -40,7 +40,7 @@ import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 @Composable
 fun Reading(
     book: Book?,
-    viewModel: AppViewModel,
+    readingMode: Boolean,
     toggleReadingMode: () -> Unit,
 ) {
     Box(
@@ -67,8 +67,13 @@ fun Reading(
             )
         }
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ){
         // Display the chapter navigation only if not in reading mode
-        if (!viewModel.readingMode) {
+        if (!readingMode) {
             ChapterNavigation(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
