@@ -28,15 +28,16 @@ fun Bookshelf(
     downloadViewModel: DownloadViewModel,
     onDownloadCompleteBookshelf: () -> Unit
 ) {
+    var books: List<Book> = bookshelfBooks
     // Check if download is complete, if so, move book to bookshelf
-    LaunchedEffect(downloadViewModel.progressPercentage.value) {
-        if (downloadViewModel.progressPercentage.value == 100) {
+    LaunchedEffect(downloadViewModel.isDownloading) {
+        if (!downloadViewModel.isDownloading) {
             // Trigger move to bookshelf when download completes
-            onDownloadCompleteBookshelf()
+            books = bookshelfBooks
         }
     }
     BooksAvailable(
-        books = bookshelfBooks,
+        books = books,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()

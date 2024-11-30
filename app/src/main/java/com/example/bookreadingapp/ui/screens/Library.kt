@@ -42,15 +42,20 @@ fun Library(
     setupDownload: (String, String) -> String,
     downloadViewModel: DownloadViewModel,
     updateCurrentDownloadingBook: (Book?) -> Unit,
-    onDownloadCompleteLibrary: () -> Unit
+    onDownloadCompleteLibrary: () -> Unit,
+    onDownloadCompleteBookshelf: () -> Unit,
 ) {
     val urlList = stringArrayResource(R.array.download)
 
     // Check if download is complete, if so, move book to bookshelf
-    LaunchedEffect(downloadViewModel.progressPercentage.value) {
-        if (downloadViewModel.progressPercentage.value == 100) {
+    LaunchedEffect(downloadViewModel.isDownloading) {
+        if (!downloadViewModel.isDownloading) {
             // Trigger move to bookshelf when download completes
             onDownloadCompleteLibrary()
+            // Trigger move to bookshelf when download completes
+            onDownloadCompleteBookshelf()
+            // Clear currentlyDownload after removing it from the library
+            updateCurrentDownloadingBook(null)
         }
     }
 

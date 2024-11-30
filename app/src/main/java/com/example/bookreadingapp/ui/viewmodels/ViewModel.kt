@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -20,11 +21,11 @@ class AppViewModel : ViewModel() {
 
     // MutableStateList to hold the books in the library
     private val _libraryBooks = mutableStateListOf<Book>()
-    val libraryBooks: List<Book> get() = _libraryBooks
+    val libraryBooks: List<Book> = _libraryBooks
 
     // MutableStateList to hold the books in the bookshelf
     private val _bookshelfBooks = mutableStateListOf<Book>()
-    val bookshelfBooks: List<Book> get() = _bookshelfBooks
+    val bookshelfBooks: List<Book> = _bookshelfBooks
 
     // A flag to ensure the library is only initialized once
     private var isLibraryInitialized = false
@@ -45,20 +46,6 @@ class AppViewModel : ViewModel() {
         _libraryBooks.addAll(books)
     }
 
-    // Function to add a book to the bookshelf ensuring that it doesn't already exists
-    // Learned about .add and .contains from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
-    private fun addBookToBookshelf(book: Book) {
-        if (!_bookshelfBooks.contains(book)) {
-            _bookshelfBooks.add(book)
-        }
-    }
-
-    // Function to remove a book from the library
-    // Learned about .remove from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
-    private fun removeBookFromLibrary(book: Book) {
-        _libraryBooks.remove(book)
-    }
-
     fun updateBook(book: Book) {
         selectedBook = book
     }
@@ -77,15 +64,23 @@ class AppViewModel : ViewModel() {
         currentDownloadingBook = book
     }
 
-    // Handles download completion
+    // Function to add a book to the bookshelf ensuring that it doesn't already exists
+    // Learned about .add and .contains from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
     fun onDownloadCompleteBookshelf() {
         currentDownloadingBook?.let { book ->
-            addBookToBookshelf(book)
+            Log.d("DownloadStatus for Bookshelf", "Download complete for: ${book.title}")
+            if (!_bookshelfBooks.contains(book)) {
+                _bookshelfBooks.add(book)
+            }
         }
     }
+
+    // Function to add a book to the bookshelf ensuring that it doesn't already exists
+    // Learned about .remove from here https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/
     fun onDownloadCompleteLibrary() {
         currentDownloadingBook?.let { book ->
-            removeBookFromLibrary(book)
+            Log.d("DownloadStatus for Library", "Download complete for: ${book.title}")
+            _libraryBooks.remove(book)
         }
     }
 }

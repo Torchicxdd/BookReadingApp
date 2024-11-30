@@ -73,7 +73,8 @@ fun NavigationHost(
                 setupDownload = { url: String, dir: String -> downloadViewModel.setupDownload(url, dir) },
                 downloadViewModel,
                 updateCurrentDownloadingBook = { viewModel.updateCurrentDownloadingBook(it) },
-                onDownloadCompleteLibrary = {viewModel.onDownloadCompleteLibrary()}
+                onDownloadCompleteLibrary = {viewModel.onDownloadCompleteLibrary()},
+                onDownloadCompleteBookshelf = {viewModel.onDownloadCompleteBookshelf()},
             )
         }
         composable(Routes.Bookshelf.route) {
