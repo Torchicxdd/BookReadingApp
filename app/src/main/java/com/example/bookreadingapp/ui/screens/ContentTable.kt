@@ -1,9 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material3.Text
-import com.example.bookreadingapp.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,15 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
-import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.R
+import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.GoToReadingButton
 import com.example.bookreadingapp.ui.utils.GoToSearchButton
 
@@ -31,10 +28,9 @@ import com.example.bookreadingapp.ui.utils.GoToSearchButton
  */
 @Composable
 fun ContentTable(
-    context: Context,
-    viewModel: AppViewModel,
-    navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    book: Book?,
+    navigateToSearch: () -> Unit,
+    navigateToReading: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -49,11 +45,11 @@ fun ContentTable(
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             // Title and selected book information
-            Text(text = context.getString(R.string.content), style = MaterialTheme.typography.displayLarge)
+            Text(text = stringResource(R.string.content), style = MaterialTheme.typography.displayLarge)
             Text(
                 text = stringResource(
                     R.string.book_chosen,
-                    stringResource(viewModel.selectedBookTitleResId)
+                    stringResource(book!!.title)
                 )
             )
 
@@ -64,8 +60,8 @@ fun ContentTable(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                GoToSearchButton(navController = navController)
-                GoToReadingButton(navController = navController)
+                GoToSearchButton(navigateToSearch)
+                GoToReadingButton(navigateToReading)
             }
         }
     }

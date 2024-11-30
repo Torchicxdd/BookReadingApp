@@ -11,17 +11,17 @@ import com.example.bookreadingapp.R
 
 // Go to Search Button
 @Composable
-fun GoToSearchButton(navController: NavController) {
+fun GoToSearchButton(navigateToSearch: () -> Unit) {
     NavigationButton(text = stringResource(id = R.string.go_to_search), testTag = "go_to_search_button") {
-        navController.navigate("search")
+        navigateToSearch()
     }
 }
 
 // Go to Reading Button
 @Composable
-fun GoToReadingButton(navController: NavController) {
+fun GoToReadingButton(navigateToReading: () -> Unit) {
     NavigationButton(text = stringResource(id = R.string.go_to_reading), testTag = "go_to_reading_button") {
-        navController.navigate("reading")
+        navigateToReading()
     }
 }
 

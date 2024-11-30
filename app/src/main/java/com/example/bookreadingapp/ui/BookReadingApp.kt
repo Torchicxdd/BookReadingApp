@@ -18,6 +18,7 @@ import com.example.bookreadingapp.ui.objects.BottomNavBar
 import com.example.bookreadingapp.ui.objects.NavRail
 import com.example.bookreadingapp.ui.objects.NavigationHost
 import com.example.bookreadingapp.ui.objects.PermanentNavDrawer
+import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.objects.TopAppBar
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 
@@ -49,6 +50,9 @@ fun BookReadingApp(
     // Listen for destination changes to update the back navigation state
     navController.addOnDestinationChangedListener { _, _, _, ->
         viewModel.canNavigateBack = navController.previousBackStackEntry != null
+        if (navController.currentDestination?.route != Routes.Reading.route && viewModel.readingMode) {
+            viewModel.readingMode = false
+        }
     }
 
     Scaffold(
@@ -57,19 +61,26 @@ fun BookReadingApp(
             if (!viewModel.readingMode) {
                 TopAppBar(
                     canNavigateBack = viewModel.canNavigateBack,
-                    navigateBack = { navController.navigateUp() }
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
                 )
             }
         },
         content = { innerPadding ->
-            AdaptiveContent(
-                adaptiveNavigationType = adaptiveNavigationType,
-                navController = navController,
-                context = context,
-                modifier = Modifier.padding(innerPadding),
-                viewModel = viewModel,
-                downloadViewModel = downloadViewModel
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                AdaptiveContent(
+                    adaptiveNavigationType = adaptiveNavigationType,
+                    navController = navController,
+                    context = context,
+                    viewModel = viewModel,
+                    downloadViewModel = downloadViewModel
+                )
+            }
         },
         bottomBar = {
             // Display the bottom navigation bar only for compact screens
@@ -95,9 +106,9 @@ fun AdaptiveContent(
     adaptiveNavigationType: AdaptiveNavigationType,
     navController: NavHostController,
     context: Context,
-    modifier: Modifier,
     viewModel: AppViewModel,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
         // Display the navigation rail for medium-sized screens
@@ -110,7 +121,7 @@ fun AdaptiveContent(
         }
         // Display the main content for smaller screens or when in reading mode
         if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
-            ContentNavigationHost(navController, context, modifier, adaptiveNavigationType, viewModel, downloadViewModel)
+            ContentNavigationHost(navController, context, viewModel, downloadViewModel)
         }
     }
 }
@@ -149,13 +160,14 @@ fun PermanentNavDrawerComponent(
     context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    modifier: Modifier = Modifier
 ) {
     PermanentNavDrawer(
         navController,
         context,
         adaptiveNavigationType,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         viewModel = viewModel,
         downloadViewModel = downloadViewModel
@@ -167,32 +179,24 @@ fun PermanentNavDrawerComponent(
  *
  * @param navController The NavHostController for managing navigation.
  * @param context The current context for accessing resources.
- * @param modifier Modifier to apply layout behavior.
  * @param adaptiveNavigationType The type of adaptive navigation (rail or bottom navigation).
  * @param viewModel The ViewModel for managing the app state.
  * @param downloadViewModel The ViewModel for handling download and data operations.
+ * @param modifier Modifier to apply layout behavior.
  */
 @Composable
 fun ContentNavigationHost(
     navController: NavHostController,
     context: Context,
-    modifier: Modifier,
-    adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifier)
-    ) {
-        NavigationHost(
-            navController,
-            context,
-            adaptiveNavigationType,
-            Modifier,
-            viewModel = viewModel,
-            downloadViewModel = downloadViewModel
-        )
-    }
+    NavigationHost(
+        navController,
+        context,
+        Modifier,
+        viewModel = viewModel,
+        downloadViewModel = downloadViewModel
+    )
 }

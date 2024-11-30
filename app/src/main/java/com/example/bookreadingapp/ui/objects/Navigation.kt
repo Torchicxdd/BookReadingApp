@@ -57,7 +57,6 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 fun NavigationHost(
     navController: NavHostController,
     context: Context,
-    adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel
@@ -66,22 +65,46 @@ fun NavigationHost(
         startDestination = Routes.Home.route
     ) {
         composable(Routes.Home.route) {
-            Home(context, viewModel, adaptiveNavigationType)
+            Home()
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel, navController, adaptiveNavigationType, downloadViewModel)
+            Library(
+                libraryBooks = viewModel.libraryBooks,
+                moveBookToBookshelf = { viewModel.moveBookToBookshelf(it) },
+                setupDownload = { url: String, dir: String -> downloadViewModel.setupDownload(url, dir) }
+            )
         }
         composable(Routes.Bookshelf.route) {
-            Bookshelf(context, viewModel, navController, adaptiveNavigationType)
+            Bookshelf(
+                bookshelfBooks = viewModel.bookshelfBooks,
+                updateBook = { viewModel.updateBook(it) },
+                navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
+                    launchSingleTop = true
+                    restoreState = true
+                } }
+            )
         }
         composable(Routes.Search.route) {
-            Search(context, viewModel, navController, adaptiveNavigationType)
+            Search(
+                book = viewModel.selectedBook,
+                searchBarInput = viewModel.searchBarInput,
+                updateSearchBar = { viewModel.updateSearchBarInput(it) },
+                performSearch = { viewModel.performSearch() },
+                searchResult = viewModel.searchResultText
+            )
         }
         composable(Routes.ContentTable.route) {
-            ContentTable(context, viewModel, navController, adaptiveNavigationType)
+            ContentTable(
+                book = viewModel.selectedBook,
+                navigateToSearch =  { navController.navigate(Routes.Search.route) },
+                navigateToReading =  { navController.navigate(Routes.Reading.route) }
+            )
         }
         composable(Routes.Reading.route) {
-            Reading(context, viewModel, navController, adaptiveNavigationType)
+            Reading(
+                book = viewModel.selectedBook,
+                toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode }
+            )
         }
 
     }
@@ -231,9 +254,8 @@ fun PermanentNavDrawer(
                 modifier = modifier
             ) {
                 NavigationHost(
-                    navController,
-                    context,
-                    adaptiveNavigationType,
+                    navController = navController,
+                    context = context,
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
                     downloadViewModel = downloadViewModel

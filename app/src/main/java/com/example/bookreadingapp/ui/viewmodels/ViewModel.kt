@@ -11,7 +11,7 @@ import com.example.bookreadingapp.data.books
 
 class AppViewModel : ViewModel() {
     var readingMode by mutableStateOf(false)
-    var selectedBookTitleResId by mutableIntStateOf(0)
+    var selectedBook by mutableStateOf<Book?>(null)
     var searchBarInput by mutableStateOf("")
     var searchResultText by mutableStateOf("")
 
@@ -49,12 +49,8 @@ class AppViewModel : ViewModel() {
         _bookshelfBooks.add(book)
     }
 
-    fun updateReadingMode() {
-        readingMode = !readingMode
-    }
-
-    fun updateBookTitle(resId: Int) {
-        selectedBookTitleResId = resId
+    fun updateBook(book: Book) {
+        selectedBook = book
     }
 
     fun updateSearchBarInput(newInput: String) {

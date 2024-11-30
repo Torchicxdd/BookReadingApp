@@ -37,19 +37,11 @@ class AppViewModelTest {
     @Test
     // Testing that the reading mode is toggled correctly (false to true, and back to false)
     fun updateReadingMode_readingModeIsToggledCorrectly() {
-        viewModel.updateReadingMode()
+        viewModel.readingMode = !viewModel.readingMode
         assertTrue(viewModel.readingMode)
 
-        viewModel.updateReadingMode()
+        viewModel.readingMode = !viewModel.readingMode
         assertFalse(viewModel.readingMode)
-    }
-
-    @Test
-    // Testing that the selected book title resId is updated correctly
-    fun updateBookTitle_titleResIdIsUpdatedCorrectly() {
-        val newResId = 123
-        viewModel.updateBookTitle(newResId)
-        assertEquals(newResId, viewModel.selectedBookTitleResId)
     }
 
     @Test
