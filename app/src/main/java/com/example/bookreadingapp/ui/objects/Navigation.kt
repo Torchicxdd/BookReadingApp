@@ -25,9 +25,11 @@ import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -56,7 +58,6 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 @Composable
 fun NavigationHost(
     navController: NavHostController,
-    context: Context,
     modifier: Modifier,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel
@@ -70,26 +71,30 @@ fun NavigationHost(
         composable(Routes.Library.route) {
             Library(
                 libraryBooks = viewModel.libraryBooks,
-                moveBookToBookshelf = { viewModel.moveBookToBookshelf(it) },
-                setupDownload = { url: String, dir: String -> downloadViewModel.setupDownload(url, dir) }
+                moveBookToBookshelf = viewModel::moveBookToBookshelf,
+                progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
+                isDownloading = downloadViewModel.isDownloading.collectAsState(),
+                setupDownload = downloadViewModel::setupDownload
             )
         }
         composable(Routes.Bookshelf.route) {
             Bookshelf(
                 bookshelfBooks = viewModel.bookshelfBooks,
-                updateBook = { viewModel.updateBook(it) },
+                updateBook = viewModel::updateBook,
                 navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
                     launchSingleTop = true
                     restoreState = true
-                } }
+                } },
+                progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
+                isDownloading = downloadViewModel.isDownloading.collectAsState(),
             )
         }
         composable(Routes.Search.route) {
             Search(
                 book = viewModel.selectedBook,
                 searchBarInput = viewModel.searchBarInput,
-                updateSearchBar = { viewModel.updateSearchBarInput(it) },
-                performSearch = { viewModel.performSearch() },
+                updateSearchBar = viewModel::updateSearchBarInput,
+                performSearch = viewModel::performSearch,
                 searchResult = viewModel.searchResultText
             )
         }
@@ -133,13 +138,11 @@ fun BottomNavBar(
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
                 onClick = {
-                    if (currentRoute != navItem.route) {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
+                        launchSingleTop = true
                     }
                 },
                 icon = {
@@ -181,7 +184,6 @@ fun NavRail(
                             saveState = true
                         }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 icon = {
@@ -231,7 +233,6 @@ fun PermanentNavDrawer(
                                             saveState = true
                                         }
                                         launchSingleTop = true
-                                        restoreState = true
                                     }
                                 },
                                 icon = {
@@ -256,7 +257,6 @@ fun PermanentNavDrawer(
             ) {
                 NavigationHost(
                     navController = navController,
-                    context = context,
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
                     downloadViewModel = downloadViewModel

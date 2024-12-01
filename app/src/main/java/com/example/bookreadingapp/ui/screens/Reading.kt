@@ -56,7 +56,7 @@ import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.extensions.detectedTapWithoutSwipe
-import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.ui.utils.BookCover
 
 
 /**

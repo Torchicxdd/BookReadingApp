@@ -121,7 +121,7 @@ fun AdaptiveContent(
         }
         // Display the main content for smaller screens or when in reading mode
         if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
-            ContentNavigationHost(navController, context, viewModel, downloadViewModel)
+            ContentNavigationHost(navController, viewModel, downloadViewModel)
         }
     }
 }
@@ -187,14 +187,12 @@ fun PermanentNavDrawerComponent(
 @Composable
 fun ContentNavigationHost(
     navController: NavHostController,
-    context: Context,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
     modifier: Modifier = Modifier
 ) {
     NavigationHost(
         navController,
-        context,
         Modifier,
         viewModel = viewModel,
         downloadViewModel = downloadViewModel
