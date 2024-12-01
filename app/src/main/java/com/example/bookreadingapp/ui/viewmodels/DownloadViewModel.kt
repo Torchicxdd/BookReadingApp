@@ -37,8 +37,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
         directoryName: String,
         book: Book,
         moveBookToBookshelf: (Book) -> Unit
-    ): String {
-        var extractedHtmlPath = ""
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
             val file = repository.createFile(directoryName, fileName)
@@ -48,12 +47,11 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             _isDownloading.emit(true)
 
             downloadFileWithProgress(url, file)
-            extractedHtmlPath = extractZipWithProgress(file, directoryName, book, moveBookToBookshelf)
-
+            extractZipWithProgress(file, directoryName, book, moveBookToBookshelf)
+            book.exampleHtmlParsing()
             _isDownloading.value = false
             updateDirectoryContents("")
         }
-        return extractedHtmlPath
     }
 
     private suspend fun downloadFileWithProgress(
@@ -78,26 +76,26 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
         directoryName: String,
         book: Book,
         moveBookToBookshelf: (Book) -> Unit
-    ): String {
+    ) {
         // Extract zip file after downloading
-        var downloadedFilePath: String = ""
         try {
-            downloadedFilePath = repository.unzipFile(file, directoryName) { progress ->
+            val downloadedFilePath = repository.unzipFile(file, directoryName) { progress ->
                 viewModelScope.launch {
                     _progressPercentage.emit(progress)
                 }
             }
             if (downloadedFilePath.isNotEmpty()) {
-//                book.htmlFilePath = downloadedFilePath
+                book.htmlFilePath = downloadedFilePath
                 moveBookToBookshelf(book)
             } else {
                 Log.e(TAG_DVM, "Download file path is empty, book was not moved to bookshelf")
             }
+
         } catch (e: IOException) {
             e.printStackTrace()
             e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
         }
-        return downloadedFilePath
+
     }
 
     private suspend fun updateDirectoryContents(directoryName: String) {

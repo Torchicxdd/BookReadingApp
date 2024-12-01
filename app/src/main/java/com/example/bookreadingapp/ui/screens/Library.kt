@@ -1,6 +1,5 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,14 +61,12 @@ fun Library(
                     // Starts downloading only if this book is not already being downloaded
                     //viewModel.updateCurrentDownloadingBook(book)
                     val url = urlList[book.arrayIndex]
-
                     setupDownload(
                         url,
                         "${url.substringAfterLast("/").replace(".zip", "")}-dir",
                         book,
                         moveBookToBookshelf
                     )
-                    Log.i("DownloadViewModel", book.htmlFilePath)
                 }
             )
         }
