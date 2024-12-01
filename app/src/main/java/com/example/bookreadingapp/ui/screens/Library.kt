@@ -22,7 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,20 +35,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.ui.theme.Shapes
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 
 // Composable function that represents the main screen of the Library
 @Composable
 fun Library(
     libraryBooks: List<Book>,
-    downloadViewModel: DownloadViewModel,
-    viewModel: AppViewModel
+    moveBookToBookshelf: (Book) -> Unit,
+    progressPercentage: State<Int>,
+    isDownloading: State<Boolean>,
+    setupDownload: (String, String, Book, (Book) -> Unit ) -> Unit
 ) {
     val urlList = stringArrayResource(R.array.download)
-    val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
-    val isDownloading by downloadViewModel.isDownloading.collectAsState()
+//    val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
+//    val isDownloading by downloadViewModel.isDownloading.collectAsState()
 
     Column(
         modifier = Modifier
@@ -63,9 +62,9 @@ fun Library(
             Text(text = stringResource(R.string.library), style = MaterialTheme.typography.displayLarge)
 
             // Display progress message if download or unzip is ongoing
-            if (isDownloading) {
+            if (isDownloading.value) {
                 ProgressMessage(
-                    progress = progressPercentage
+                    progress = progressPercentage.value
                 )
             }
         }
@@ -84,11 +83,11 @@ fun Library(
                             // Starts downloading only if this book is not already being downloaded
                             //viewModel.updateCurrentDownloadingBook(book)
                             val url = urlList[book.arrayIndex]
-                            downloadViewModel.setupDownload(
-                                url = url,
-                                directoryName = "${url.substringAfterLast("/").replace(".zip", "")}-dir",
-                                book = book,
-                                moveBookToBookshelf = { viewModel.moveBookToBookshelf(book) }
+                            setupDownload(
+                                url,
+                                "${url.substringAfterLast("/").replace(".zip", "")}-dir",
+                                book,
+                                moveBookToBookshelf
                             )
 
                         },
