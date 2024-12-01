@@ -91,6 +91,8 @@ fun NavigationHost(
                 } },
                 progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
+                setBookDownloading = viewModel::setBookDownloading,
+                downloadingBooks = viewModel.downloadingBooks
             )
         }
         composable(Routes.Search.route) {
