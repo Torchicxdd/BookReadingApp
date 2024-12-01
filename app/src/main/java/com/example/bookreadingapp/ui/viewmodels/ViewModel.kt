@@ -70,6 +70,6 @@ class AppViewModel : ViewModel() {
 
     // Function to set a book's downloading state
     fun setBookDownloading(bookId: Int, isDownloading: Boolean) {
-        _downloadingBooks.value += (bookId to isDownloading)
+        _downloadingBooks.value[bookId] = isDownloading
     }
 }

@@ -9,8 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -30,12 +32,15 @@ fun Library(
     moveBookToBookshelf: (Book) -> Unit,
     progressPercentage: State<Int>,
     isDownloading: State<Boolean>,
-    setupDownload: (String, String, Book, (Book) -> Unit ) -> Unit,
+    setupDownload: (String, String, Book, (Book) -> Unit) -> Unit,
     setBookDownloading: (Int, Boolean) -> Unit,
     downloadingBooks: State<Map<Int, Boolean>>
     mainViewModel: MainViewModel
 ) {
     val urlList = stringArrayResource(R.array.download)
+
+    // State to track if any book is downloading
+    val isAnyBookDownloading = libraryBooks.any { downloadingBooks.value[it.arrayIndex] == true }
 
     Column(
         modifier = Modifier
@@ -44,8 +49,7 @@ fun Library(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(R.string.library), style = MaterialTheme.typography.displayLarge)
 
@@ -56,17 +60,18 @@ fun Library(
                 )
             }
         }
+
         // Check if the library has books
         if (libraryBooks.isEmpty()) {
             NoBooksToDownloadMessage()
         } else {
-            // LazyVerticalGrid for the book items
+            // Display the books in a LazyVerticalGrid
             DisplayBookList(
                 libraryBooks = libraryBooks,
                 onBookClick = { book ->
                     // Only start download if the book is not already being downloaded
                     val isDownloadingBook = downloadingBooks.value[book.arrayIndex] == true
-                    if (!isDownloadingBook) {
+                    if (!isDownloadingBook && !isAnyBookDownloading) {
                         val url = urlList[book.arrayIndex]
                         setupDownload(
                             url,
@@ -80,8 +85,10 @@ fun Library(
                         setBookDownloading(book.arrayIndex, true)
                     }
                 },
-                // Pass download state for each book
-                isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == true }
+                isBookDownloading = { book ->
+                    downloadingBooks.value[book.arrayIndex] == true
+                },
+                disableAllClicks = isAnyBookDownloading // Disable clicks if any book is downloading
             )
         }
     }

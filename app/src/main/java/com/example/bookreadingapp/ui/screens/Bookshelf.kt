@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.DisplayBookList
-import com.example.bookreadingapp.ui.utils.DisplayBookListBookshelf
 import com.example.bookreadingapp.ui.utils.ProgressMessage
 
 // Main composable function for the bookshelf screen
@@ -38,7 +37,8 @@ fun Bookshelf(
         },
         isDownloading.value,
         progressPercentage.value,
-        isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == false }
+        isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == true  },
+        disableClicks = false
     )
 }
 
@@ -67,7 +67,8 @@ fun BooksAvailable(
     onBookClick: (Book) -> Unit,
     isDownloading: Boolean,
     progressPercentage: Int,
-    isBookDownloading: (Book) -> Boolean
+    isBookDownloading: (Book) -> Boolean,
+    disableClicks: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -95,7 +96,8 @@ fun BooksAvailable(
         DisplayBookList(
             libraryBooks = books,
             onBookClick = onBookClick,
-            isBookDownloading = isBookDownloading
+            isBookDownloading = isBookDownloading,
+            disableAllClicks = disableClicks
         )
     }
 }
