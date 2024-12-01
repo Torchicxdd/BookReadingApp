@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.ui.utils.DisplayBookList
 
 // Composable function that represents the main screen of the Library
 @Composable
@@ -69,41 +70,22 @@ fun Library(
             NoBooksToDownloadMessage()
         } else {
             // LazyVerticalGrid for the book items
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .fillMaxSize(),
-                content = {
-                    items(libraryBooks) { book ->
-                        BookItem(book = book, onClick = {
-                            // Starts downloading only if this book is not already being downloaded
-                            //viewModel.updateCurrentDownloadingBook(book)
-                            val url = urlList[book.arrayIndex]
-                            setupDownload(
-                                url,
-                                "${url.substringAfterLast("/").replace(".zip", "")}-dir",
-                                book,
-                                moveBookToBookshelf
-                            )
-
-                        },
-                        modifier = Modifier.testTag("book_item_${book.title}"))
-                        Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
-                    }
+            DisplayBookList(
+                libraryBooks = libraryBooks,
+                onBookClick = { book ->
+                    // Starts downloading only if this book is not already being downloaded
+                    //viewModel.updateCurrentDownloadingBook(book)
+                    val url = urlList[book.arrayIndex]
+                    setupDownload(
+                        url,
+                        "${url.substringAfterLast("/").replace(".zip", "")}-dir",
+                        book,
+                        moveBookToBookshelf
+                    )
                 }
             )
         }
     }
-}
-// Function to download book files from the provided URL
-private fun downloadBookFiles(
-    setupDownload: (String, String) -> String,
-    url: String
-) : String {
-    return setupDownload(
-        url,
-        "${url.substringAfterLast("/").replace(".zip", "")}-dir"
-    )
 }
 
 // Composable to display a message when there are no books to download
@@ -119,78 +101,6 @@ fun NoBooksToDownloadMessage() {
         Text(
             text = stringResource(R.string.no_books_to_download),
             style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
-// Composable to display a book item (cover and title)
-@Composable
-fun BookItem(
-    book: Book,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_small))
-            .clickable(onClick = onClick)
-    ) {
-        Column(
-            modifier = Modifier
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    )
-                )
-        ) {
-            // Display book cover
-            BookCover(book.imageResourceId)
-
-            // Display book title underneath the cover
-            BookInformation(book.title)
-        }
-    }
-}
-// Composable to display the book cover image
-@Composable
-fun BookCover(
-    @DrawableRes bookCover: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = dimensionResource(R.dimen.padding_medium)),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            modifier = Modifier
-                .size(dimensionResource(R.dimen.image_size)),
-            painter = painterResource(bookCover),
-            contentDescription = null
-        )
-    }
-}
-
-// Composable to display the book title
-@Composable
-fun BookInformation(
-    @StringRes bookTitle: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(bookTitle),
-            style = MaterialTheme.typography.displayMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium)
-                )
         )
     }
 }

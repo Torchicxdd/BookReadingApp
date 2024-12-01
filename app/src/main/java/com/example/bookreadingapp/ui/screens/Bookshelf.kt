@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.ui.utils.DisplayBookList
 
 // Main composable function for the bookshelf screen
 @Composable
@@ -87,20 +88,9 @@ fun BooksAvailable(
             }
         }
         // LazyVerticalGrid to display books in a grid
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            content = {
-                items(books) { book ->
-                    BookItem(
-                        book = book,
-                        onClick = {
-                            onBookClick(book)
-                        },
-                        modifier = Modifier.testTag("book_item_${book.title}")
-                    )
-                }
-            }
+        DisplayBookList(
+            libraryBooks = books,
+            onBookClick = onBookClick
         )
     }
 }
