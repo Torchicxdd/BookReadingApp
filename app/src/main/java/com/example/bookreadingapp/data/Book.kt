@@ -58,23 +58,37 @@ class Book (
         }
     }
 
+    // Parsing used if we're simply displaying text for the table
     private fun parseTableStringBuild(element: Element, elements: MutableList<String>) {
         val table = StringBuilder()
-        for (e in element.children()) {
-            if (e.tagName().equals("tbody")) {
-                for (row in e.children()) {
-                    val tableRow = StringBuilder()
-                    for (data in row.children()) {
-                        if (tableRow.length > 0) {
-                            tableRow.append("|")
-                        }
-                        tableRow.append(data.text())
-                    }
+        element.select("tr").forEach { row ->
+            val tableRow = StringBuilder()
+            for (data in row.children()) {
+                if (tableRow.length > 0) {
                     tableRow.append("|")
-                    table.append(tableRow).append("\n")
                 }
+                tableRow.append(data.text())
             }
+            tableRow.append("|")
+            table.append(tableRow).append("\n")
         }
+        elements.add(table.toString())
+    }
+
+    // Parsing used if we're using WebView display for tables
+    private fun parseTableWebView(element: Element, elements: MutableList<String>) {
+        val table = StringBuilder()
+        table.append("<table>")
+        element.select("tr").forEach { row ->
+            table.append("<tr>")
+            row.select("td, th").forEach { data ->
+                table.append("<").append(data.tagName()).append(">")
+                table.append(data.text())
+                table.append("</").append(data.tagName()).append(">")
+            }
+            table.append("</tr>")
+        }
+        table.append("</table>")
         elements.add(table.toString())
     }
 
