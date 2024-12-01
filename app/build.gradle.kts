@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.fir.expressions.FirEmptyArgumentList.arguments
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
