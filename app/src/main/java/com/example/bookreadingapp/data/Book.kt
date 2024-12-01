@@ -61,6 +61,7 @@ class Book (
     // Parsing used if we're simply displaying text for the table
     private fun parseTableStringBuild(element: Element, elements: MutableList<String>) {
         val table = StringBuilder()
+        table.append("\n")
         element.select("tr").forEach { row ->
             val tableRow = StringBuilder()
             for (data in row.children()) {
@@ -72,6 +73,7 @@ class Book (
             tableRow.append("|")
             table.append(tableRow).append("\n")
         }
+        table.append("\n")
         elements.add(table.toString())
     }
 
