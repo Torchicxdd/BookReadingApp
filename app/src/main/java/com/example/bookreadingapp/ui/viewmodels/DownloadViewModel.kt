@@ -16,6 +16,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.io.IOException
 
 private const val TAG_DVM = "DownloadViewModel"
@@ -36,7 +37,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
         directoryName: String,
         book: Book,
         moveBookToBookshelf: (Book) -> Unit
-    ){
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
             val file = repository.createFile(directoryName, fileName)
@@ -45,40 +46,54 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             _progressPercentage.emit(0)
             _isDownloading.emit(true)
 
-            // Download zip file from url with progress update
-            if (repository.downloadFile(url, file) { progress ->
-                    viewModelScope.launch {
-                        _progressPercentage.emit(progress)
-                    }
-                }
-            ){
-                Log.i(TAG_DVM, "File Downloaded")
-            }
-            else {
-                Log.e(TAG_DVM, "Failed to download file")
-            }
-
-            // Extract zip file after downloading
-            try {
-                val downloadedFilePath = repository.unzipFile(file, directoryName){ progress ->
-                    viewModelScope.launch {
-                        _progressPercentage.emit(progress)
-                    }
-                }
-                if (downloadedFilePath.isNotEmpty()) {
-                    book.htmlFilePath = downloadedFilePath
-                    moveBookToBookshelf(book)
-                } else {
-                    Log.e(TAG_DVM, "Download file path is empty, book was not moved to bookshelf")
-                }
-
-            } catch(e: IOException) {
-                e.printStackTrace()
-                e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
-            }
+            downloadFileWithProgress(url, file)
+            extractZipWithProgress(file, directoryName, book, moveBookToBookshelf)
 
             _isDownloading.value = false
             updateDirectoryContents("")
+        }
+    }
+
+    private suspend fun downloadFileWithProgress(
+        url: String,
+        file: File
+    ) {
+        // Download zip file from url with progress update
+        if (repository.downloadFile(url, file) { progress ->
+                viewModelScope.launch {
+                    _progressPercentage.emit(progress)
+                }
+            }
+        ) {
+            Log.i(TAG_DVM, "File Downloaded")
+        } else {
+            Log.e(TAG_DVM, "Failed to download file")
+        }
+    }
+
+    private suspend fun extractZipWithProgress(
+        file: File,
+        directoryName: String,
+        book: Book,
+        moveBookToBookshelf: (Book) -> Unit
+    ) {
+        // Extract zip file after downloading
+        try {
+            val downloadedFilePath = repository.unzipFile(file, directoryName) { progress ->
+                viewModelScope.launch {
+                    _progressPercentage.emit(progress)
+                }
+            }
+            if (downloadedFilePath.isNotEmpty()) {
+                book.htmlFilePath = downloadedFilePath
+                moveBookToBookshelf(book)
+            } else {
+                Log.e(TAG_DVM, "Download file path is empty, book was not moved to bookshelf")
+            }
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
         }
     }
 
