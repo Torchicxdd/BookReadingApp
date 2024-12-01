@@ -33,10 +33,23 @@ class Book (
     }
 
     private fun parseElement(element: Element, elements: MutableList<String>) {
+        Log.i("HtmlParser", element.tagName())
         when (element.tagName()) {
+            // Mark where images are
             "img" -> elements.add("IMAGE PLACEHOLDER")
+            // Mark where paragraphs begin and end
             "p" -> {
-                elements.add("<p>-Start" + element.text())
+                elements.add("<p>-Start" + element.text() + "<p>-End")
+            }
+            // Mark where chapters begin and end
+            "h2" -> {
+                elements.add("<h2>-End")
+                elements.add("<h2>-Start")
+                elements.add(element.text())
+            }
+            // Mark where tables begin and end
+            "table" -> {
+                
             }
             else -> {
                 elements.add(element.text())
@@ -48,14 +61,9 @@ class Book (
     }
 
     fun exampleHtmlParsing() {
-        val html = readHtmlFile()
-        val elements = parseHtml(html)
+        val elements = parseHtml(readHtmlFile())
 
-        for (i in 0..500) {
-            if (elements[i].contains("<p>-Start")) {
-                Log.i("HtmlParser", elements[i].replace("<p>-Start", ""))
-            }
-        }
+
     }
 }
 
