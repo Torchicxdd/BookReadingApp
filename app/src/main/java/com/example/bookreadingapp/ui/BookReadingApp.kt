@@ -48,7 +48,7 @@ fun BookReadingApp(
     }
 
     // Listen for destination changes to update the back navigation state
-    navController.addOnDestinationChangedListener { _, _, _, ->
+    navController.addOnDestinationChangedListener { _, _, _ ->
         viewModel.canNavigateBack = navController.previousBackStackEntry != null
         if (navController.currentDestination?.route != Routes.Reading.route && viewModel.readingMode) {
             viewModel.readingMode = false
@@ -178,8 +178,6 @@ fun PermanentNavDrawerComponent(
  * Displays the content and navigation host for smaller screens or reading mode.
  *
  * @param navController The NavHostController for managing navigation.
- * @param context The current context for accessing resources.
- * @param adaptiveNavigationType The type of adaptive navigation (rail or bottom navigation).
  * @param viewModel The ViewModel for managing the app state.
  * @param downloadViewModel The ViewModel for handling download and data operations.
  * @param modifier Modifier to apply layout behavior.
