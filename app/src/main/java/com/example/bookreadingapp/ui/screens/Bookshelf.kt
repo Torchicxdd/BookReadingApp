@@ -25,16 +25,20 @@ fun Bookshelf(
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
-    isDownloading: State<Boolean>
+    isDownloading: State<Boolean>,
+    setBookDownloading: (Int, Boolean) -> Unit,
+    downloadingBooks: State<Map<Int, Boolean>>
 ) {
     BooksAvailable(
         books = bookshelfBooks,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()
+            setBookDownloading(book.arrayIndex, false)
         },
         isDownloading.value,
-        progressPercentage.value
+        progressPercentage.value,
+        isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == false }
     )
 }
 
@@ -62,7 +66,8 @@ fun BooksAvailable(
     books: List<Book>,
     onBookClick: (Book) -> Unit,
     isDownloading: Boolean,
-    progressPercentage: Int
+    progressPercentage: Int,
+    isBookDownloading: (Book) -> Boolean
 ) {
     Column(
         modifier = Modifier
@@ -87,9 +92,10 @@ fun BooksAvailable(
             }
         }
         // LazyVerticalGrid to display books in a grid
-        DisplayBookListBookshelf(
+        DisplayBookList(
             libraryBooks = books,
-            onBookClick = onBookClick
+            onBookClick = onBookClick,
+            isBookDownloading = isBookDownloading
         )
     }
 }
