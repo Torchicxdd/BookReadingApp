@@ -45,13 +45,7 @@ class Book (
                 elements.add("<h2>-Start" + element.text())
             }
             // Mark where tables begin and end
-            "table" -> {
-                elements.add("<table>-Start")
-                element.children().forEach { tableElement ->
-                    parseElement(tableElement, elements)
-                }
-                elements.add("<table>-End")
-            }
+            "table" -> parseTableStringBuild(element, elements)
             else -> {
                 // Avoid adding empty strings
                 if (element.text() != "") {
@@ -62,6 +56,26 @@ class Book (
                 }
             }
         }
+    }
+
+    private fun parseTableStringBuild(element: Element, elements: MutableList<String>) {
+        val table = StringBuilder()
+        for (e in element.children()) {
+            if (e.tagName().equals("tbody")) {
+                for (row in e.children()) {
+                    val tableRow = StringBuilder()
+                    for (data in row.children()) {
+                        if (tableRow.length > 0) {
+                            tableRow.append("|")
+                        }
+                        tableRow.append(data.text())
+                    }
+                    tableRow.append("|")
+                    table.append(tableRow).append("\n")
+                }
+            }
+        }
+        elements.add(table.toString())
     }
 
     fun exampleHtmlParsing() {
