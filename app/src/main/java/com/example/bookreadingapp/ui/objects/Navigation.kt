@@ -138,13 +138,11 @@ fun BottomNavBar(
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
                 onClick = {
-                    if (currentRoute != navItem.route) {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
+                        launchSingleTop = true
                     }
                 },
                 icon = {
@@ -186,7 +184,6 @@ fun NavRail(
                             saveState = true
                         }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 icon = {
@@ -236,7 +233,6 @@ fun PermanentNavDrawer(
                                             saveState = true
                                         }
                                         launchSingleTop = true
-                                        restoreState = true
                                     }
                                 },
                                 icon = {
