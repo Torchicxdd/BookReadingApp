@@ -2,9 +2,8 @@ package com.example.bookreadingapp.data
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
-import android.content.res.Resources
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element
 import android.util.Log
 import com.example.bookreadingapp.R
 import java.io.File
@@ -16,45 +15,42 @@ class Book (
 ) {
     var htmlFilePath: String = ""
 
-    fun readHtmlFile(filePath: String): String {
-        val htmlFile = File(filePath)
-
-//        Log.i("BookObject", htmlFile.readText())
-        Log.i("BookObject", filePath)
+    private fun readHtmlFile(): String {
+        val htmlFile = File(this.htmlFilePath)
 
         return htmlFile.readText()
     }
 
-//    fun parseHtml(html: String): List<String> {
-//        val content = Jsoup.parse(html)
-//        val elements = mutableListOf<String>()
-//
-//        content.body().children().forEach { element ->
-//            parseElement(element, elements)
-//        }
-//
-//        return elements
-//    }
-//
-//    private fun parseElement(element: Element, elements: MutableList<String>) {
-//        when (element.tagName()) {
-//            "img" -> elements.add("IMAGE PLACEHOLDER")
-//            else -> {
-//                elements.add(element.text())
-//                element.children().forEach { child ->
-//                    parseElement(child, elements)
-//                }
-//            }
-//        }
-//    }
-//
-//    fun exampleHtmlParsing(context: Context) {
-//        val html = readHtmlFile(context, "pg27778-images.html")
-//        val elements = parseHtml(html)
-//        elements.forEach { element ->
-//            Log.d("HtmlParser", element)
-//        }
-//    }
+    private fun parseHtml(html: String): List<String> {
+        val content = Jsoup.parse(html)
+        val elements = mutableListOf<String>()
+
+        content.body().children().forEach { element ->
+            parseElement(element, elements)
+        }
+
+        return elements
+    }
+
+    private fun parseElement(element: Element, elements: MutableList<String>) {
+        when (element.tagName()) {
+            "img" -> elements.add("IMAGE PLACEHOLDER")
+            else -> {
+                elements.add(element.text())
+                element.children().forEach { child ->
+                    parseElement(child, elements)
+                }
+            }
+        }
+    }
+
+    fun exampleHtmlParsing() {
+        val html = readHtmlFile()
+        val elements = parseHtml(html)
+        elements.forEach { element ->
+            Log.d("HtmlParser", element)
+        }
+    }
 }
 
 val books = listOf(
