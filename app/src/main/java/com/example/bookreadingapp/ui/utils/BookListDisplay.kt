@@ -131,25 +131,3 @@ fun DisplayBookList(
         }
     )
 }
-@Composable
-fun DisplayBookListBookshelf(
-    libraryBooks: List<Book>,
-    onBookClick: (Book) -> Unit
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .fillMaxSize(),
-        content = {
-            items(libraryBooks) { book ->
-                BookItem(
-                    book = book,
-                    onClick = { onBookClick(book) },
-                    modifier = Modifier.testTag("book_item_${book.title}"),
-                    isBookDownloading = false
-                )
-                Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
-            }
-        }
-    )
-}
