@@ -74,7 +74,9 @@ fun NavigationHost(
                 moveBookToBookshelf = viewModel::moveBookToBookshelf,
                 progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
-                setupDownload = downloadViewModel::setupDownload
+                setupDownload = downloadViewModel::setupDownload,
+                setBookDownloading = viewModel::setBookDownloading,
+                downloadingBooks = viewModel.downloadingBooks
             )
         }
         composable(Routes.Bookshelf.route) {
