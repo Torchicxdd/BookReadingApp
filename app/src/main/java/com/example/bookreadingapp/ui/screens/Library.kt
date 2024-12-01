@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.DisplayBookList
+import com.example.bookreadingapp.ui.utils.ProgressMessage
 
 // Composable function that represents the main screen of the Library
 @Composable
@@ -102,27 +103,5 @@ fun NoBooksToDownloadMessage() {
             text = stringResource(R.string.no_books_to_download),
             style = MaterialTheme.typography.bodyLarge
         )
-    }
-}
-
-@Composable
-fun ProgressMessage(progress: Int) {
-    Column(
-        modifier = Modifier
-            .testTag("bookshelf_screen")
-            .padding(dimensionResource(R.dimen.padding_small))
-            .fillMaxWidth(),
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_small))
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = stringResource(R.string.download_progress, progress),
-                style = MaterialTheme.typography.bodyLarge
-            )
-        }
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.DisplayBookList
+import com.example.bookreadingapp.ui.utils.ProgressMessage
 
 // Main composable function for the bookshelf screen
 @Composable
