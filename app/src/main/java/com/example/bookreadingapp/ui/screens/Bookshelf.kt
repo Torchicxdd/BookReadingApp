@@ -10,16 +10,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 
 // Main composable function for the bookshelf screen
 @Composable
@@ -27,19 +24,17 @@ fun Bookshelf(
     bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
-    downloadViewModel: DownloadViewModel,
+    progressPercentage: State<Int>,
+    isDownloading: State<Boolean>
 ) {
-    val progressPercentage by downloadViewModel.progressPercentage.collectAsState()
-    val isDownloading by downloadViewModel.isDownloading.collectAsState()
-
     BooksAvailable(
         books = bookshelfBooks,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()
         },
-        isDownloading,
-        progressPercentage
+        isDownloading.value,
+        progressPercentage.value
     )
 }
 

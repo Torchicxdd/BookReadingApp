@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -57,7 +58,6 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 @Composable
 fun NavigationHost(
     navController: NavHostController,
-    context: Context,
     modifier: Modifier,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel
@@ -80,20 +80,21 @@ fun NavigationHost(
         composable(Routes.Bookshelf.route) {
             Bookshelf(
                 bookshelfBooks = viewModel.bookshelfBooks,
-                updateBook = { viewModel.updateBook(it) },
+                updateBook = viewModel::updateBook,
                 navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
                     launchSingleTop = true
                     restoreState = true
                 } },
-                downloadViewModel,
+                progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
+                isDownloading = downloadViewModel.isDownloading.collectAsState(),
             )
         }
         composable(Routes.Search.route) {
             Search(
                 book = viewModel.selectedBook,
                 searchBarInput = viewModel.searchBarInput,
-                updateSearchBar = { viewModel.updateSearchBarInput(it) },
-                performSearch = { viewModel.performSearch() },
+                updateSearchBar = viewModel::updateSearchBarInput,
+                performSearch = viewModel::performSearch,
                 searchResult = viewModel.searchResultText
             )
         }
@@ -260,7 +261,6 @@ fun PermanentNavDrawer(
             ) {
                 NavigationHost(
                     navController = navController,
-                    context = context,
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
                     downloadViewModel = downloadViewModel
