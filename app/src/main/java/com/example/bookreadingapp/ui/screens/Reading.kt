@@ -3,6 +3,7 @@ package com.example.bookreadingapp.ui.screens
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -199,7 +200,7 @@ fun PageScrollLazyColumn(
 
     var currentPage by rememberSaveable { mutableStateOf(0) }
 
-    val swipeThreshold = 90f
+    val swipeThreshold = 300f
     var swipeDetected by remember { mutableStateOf(false) }
     var dragOffset by remember { mutableStateOf(0f) }
 
@@ -216,7 +217,7 @@ fun PageScrollLazyColumn(
 
     val swipeModifier = Modifier.pointerInput(Unit) {
         detectHorizontalDragGestures { change, dragAmount ->
-            dragOffset += dragAmount
+            dragOffset += dragAmount * 0.5f
 
             if (dragOffset > swipeThreshold && !swipeDetected) {
                 if (currentPage > 0) {
@@ -229,7 +230,6 @@ fun PageScrollLazyColumn(
                     swipeDetected = true
                 }
             }
-
             if (swipeDetected) {
                 dragOffset = 0f
             }
@@ -246,6 +246,7 @@ fun PageScrollLazyColumn(
                 .fillMaxSize()
                 //.border(BorderStroke(4.dp, Color.Black), RectangleShape)
                 .padding(16.dp)
+                .align(Alignment.Center)
                 .then(swipeModifier)
         ) {
             if (currentPage == 0) {
@@ -264,6 +265,7 @@ fun PageScrollLazyColumn(
                         text = chunkedPages[currentPage][index],
                         style = TextStyle(fontSize = 18.sp),
                         modifier = Modifier.padding(bottom = 8.dp)
+                            .align(Alignment.Center)
                     )
                 }
             }
