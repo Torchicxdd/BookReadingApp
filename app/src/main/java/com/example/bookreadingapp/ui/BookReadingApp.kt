@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.objects.BottomNavBar
 import com.example.bookreadingapp.ui.objects.NavRail
 import com.example.bookreadingapp.ui.objects.NavigationHost
@@ -21,6 +19,9 @@ import com.example.bookreadingapp.ui.objects.PermanentNavDrawer
 import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.objects.TopAppBar
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 /**
  * The main composable function that drives the UI layout and navigation based on screen size.
@@ -35,7 +36,8 @@ fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
     viewModel: AppViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     navController: NavHostController = rememberNavController(),
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel
 ) {
     val context = LocalContext.current
 
@@ -48,7 +50,7 @@ fun BookReadingApp(
     }
 
     // Listen for destination changes to update the back navigation state
-    navController.addOnDestinationChangedListener { _, _, _, ->
+    navController.addOnDestinationChangedListener { _, _, _ ->
         viewModel.canNavigateBack = navController.previousBackStackEntry != null
         if (navController.currentDestination?.route != Routes.Reading.route && viewModel.readingMode) {
             viewModel.readingMode = false
@@ -78,7 +80,8 @@ fun BookReadingApp(
                     navController = navController,
                     context = context,
                     viewModel = viewModel,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    mainViewModel = mainViewModel
                 )
             }
         },
@@ -108,6 +111,7 @@ fun AdaptiveContent(
     context: Context,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
@@ -117,11 +121,11 @@ fun AdaptiveContent(
         }
         // Display the permanent navigation drawer for expanded screens
         if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-            PermanentNavDrawerComponent(navController, context, adaptiveNavigationType, viewModel, downloadViewModel)
+            PermanentNavDrawerComponent(navController, context, adaptiveNavigationType, viewModel, downloadViewModel, mainViewModel)
         }
         // Display the main content for smaller screens or when in reading mode
         if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
-            ContentNavigationHost(navController, viewModel, downloadViewModel)
+            ContentNavigationHost(navController, viewModel, downloadViewModel, mainViewModel)
         }
     }
 }
@@ -161,6 +165,7 @@ fun PermanentNavDrawerComponent(
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
     PermanentNavDrawer(
@@ -170,7 +175,8 @@ fun PermanentNavDrawerComponent(
         modifier = modifier
             .fillMaxSize(),
         viewModel = viewModel,
-        downloadViewModel = downloadViewModel
+        downloadViewModel = downloadViewModel,
+        mainViewModel = mainViewModel
     )
 }
 
@@ -178,8 +184,6 @@ fun PermanentNavDrawerComponent(
  * Displays the content and navigation host for smaller screens or reading mode.
  *
  * @param navController The NavHostController for managing navigation.
- * @param context The current context for accessing resources.
- * @param adaptiveNavigationType The type of adaptive navigation (rail or bottom navigation).
  * @param viewModel The ViewModel for managing the app state.
  * @param downloadViewModel The ViewModel for handling download and data operations.
  * @param modifier Modifier to apply layout behavior.
@@ -189,12 +193,14 @@ fun ContentNavigationHost(
     navController: NavHostController,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
     NavigationHost(
         navController,
         Modifier,
         viewModel = viewModel,
-        downloadViewModel = downloadViewModel
+        downloadViewModel = downloadViewModel,
+        mainViewModel = mainViewModel
     )
 }

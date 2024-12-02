@@ -12,14 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.ui.BookReadingApp
+import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.ui.viewmodels.AppViewModelFactory
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModelFactory
-import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
 class MainActivity : ComponentActivity() {
     private val downloadViewModel: DownloadViewModel by viewModels {
         DownloadViewModelFactory(this.applicationContext)
+    }
+    private val mainViewModel: MainViewModel by viewModels {
+        AppViewModelFactory(this.application)
     }
 
     @ExperimentalMaterial3WindowSizeClassApi
@@ -27,11 +32,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            // Reset database on application run
+            this.applicationContext.deleteDatabase("books_app_database")
             BookReadingAppTheme {
                 val windowSize = calculateWindowSizeClass(this)
                 BookReadingApp(
                     windowSize = windowSize.widthSizeClass,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    mainViewModel = mainViewModel
                 )
             }
         }
@@ -48,7 +56,13 @@ fun ReadingPreview() {
     BookReadingAppTheme {
         BookReadingApp(
             windowSize = WindowWidthSizeClass.Expanded,
-            downloadViewModel = viewModel()
+            downloadViewModel = viewModel(),
+            mainViewModel = viewModel()
+        )
+        BookReadingApp(
+            windowSize = WindowWidthSizeClass.Expanded,
+            downloadViewModel = viewModel(),
+            mainViewModel = viewModel()
         )
     }
 }

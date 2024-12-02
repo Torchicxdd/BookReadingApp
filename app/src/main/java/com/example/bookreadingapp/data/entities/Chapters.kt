@@ -20,7 +20,7 @@ class Chapters {
     @PrimaryKey(autoGenerate=true)
 
     @ColumnInfo(name="chapterId")
-    var id: Int = 0
+    var id: Long = 0
 
     @ColumnInfo(name="title")
     var title: String = ""
@@ -28,10 +28,10 @@ class Chapters {
     @ColumnInfo(name="chapterPosition")
     var position: Int = 0
 
-    var bookId: Int = 0
+    var bookId: Long = 0
 
     constructor()
-    constructor(title: String, position: Int, bookId: Int) {
+    constructor(title: String, position: Int, bookId: Long) {
         this.title = title
         this.position = position
         this.bookId = bookId

@@ -19,7 +19,7 @@ class ImageViewModel(application: Application) : ViewModel() {
         searchedResults = repository.searchResults
     }
 
-    fun insertImage(image: Image) {
+    suspend fun insertImage(image: Image) {
         repository.insertImage(image)
     }
 

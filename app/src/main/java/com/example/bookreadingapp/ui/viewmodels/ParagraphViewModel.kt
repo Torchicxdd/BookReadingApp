@@ -19,7 +19,7 @@ class ParagraphViewModel(application: Application) : ViewModel() {
         searchedResults = repository.searchResults
     }
 
-    fun insertParagraph(paragraph: Paragraphs) {
+    suspend fun insertParagraph(paragraph: Paragraphs) {
         repository.insertParagraph(paragraph)
     }
 

@@ -29,7 +29,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -40,15 +39,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.bookreadingapp.R
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.screens.Bookshelf
 import com.example.bookreadingapp.ui.screens.ContentTable
 import com.example.bookreadingapp.ui.screens.Home
 import com.example.bookreadingapp.ui.screens.Library
 import com.example.bookreadingapp.ui.screens.Reading
 import com.example.bookreadingapp.ui.screens.Search
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
 /**
@@ -60,7 +60,8 @@ fun NavigationHost(
     navController: NavHostController,
     modifier: Modifier,
     viewModel: AppViewModel,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
@@ -74,7 +75,8 @@ fun NavigationHost(
                 moveBookToBookshelf = viewModel::moveBookToBookshelf,
                 progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
-                setupDownload = downloadViewModel::setupDownload
+                setupDownload = downloadViewModel::setupDownload,
+                mainViewModel = mainViewModel
             )
         }
         composable(Routes.Bookshelf.route) {
@@ -208,6 +210,7 @@ fun PermanentNavDrawer(
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -259,7 +262,8 @@ fun PermanentNavDrawer(
                     navController = navController,
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    mainViewModel = mainViewModel
                 )
             }
         },

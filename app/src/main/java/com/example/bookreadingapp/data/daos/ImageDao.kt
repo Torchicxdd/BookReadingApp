@@ -10,7 +10,7 @@ import com.example.bookreadingapp.data.entities.Image
 interface ImageDao {
 
     @Insert
-    fun insertImage(image: Image)
+    suspend fun insertImage(image: Image)
 
     @Query("DELETE FROM images WHERE imageId = :id")
     fun deleteImage(id: Int)

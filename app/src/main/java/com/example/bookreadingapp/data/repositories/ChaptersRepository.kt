@@ -16,16 +16,18 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     /**
      * Insert a new chapter into the database
      */
-    fun insertChapter(chapter: Chapters) {
+    suspend fun insertChapter(chapter: Chapters): Long {
+        var newChapterID: Long = 1
         coroutineScope.launch(Dispatchers.IO) {
-            chaptersDao.insertChapter(chapter)
+            newChapterID = chaptersDao.insertChapter(chapter)
         }
+        return newChapterID
     }
 
     /**
      * Insert multiple chapters into the database
      */
-    fun insertManyChapters(chapters: List<Chapters>) {
+    suspend fun insertManyChapters(chapters: List<Chapters>) {
         coroutineScope.launch(Dispatchers.IO) {
             chaptersDao.insertManyChapters(chapters)
         }

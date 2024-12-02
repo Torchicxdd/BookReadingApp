@@ -18,10 +18,12 @@ class BooksRepository(private val booksDao: BooksDao) {
     /**
      * Method used to insert new books to the database
      */
-    fun insertBook(newBook: Books) {
+    suspend fun insertBook(newBook: Books): Long {
+        var newBookID: Long = 1
         coroutineScope.launch(Dispatchers.IO) {
-            booksDao.insertBook(newBook)
+            newBookID = booksDao.insertBook(newBook)
         }
+        return newBookID
     }
 
     /**

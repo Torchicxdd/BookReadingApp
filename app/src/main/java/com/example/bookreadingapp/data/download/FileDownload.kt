@@ -2,7 +2,6 @@ package com.example.bookreadingapp.data.download
 
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -44,7 +43,7 @@ class FileDownload(private val context: Context) {
     // Request content from url and saves to file to its own folder created with createFile()
     // Returns a boolean representing if the request was successful
     suspend fun downloadFile(url: String, file: File, onProgressUpdate: (Int) -> Unit): Boolean {
-        var downloadSuccess : Boolean = false
+        var downloadSuccess = false
         withContext(Dispatchers.IO) {
             try {
                 val client = OkHttpClient()
@@ -89,17 +88,6 @@ class FileDownload(private val context: Context) {
             // Update progress (50% max for download)
             val downloadProgress = ((totalDownloaded * 50) / totalBytes).toInt()
             onProgressUpdate(downloadProgress)
-        }
-    }
-
-    // Delete directory contents directly without IntentSender
-    suspend fun deleteDirectoryContents(directoryName: String) {
-        var folderToDelete : File
-        withContext(Dispatchers.IO) {
-            folderToDelete = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
-            folderToDelete.listFiles()?.forEach {
-                it.delete()
-            }
         }
     }
 

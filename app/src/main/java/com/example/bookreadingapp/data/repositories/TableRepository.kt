@@ -2,7 +2,6 @@ package com.example.bookreadingapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.TableDao
-import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Table
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -14,7 +13,7 @@ class TableRepository(private val tableDao: TableDao) {
     val searchResults = MutableLiveData<List<Table>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertTable(newTable: Table) {
+    suspend fun insertTable(newTable: Table) {
         coroutineScope.launch(Dispatchers.IO) {
             tableDao.insertTable(newTable)
         }

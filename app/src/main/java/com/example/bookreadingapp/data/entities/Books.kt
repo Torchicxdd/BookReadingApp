@@ -10,7 +10,7 @@ class Books {
     @PrimaryKey(autoGenerate=true)
     @NonNull
     @ColumnInfo(name="bookId")
-    var id: Int = 0
+    var id: Long = 0
     @ColumnInfo(name="title")
     var title: String = ""
     @ColumnInfo(name="author")

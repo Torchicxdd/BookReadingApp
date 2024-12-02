@@ -8,7 +8,7 @@ import com.example.bookreadingapp.data.entities.Table
 @Dao
 interface TableDao {
     @Insert
-    fun insertTable(table: Table)
+    suspend fun insertTable(table: Table)
 
     @Query("SELECT * FROM tables WHERE tableId = :id")
     fun findTableById(id: Int): List<Table>

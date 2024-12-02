@@ -19,6 +19,7 @@ import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 // Composable function that represents the main screen of the Library
 @Composable
@@ -27,7 +28,8 @@ fun Library(
     moveBookToBookshelf: (Book) -> Unit,
     progressPercentage: State<Int>,
     isDownloading: State<Boolean>,
-    setupDownload: (String, String, Book, (Book) -> Unit ) -> Unit
+    setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit ) -> Unit,
+    mainViewModel: MainViewModel
 ) {
     val urlList = stringArrayResource(R.array.download)
 
@@ -65,6 +67,7 @@ fun Library(
                         url,
                         "${url.substringAfterLast("/").replace(".zip", "")}-dir",
                         book,
+                        mainViewModel,
                         moveBookToBookshelf
                     )
                 }
