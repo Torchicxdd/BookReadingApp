@@ -21,6 +21,7 @@ import com.example.bookreadingapp.ui.objects.PermanentNavDrawer
 import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.objects.TopAppBar
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.BookViewModel
 
 /**
  * The main composable function that drives the UI layout and navigation based on screen size.
@@ -35,7 +36,8 @@ fun BookReadingApp(
     windowSize: WindowWidthSizeClass,
     viewModel: AppViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     navController: NavHostController = rememberNavController(),
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    bookViewModel: BookViewModel
 ) {
     val context = LocalContext.current
 
@@ -78,7 +80,8 @@ fun BookReadingApp(
                     navController = navController,
                     context = context,
                     viewModel = viewModel,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    bookViewModel = bookViewModel
                 )
             }
         },
@@ -108,6 +111,7 @@ fun AdaptiveContent(
     context: Context,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    bookViewModel: BookViewModel,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
@@ -117,11 +121,11 @@ fun AdaptiveContent(
         }
         // Display the permanent navigation drawer for expanded screens
         if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-            PermanentNavDrawerComponent(navController, context, adaptiveNavigationType, viewModel, downloadViewModel)
+            PermanentNavDrawerComponent(navController, context, adaptiveNavigationType, viewModel, downloadViewModel, bookViewModel)
         }
         // Display the main content for smaller screens or when in reading mode
         if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
-            ContentNavigationHost(navController, viewModel, downloadViewModel)
+            ContentNavigationHost(navController, viewModel, downloadViewModel, bookViewModel)
         }
     }
 }
@@ -161,6 +165,7 @@ fun PermanentNavDrawerComponent(
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    bookViewModel: BookViewModel,
     modifier: Modifier = Modifier
 ) {
     PermanentNavDrawer(
@@ -170,7 +175,8 @@ fun PermanentNavDrawerComponent(
         modifier = modifier
             .fillMaxSize(),
         viewModel = viewModel,
-        downloadViewModel = downloadViewModel
+        downloadViewModel = downloadViewModel,
+        bookViewModel = bookViewModel
     )
 }
 
@@ -187,12 +193,14 @@ fun ContentNavigationHost(
     navController: NavHostController,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    bookViewModel: BookViewModel,
     modifier: Modifier = Modifier
 ) {
     NavigationHost(
         navController,
         Modifier,
         viewModel = viewModel,
-        downloadViewModel = downloadViewModel
+        downloadViewModel = downloadViewModel,
+        bookViewModel = bookViewModel
     )
 }

@@ -49,6 +49,7 @@ import com.example.bookreadingapp.ui.screens.Reading
 import com.example.bookreadingapp.ui.screens.Search
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.BookViewModel
 
 
 /**
@@ -60,7 +61,8 @@ fun NavigationHost(
     navController: NavHostController,
     modifier: Modifier,
     viewModel: AppViewModel,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    bookViewModel: BookViewModel
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
@@ -208,6 +210,7 @@ fun PermanentNavDrawer(
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    bookViewModel: BookViewModel,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -259,7 +262,8 @@ fun PermanentNavDrawer(
                     navController = navController,
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    bookViewModel = bookViewModel
                 )
             }
         },
