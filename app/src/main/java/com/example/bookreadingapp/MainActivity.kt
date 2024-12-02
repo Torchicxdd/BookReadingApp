@@ -10,6 +10,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.ui.viewmodels.AppViewModelFactory
@@ -53,15 +54,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ReadingPreview() {
     BookReadingAppTheme {
-//        BookReadingApp(
-//            windowSize = WindowWidthSizeClass.Expanded,
-//            downloadViewModel = viewModel(),
-//            mainViewModel = viewModel()
-//        )
-//        BookReadingApp(
-//            windowSize = WindowWidthSizeClass.Expanded,
-//            downloadViewModel = viewModel(),
-//            mainViewModel = viewModel()
-//        )
+        BookReadingApp(
+            windowSize = WindowWidthSizeClass.Expanded,
+            downloadViewModel = viewModel(),
+            mainViewModel = viewModel()
+        )
+        BookReadingApp(
+            windowSize = WindowWidthSizeClass.Expanded,
+            downloadViewModel = viewModel(),
+            mainViewModel = viewModel()
+        )
     }
 }
