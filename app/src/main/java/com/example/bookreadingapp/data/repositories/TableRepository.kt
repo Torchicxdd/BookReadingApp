@@ -2,6 +2,7 @@ package com.example.bookreadingapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.TableDao
+import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Table
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -45,5 +46,16 @@ class TableRepository(private val tableDao: TableDao) {
     private fun asyncFindTableByChapterId(chapterId: Int) : Deferred<List<Table>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async tableDao.findTableByChapterId(chapterId)
+        }
+
+    fun findTablesInAscOrder(chapterId: Int) {
+        coroutineScope.launch(Dispatchers.Main) {
+            searchResults.value = asyncFindTablesInAscOrder(chapterId).await()
+        }
+    }
+
+    private fun asyncFindTablesInAscOrder(chapterId: Int) : Deferred<List<Table>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async tableDao.findTablesInAscOrder(chapterId)
         }
 }

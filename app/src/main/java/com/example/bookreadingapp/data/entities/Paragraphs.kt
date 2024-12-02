@@ -21,12 +21,18 @@ class Paragraphs {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "paragraphId")
     var id: Int = 0
+
     var chapterId: Int = 0
+
+    @ColumnInfo(name="paragraphPosition")
+    var position: Int = 0
+
     var text: String = ""
 
     constructor()
-    constructor(text: String, chapterId: Int) {
+    constructor(text: String, chapterId: Int, position: Int) {
         this.text = text
         this.chapterId = chapterId
+        this.position = position
     }
 }

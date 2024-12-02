@@ -18,4 +18,7 @@ interface TableDao {
 
     @Query("DELETE FROM tables WHERE tableId = :id")
     fun deleteTable(id: Int)
+
+    @Query("SELECT * FROM tables WHERE chapterId = :chapterId ORDER BY tablePosition ASC")
+    fun findTablesInAscOrder(chapterId: Int): List<Table>
 }
