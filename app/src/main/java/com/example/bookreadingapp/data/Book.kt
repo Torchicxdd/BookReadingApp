@@ -6,6 +6,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import android.util.Log
 import com.example.bookreadingapp.R
+import com.example.bookreadingapp.data.entities.Books
+import com.example.bookreadingapp.ui.viewmodels.BookViewModel
 import java.io.File
 
 class Book (
@@ -14,6 +16,7 @@ class Book (
     val arrayIndex: Int
 ) {
     var htmlFilePath: String = ""
+    var inserted = false;
 
     private fun readHtmlFile(): String {
         val htmlFile = File(this.htmlFilePath)
@@ -110,6 +113,17 @@ class Book (
             if(insideTable) {
                 Log.i("HtmlParser", element)
             }
+        }
+    }
+
+    fun insertElementsIntoTables(bookViewModel: BookViewModel) {
+        if(!inserted) {
+            bookViewModel.insertBook(
+                Books(
+                    title.toString(), "AUTHOR_HERE", imageResourceId.toString()
+                )
+            )
+            inserted = true;
         }
     }
 }
