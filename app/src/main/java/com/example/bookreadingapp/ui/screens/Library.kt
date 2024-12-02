@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +20,10 @@ import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
-import com.example.bookreadingapp.ui.viewmodels.BookViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // Composable function that represents the main screen of the Library
 @Composable
@@ -28,8 +32,8 @@ fun Library(
     moveBookToBookshelf: (Book) -> Unit,
     progressPercentage: State<Int>,
     isDownloading: State<Boolean>,
-    setupDownload: (String, String, Book, (Book) -> Unit ) -> Unit,
-    bookViewModel: BookViewModel
+    setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit ) -> Unit,
+    mainViewModel: MainViewModel
 ) {
     val urlList = stringArrayResource(R.array.download)
 
@@ -67,9 +71,9 @@ fun Library(
                         url,
                         "${url.substringAfterLast("/").replace(".zip", "")}-dir",
                         book,
+                        mainViewModel,
                         moveBookToBookshelf
                     )
-                    book.insertElementsIntoTables(bookViewModel = bookViewModel)
                 }
             )
         }

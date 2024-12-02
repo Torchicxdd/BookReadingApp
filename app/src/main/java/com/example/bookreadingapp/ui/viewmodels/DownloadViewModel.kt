@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.download.FileDownload
+import com.example.bookreadingapp.data.entities.Books
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,12 +31,13 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _isDownloading = MutableStateFlow(false)
     val isDownloading: StateFlow<Boolean> get() = _isDownloading
 
-    // Function to set up file download
+    // Function to set up file download and data insertion
     // Returns the absolute path of the downloaded and extracted html file
     fun setupDownload(
         url: String,
         directoryName: String,
         book: Book,
+        mainViewModel: MainViewModel,
         moveBookToBookshelf: (Book) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -48,9 +50,11 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
             downloadFileWithProgress(url, file)
             extractZipWithProgress(file, directoryName, book, moveBookToBookshelf)
-            book.exampleHtmlParsing()
             _isDownloading.value = false
             updateDirectoryContents("")
+
+            book.insertBook(mainViewModel)
+            book.insertChapters(mainViewModel)
         }
     }
 

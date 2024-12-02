@@ -49,7 +49,7 @@ import com.example.bookreadingapp.ui.screens.Reading
 import com.example.bookreadingapp.ui.screens.Search
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
-import com.example.bookreadingapp.ui.viewmodels.BookViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
 /**
@@ -62,7 +62,7 @@ fun NavigationHost(
     modifier: Modifier,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
-    bookViewModel: BookViewModel
+    mainViewModel: MainViewModel
 ) {
     NavHost(navController = navController,
         startDestination = Routes.Home.route
@@ -77,7 +77,7 @@ fun NavigationHost(
                 progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
                 setupDownload = downloadViewModel::setupDownload,
-                bookViewModel = bookViewModel
+                mainViewModel = mainViewModel
             )
         }
         composable(Routes.Bookshelf.route) {
@@ -211,7 +211,7 @@ fun PermanentNavDrawer(
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
-    bookViewModel: BookViewModel,
+    mainViewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -264,7 +264,7 @@ fun PermanentNavDrawer(
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
                     downloadViewModel = downloadViewModel,
-                    bookViewModel = bookViewModel
+                    mainViewModel = mainViewModel
                 )
             }
         },
