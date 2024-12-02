@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.ui.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,6 +27,15 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _isDownloading = MutableStateFlow(false)
     val isDownloading: StateFlow<Boolean> get() = _isDownloading
 
+    private val _isDownloadComplete = MutableStateFlow(false) // Download completion flag
+    val isDownloadComplete: StateFlow<Boolean> get() = _isDownloadComplete
+
+    private val _isUnzipComplete = MutableStateFlow(false) // Unzip completion flag
+    val isUnzipComplete: StateFlow<Boolean> get() = _isUnzipComplete
+
+    private val _isInsertComplete = MutableStateFlow(false) // Insert completion flag
+    val isInsertComplete: StateFlow<Boolean> get() = _isInsertComplete
+
     // Function to set up file download and data insertion
     fun setupDownload(
         url: String,
@@ -42,15 +52,18 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             _progressPercentage.emit(0)
             _isDownloading.emit(true)
             _progressInsertPercentage.emit(0)
+            _isDownloadComplete.emit(false)
+            _isUnzipComplete.emit(false)
+            _isInsertComplete.emit(false)
 
             downloadFileWithProgress(url, file)
             extractZipWithProgress(file, directoryName, book, moveBookToBookshelf)
-            _isDownloading.value = false
             updateDirectoryContents("")
 
             // Insert new book information into database
             val newBookID = book.insertBook(mainViewModel)
             book.insertElements(newBookID, mainViewModel, _progressInsertPercentage)
+            Log.d("InsertElements", "\nProgress emitted in Download: ${_progressInsertPercentage.value}%")
         }
     }
 
