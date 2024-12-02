@@ -2,7 +2,7 @@ package com.example.bookreadingapp.data
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import org.jsoup.Jsoup;
+import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import android.util.Log
 import com.example.bookreadingapp.R
@@ -53,7 +53,10 @@ class Book (
                 elements.add("<table>-End")
             }
             else -> {
-                elements.add(element.text())
+                // Avoid adding empty strings
+                if (element.text() != "") {
+                    elements.add(element.text())
+                }
                 element.children().forEach { child ->
                     parseElement(child, elements)
                 }
@@ -63,19 +66,19 @@ class Book (
 
     fun exampleHtmlParsing() {
         val elements = parseHtml(readHtmlFile())
-        var insideTable = true;
+        var insideTable = true
 
         // Table elements located between "<table>-Start" & "<table>-End"
-        for (i in 0..500) {
-            if(elements[i].contains("<table>-Start")) {
-                insideTable = true;
+        for (element in elements) {
+            if(element.contains("<table>-Start")) {
+                insideTable = true
             }
-            if (elements[i].contains("<table>-End")) {
-                Log.i("HtmlParser", elements[i])
-                insideTable = false;
+            if (element.contains("<table>-End")) {
+                Log.i("HtmlParser", element)
+                insideTable = false
             }
             if(insideTable) {
-                Log.i("HtmlParser", elements[i])
+                Log.i("HtmlParser", element)
             }
         }
     }
