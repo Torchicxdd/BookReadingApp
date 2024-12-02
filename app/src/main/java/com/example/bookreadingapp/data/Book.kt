@@ -1,9 +1,7 @@
 package com.example.bookreadingapp.data
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.entities.Chapters
@@ -11,7 +9,6 @@ import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
-import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.io.File
@@ -22,7 +19,6 @@ class Book (
     val arrayIndex: Int
 ) {
     var htmlFilePath: String = ""
-    var inserted = false;
 
     private fun readHtmlFile(): String {
         val htmlFile = File(this.htmlFilePath)
@@ -75,7 +71,7 @@ class Book (
         element.select("tr").forEach { row ->
             val tableRow = StringBuilder()
             for (data in row.children()) {
-                if (tableRow.length > 0) {
+                if (tableRow.isNotEmpty()) {
                     tableRow.append("|")
                 }
                 tableRow.append(data.text())
@@ -115,9 +111,9 @@ class Book (
 
     suspend fun insertElements(newBookID: Long, mainViewModel: MainViewModel) {
         val elements = parseHtml(readHtmlFile())
-        var currentChapterID: Long = 0;
-        var chapterPosition = 1;
-        var elementPosition = 0;
+        var currentChapterID: Long = 0
+        var chapterPosition = 1
+        var elementPosition = 0
 
         for (e in elements) {
             // Insert chapters
@@ -146,7 +142,7 @@ class Book (
             // Insert images
             if (e.contains("<img>-PLACEHOLDER")) {
                 mainViewModel.imageViewModel.insertImage(
-                    Image(e.replace("<img>-PLACEHOLDER", ""), elementPosition)
+                    Image(e, elementPosition)
                 )
                 elementPosition ++
             }

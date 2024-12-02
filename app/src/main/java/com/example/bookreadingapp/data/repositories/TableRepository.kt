@@ -2,7 +2,6 @@ package com.example.bookreadingapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.TableDao
-import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Table
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred

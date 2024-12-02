@@ -6,15 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.ui.BookReadingApp
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModelFactory
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.ui.viewmodels.AppViewModelFactory
-import com.example.bookreadingapp.ui.viewmodels.BookViewModel
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModelFactory
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
@@ -31,6 +32,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            // Reset database on application run
+            this.applicationContext.deleteDatabase("books_app_database")
             BookReadingAppTheme {
                 val windowSize = calculateWindowSizeClass(this)
                 BookReadingApp(
@@ -51,13 +54,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ReadingPreview() {
     BookReadingAppTheme {
-//        BookReadingApp(
-//            windowSize = WindowWidthSizeClass.Expanded,
-//            downloadViewModel = viewModel()
-//        )
-//        BookReadingApp(
-//            windowSize = WindowWidthSizeClass.Expanded,
-//            downloadViewModel = viewModel()
-//        )
+        BookReadingApp(
+            windowSize = WindowWidthSizeClass.Expanded,
+            downloadViewModel = viewModel(),
+            mainViewModel = viewModel()
+        )
+        BookReadingApp(
+            windowSize = WindowWidthSizeClass.Expanded,
+            downloadViewModel = viewModel(),
+            mainViewModel = viewModel()
+        )
     }
 }

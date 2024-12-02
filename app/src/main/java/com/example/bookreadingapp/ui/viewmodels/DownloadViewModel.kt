@@ -1,13 +1,11 @@
 package com.example.bookreadingapp.ui.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.download.FileDownload
-import com.example.bookreadingapp.data.entities.Books
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +16,6 @@ import java.io.IOException
 private const val TAG_DVM = "DownloadViewModel"
 class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _directoryContents = MutableLiveData<List<String>>()
-    val directoryContents: LiveData<List<String>> = _directoryContents
 
     private val _progressPercentage = MutableStateFlow(0)
     val progressPercentage: StateFlow<Int> get() = _progressPercentage
@@ -27,7 +24,6 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     val isDownloading: StateFlow<Boolean> get() = _isDownloading
 
     // Function to set up file download and data insertion
-    // Returns the absolute path of the downloaded and extracted html file
     fun setupDownload(
         url: String,
         directoryName: String,
@@ -102,11 +98,4 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
         val contents = repository.listDirectoryContents(directoryName)
         _directoryContents.postValue(contents)
     }
-
-    suspend fun confirmDeletion(directoryName: String) {
-        repository.deleteDirectoryContents(directoryName)
-        updateDirectoryContents(directoryName)
-        Log.i(TAG_DVM, "$directoryName content deleted")
-    }
-
 }
