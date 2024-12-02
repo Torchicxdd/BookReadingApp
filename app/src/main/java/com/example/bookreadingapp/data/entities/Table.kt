@@ -20,12 +20,18 @@ class Table {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "tableId")
     var id: Int = 0
+
     var chapterId: Int = 0
+
+    @ColumnInfo(name = "tablePosition")
+    var position: Int = 0
+
     var content: String = ""
 
     constructor()
-    constructor(content: String, chapterId: Int) {
+    constructor(content: String, chapterId: Int, position: Int) {
         this.content = content
         this.chapterId = chapterId
+        this.position = position
     }
 }
