@@ -2,6 +2,10 @@ package com.example.bookreadingapp.data
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
+import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.entities.Chapters

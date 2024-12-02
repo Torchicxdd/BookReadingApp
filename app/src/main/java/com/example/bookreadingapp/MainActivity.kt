@@ -6,11 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.ui.viewmodels.AppViewModelFactory
@@ -54,6 +52,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ReadingPreview() {
     BookReadingAppTheme {
+<<<<<<< HEAD
         BookReadingApp(
             windowSize = WindowWidthSizeClass.Expanded,
             downloadViewModel = viewModel(),
@@ -64,5 +63,11 @@ fun ReadingPreview() {
             downloadViewModel = viewModel(),
             mainViewModel = viewModel()
         )
+=======
+//        BookReadingApp(
+//            windowSize = WindowWidthSizeClass.Expanded,
+//            downloadViewModel = viewModel()
+//        )
+>>>>>>> 1c01a4cd67612cfd78504272faada94486de6552
     }
 }
