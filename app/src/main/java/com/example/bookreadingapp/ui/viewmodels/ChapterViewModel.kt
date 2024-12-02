@@ -25,8 +25,8 @@ class ChapterViewModel(application: Application) : ViewModel() {
     }
 
     // Insert a new chapter
-    suspend fun insertChapter(chapter: Chapters) {
-        repository.insertChapter(chapter)
+    suspend fun insertChapter(chapter: Chapters): Long {
+        return repository.insertChapter(chapter)
     }
 
     // Insert multiple chapters

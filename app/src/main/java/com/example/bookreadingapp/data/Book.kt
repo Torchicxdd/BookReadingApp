@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.entities.Chapters
+import com.example.bookreadingapp.data.entities.Paragraphs
+import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
@@ -110,13 +112,13 @@ class Book (
         return newBookID
     }
 
-    suspend fun insertChapters(newBookID: Long, mainViewModel: MainViewModel) {
+    suspend fun insertElements(newBookID: Long, mainViewModel: MainViewModel) {
         val elements = parseHtml(readHtmlFile())
         var chapterPosition = 1;
         var elementPosition = 0;
 
-        // Insert chapters into database
         for (e in elements) {
+            // Insert chapters
             if (e.contains("<h2>-Start")) {
                 // Reset element positions to zero at the start of every chapter
                 elementPosition = 0
@@ -125,8 +127,19 @@ class Book (
                 )
                 chapterPosition ++
             }
+            // Insert tables
             if (e.contains("<table>-Start")) {
-                mainViewModel
+                mainViewModel.tableViewModel.insertTable(
+                    Table(e.replace("<table>-Start", ""), chapterPosition, elementPosition)
+                )
+                elementPosition ++
+            }
+            // Insert paragraphs
+            if (e.contains("<p>-Start")) {
+                mainViewModel.paragraphViewModel.insertParagraph(
+                    Paragraphs(e.replace("<p>-Start", ""), chapterPosition, elementPosition)
+                )
+                elementPosition ++
             }
         }
     }

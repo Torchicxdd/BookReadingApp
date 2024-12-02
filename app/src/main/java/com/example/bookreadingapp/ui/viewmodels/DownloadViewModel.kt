@@ -50,7 +50,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
             // Insert new book information into database
             val newBookID = book.insertBook(mainViewModel)
-            book.insertChapters(newBookID, mainViewModel)
+            book.insertElements(newBookID, mainViewModel)
         }
     }
 
