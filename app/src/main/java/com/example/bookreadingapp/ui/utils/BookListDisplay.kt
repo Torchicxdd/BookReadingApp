@@ -30,12 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.data.entities.Books
 
 // Composable to display a book item (cover and title)
 @Composable
 fun BookItem(
-    book: Books,
+    book: Book,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -55,10 +54,10 @@ fun BookItem(
                 )
         ) {
             // Display book cover
-            BookCover(book.coverImage.toInt())
+            BookCover(book.imageResourceId)
 
             // Display book title underneath the cover
-            BookInformation(book.title.toInt())
+            BookInformation(book.title)
         }
     }
 }
@@ -107,8 +106,8 @@ fun BookInformation(
 
 @Composable
 fun DisplayBookList(
-    libraryBooks: List<Books>,
-    onBookClick: (Books) -> Unit
+    libraryBooks: List<Book>,
+    onBookClick: (Book) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
