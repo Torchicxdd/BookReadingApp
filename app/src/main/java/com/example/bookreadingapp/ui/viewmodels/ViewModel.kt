@@ -1,7 +1,5 @@
 package com.example.bookreadingapp.ui.viewmodels
 
-import android.util.Log
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -17,8 +15,7 @@ class AppViewModel : ViewModel() {
     var searchResultText by mutableStateOf("")
 
     // Track which books are downloading
-    private val _downloadingBooks = mutableStateOf(mutableMapOf<Int, Boolean>())
-    val downloadingBooks: State<Map<Int, Boolean>> = _downloadingBooks
+    var downloadingBooks by mutableStateOf(mutableMapOf<Int, Boolean>())
 
     // MutableStateList to hold the books in the library
     private val _libraryBooks = mutableStateListOf<Book>()
@@ -70,6 +67,8 @@ class AppViewModel : ViewModel() {
 
     // Function to set a book's downloading state
     fun setBookDownloading(bookId: Int, isDownloading: Boolean) {
-        _downloadingBooks.value[bookId] = isDownloading
+        downloadingBooks = downloadingBooks.toMutableMap().apply {
+            this[bookId] = isDownloading
+        }
     }
 }

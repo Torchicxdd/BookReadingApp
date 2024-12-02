@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,8 +27,15 @@ fun Bookshelf(
     progressPercentage: State<Int>,
     isDownloading: State<Boolean>,
     setBookDownloading: (Int, Boolean) -> Unit,
-    downloadingBooks: State<Map<Int, Boolean>>
+    downloadingBooks: MutableMap<Int, Boolean>
 ) {
+    // Reset the downloading state to false when the screen is shown for all books
+    LaunchedEffect(Unit) {
+        bookshelfBooks.forEach { book ->
+            setBookDownloading(book.arrayIndex, false)
+        }
+    }
+
     BooksAvailable(
         books = bookshelfBooks,
         onBookClick = { book ->
@@ -37,7 +45,7 @@ fun Bookshelf(
         },
         isDownloading.value,
         progressPercentage.value,
-        isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == false  },
+        isBookDownloading = { book -> downloadingBooks[book.arrayIndex] ?: false },
         disableClicks = false
     )
 }
