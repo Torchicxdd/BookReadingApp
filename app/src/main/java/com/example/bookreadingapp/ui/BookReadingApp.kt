@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.objects.BottomNavBar
 import com.example.bookreadingapp.ui.objects.NavRail
 import com.example.bookreadingapp.ui.objects.NavigationHost
@@ -21,6 +19,8 @@ import com.example.bookreadingapp.ui.objects.PermanentNavDrawer
 import com.example.bookreadingapp.ui.objects.Routes
 import com.example.bookreadingapp.ui.objects.TopAppBar
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 /**

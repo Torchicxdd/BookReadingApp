@@ -1,6 +1,5 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,9 +20,6 @@ import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 // Composable function that represents the main screen of the Library
 @Composable

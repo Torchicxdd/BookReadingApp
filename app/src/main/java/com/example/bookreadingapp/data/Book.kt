@@ -2,8 +2,6 @@ package com.example.bookreadingapp.data
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.entities.Chapters
@@ -11,6 +9,8 @@ import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import java.io.File
 
 class Book (

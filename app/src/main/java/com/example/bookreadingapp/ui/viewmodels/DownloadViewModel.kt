@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.download.FileDownload
-import com.example.bookreadingapp.data.entities.Books
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
