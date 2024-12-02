@@ -67,6 +67,7 @@ class Book (
     // Parsing used if we're simply displaying text for the table
     private fun parseTableStringBuild(element: Element, elements: MutableList<String>) {
         val table = StringBuilder()
+        table.append("<table>-Start")
         table.append("\n")
         element.select("tr").forEach { row ->
             val tableRow = StringBuilder()
@@ -120,6 +121,9 @@ class Book (
                     Chapters(e.replace("<h2>-Start", ""), chapterPosition, newBookID)
                 )
                 chapterPosition ++
+            }
+            if (e.contains("<table>-Start")) {
+                Log.i("Table", e)
             }
         }
     }
