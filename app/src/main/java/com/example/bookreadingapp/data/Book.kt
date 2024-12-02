@@ -124,6 +124,7 @@ class Book (
         }
     }
 
+<<<<<<< HEAD
     fun insertBook(mainViewModel: MainViewModel) {
         mainViewModel.bookViewModel.insertBook(
             Books(
@@ -149,6 +150,16 @@ class Book (
                     chapterPosition++
                 }
             }
+=======
+    fun insertElementsIntoTables(bookViewModel: BookViewModel) {
+        if(!inserted) {
+            bookViewModel.insertBook(
+                Books(
+                    title.toString(), "AUTHOR_HERE", imageResourceId.toString()
+                )
+            )
+            inserted = true;
+>>>>>>> 61d8496 (Create method to insert elements into data in Book class)
         }
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
@@ -75,9 +74,7 @@ fun Library(
                         mainViewModel,
                         moveBookToBookshelf
                     )
-                    insertBook(Books(
-                        "Test book", "AUTHOR_HERE", book.imageResourceId.toString()
-                    ))
+                    book.insertElementsIntoTables(bookViewModel = bookViewModel)
                 }
             )
         }
