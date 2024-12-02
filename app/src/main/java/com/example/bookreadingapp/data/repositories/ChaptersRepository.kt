@@ -16,7 +16,7 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     /**
      * Insert a new chapter into the database
      */
-    fun insertChapter(chapter: Chapters) {
+    suspend fun insertChapter(chapter: Chapters) {
         coroutineScope.launch(Dispatchers.IO) {
             chaptersDao.insertChapter(chapter)
         }
@@ -25,7 +25,7 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     /**
      * Insert multiple chapters into the database
      */
-    fun insertManyChapters(chapters: List<Chapters>) {
+    suspend fun insertManyChapters(chapters: List<Chapters>) {
         coroutineScope.launch(Dispatchers.IO) {
             chaptersDao.insertManyChapters(chapters)
         }

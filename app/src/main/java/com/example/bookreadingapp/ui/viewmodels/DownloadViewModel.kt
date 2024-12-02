@@ -48,7 +48,9 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             _isDownloading.value = false
             updateDirectoryContents("")
 
-//            book.insertChapters(mainViewModel)
+            val newBookID = book.insertBook(mainViewModel)
+            Log.i("Insert", "ID$newBookID")
+            book.insertChapters(newBookID, mainViewModel)
         }
     }
 

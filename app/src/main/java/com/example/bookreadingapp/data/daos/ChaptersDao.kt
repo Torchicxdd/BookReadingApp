@@ -15,7 +15,7 @@ interface ChaptersDao {
 
     // Insert multiple chapters at once
     @Insert
-    fun insertManyChapters(chapters: List<Chapters>)
+    suspend fun insertManyChapters(chapters: List<Chapters>)
 
     // Get all chapters as LiveData
     @Query("SELECT * FROM chapters")

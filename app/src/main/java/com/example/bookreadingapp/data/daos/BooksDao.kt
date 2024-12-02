@@ -9,7 +9,7 @@ import com.example.bookreadingapp.data.entities.Books
 @Dao
 interface BooksDao {
     @Insert
-    fun insertBook(book: Books): Long
+    suspend fun insertBook(book: Books): Long
 
     @Query("SELECT * FROM books")
     fun getAllBooks(): LiveData<List<Books>>
