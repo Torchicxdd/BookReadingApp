@@ -157,7 +157,13 @@ class Book (
             processedElements++
             val progress = (processedElements * 100 / totalElements)
             progressFlow.emit(progress)
+            var i: Int = 0
+            Log.d("InsertElements", "\nProgress emitted $i : ${progressFlow.value}%")
+            i += 1
         }
+        // Ensure the final update reflects actual completion
+        progressFlow.emit(100)
+        Log.d("InsertElements", "\nProgress emitted: ${progressFlow.value}%")
     }
 }
 
