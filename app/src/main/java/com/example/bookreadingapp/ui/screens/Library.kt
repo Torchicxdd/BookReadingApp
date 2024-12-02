@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
 
@@ -27,7 +28,8 @@ fun Library(
     moveBookToBookshelf: (Book) -> Unit,
     progressPercentage: State<Int>,
     isDownloading: State<Boolean>,
-    setupDownload: (String, String, Book, (Book) -> Unit ) -> Unit
+    setupDownload: (String, String, Book, (Book) -> Unit ) -> Unit,
+    insertBook: (Books) -> Unit
 ) {
     val urlList = stringArrayResource(R.array.download)
 
@@ -67,6 +69,9 @@ fun Library(
                         book,
                         moveBookToBookshelf
                     )
+                    insertBook(Books(
+                        "Test book", "AUTHOR_HERE", book.imageResourceId.toString()
+                    ))
                 }
             )
         }
