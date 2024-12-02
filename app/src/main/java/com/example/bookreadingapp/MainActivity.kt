@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
     private val downloadViewModel: DownloadViewModel by viewModels {
         DownloadViewModelFactory(this.applicationContext)
     }
-    private val mainViewModel: MainViewModel by viewModels {
+    private val bookViewModel: BookViewModel by viewModels {
         AppViewModelFactory(this.application)
     }
 
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 BookReadingApp(
                     windowSize = windowSize.widthSizeClass,
                     downloadViewModel = downloadViewModel,
-                    mainViewModel = mainViewModel
+                    bookViewModel = bookViewModel
                 )
             }
         }
@@ -51,6 +51,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ReadingPreview() {
     BookReadingAppTheme {
+//        BookReadingApp(
+//            windowSize = WindowWidthSizeClass.Expanded,
+//            downloadViewModel = viewModel()
+//        )
 //        BookReadingApp(
 //            windowSize = WindowWidthSizeClass.Expanded,
 //            downloadViewModel = viewModel()
