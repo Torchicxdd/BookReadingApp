@@ -20,6 +20,9 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _progressPercentage = MutableStateFlow(0)
     val progressPercentage: StateFlow<Int> get() = _progressPercentage
 
+    private val _progressInsertPercentage = MutableStateFlow(0)
+    val progressInsertPercentage: StateFlow<Int> get() = _progressInsertPercentage
+
     private val _isDownloading = MutableStateFlow(false)
     val isDownloading: StateFlow<Boolean> get() = _isDownloading
 
@@ -38,6 +41,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             // Initialize progress
             _progressPercentage.emit(0)
             _isDownloading.emit(true)
+            _progressInsertPercentage.emit(0)
 
             downloadFileWithProgress(url, file)
             extractZipWithProgress(file, directoryName, book, moveBookToBookshelf)
@@ -46,7 +50,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
 
             // Insert new book information into database
             val newBookID = book.insertBook(mainViewModel)
-            book.insertElements(newBookID, mainViewModel)
+            book.insertElements(newBookID, mainViewModel, _progressInsertPercentage)
         }
     }
 

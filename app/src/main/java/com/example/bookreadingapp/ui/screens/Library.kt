@@ -27,6 +27,7 @@ fun Library(
     libraryBooks: List<Book>,
     moveBookToBookshelf: (Book) -> Unit,
     progressPercentage: State<Int>,
+    progressInsertPercentage: State<Int>,
     isDownloading: State<Boolean>,
     setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit) -> Unit,
     setBookDownloading: (Int, Boolean) -> Unit,
@@ -49,7 +50,8 @@ fun Library(
             // Display progress message if download or unzip is ongoing
             if (isDownloading.value) {
                 ProgressMessage(
-                    progress = progressPercentage.value
+                    progress = progressPercentage.value,
+                    progressInsert = progressInsertPercentage.value
                 )
             }
         }
