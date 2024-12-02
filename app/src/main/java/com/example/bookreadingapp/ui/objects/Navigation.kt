@@ -103,6 +103,7 @@ fun NavigationHost(
         composable(Routes.ContentTable.route) {
             ContentTable(
                 book = viewModel.selectedBook,
+                mainViewModel = mainViewModel,
                 navigateToSearch =  { navController.navigate(Routes.Search.route) },
                 navigateToReading =  { navController.navigate(Routes.Reading.route) }
             )

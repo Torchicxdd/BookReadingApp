@@ -124,6 +124,7 @@ class Book (
                 )
                 elementPosition ++
             }
+            // This thing is not working
             // Insert images
             if (e.contains("<img>-PLACEHOLDER src=\"")) {
                 val imgSrc = e.substringAfter("src=\"").substringBefore("\"")

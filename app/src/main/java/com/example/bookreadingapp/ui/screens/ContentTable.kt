@@ -20,6 +20,7 @@ import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.GoToReadingButton
 import com.example.bookreadingapp.ui.utils.GoToSearchButton
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 /**
  * Table of contents page
@@ -29,6 +30,7 @@ import com.example.bookreadingapp.ui.utils.GoToSearchButton
 @Composable
 fun ContentTable(
     book: Book?,
+    mainViewModel: MainViewModel,
     navigateToSearch: () -> Unit,
     navigateToReading: () -> Unit,
 ) {
