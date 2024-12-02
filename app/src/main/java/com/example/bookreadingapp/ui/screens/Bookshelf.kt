@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
@@ -25,7 +24,6 @@ import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 // Main composable function for the bookshelf screen
 @Composable
 fun Bookshelf(
-    bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
@@ -40,9 +38,15 @@ fun Bookshelf(
             setBookDownloading(book.arrayIndex, false)
         }
     }
+    // Converts Books entity into Book objects
+    val convertedBooks = downloadBooks.mapIndexed() { i, b ->
+        Book(imageResourceId = b.coverImage.toInt(),
+            title = b.title.toInt(),
+            arrayIndex = i )
+    }
 
     BooksAvailable(
-        books = downloadBooks,
+        books = convertedBooks,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()
@@ -77,7 +81,7 @@ fun NoBooksAvailableMessage(){
 // Composable function to display the available books in a grid layout
 @Composable
 fun BooksAvailable(
-    books: List<Books>,
+    books: List<Book>,
     onBookClick: (Book) -> Unit,
     isDownloading: Boolean,
     progressPercentage: Int,
