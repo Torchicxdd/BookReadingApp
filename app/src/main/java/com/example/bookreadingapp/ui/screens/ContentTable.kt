@@ -34,6 +34,7 @@ fun ContentTable(
     navigateToSearch: () -> Unit,
     navigateToReading: () -> Unit,
 ) {
+//    mainViewModel.chapterViewModel.getChaptersByBookId()
     Column(
         modifier = Modifier
             .fillMaxSize()
