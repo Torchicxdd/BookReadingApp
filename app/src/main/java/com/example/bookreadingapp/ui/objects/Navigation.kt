@@ -77,7 +77,7 @@ fun NavigationHost(
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
                 setupDownload = downloadViewModel::setupDownload,
                 setBookDownloading = viewModel::setBookDownloading,
-                downloadingBooks = viewModel.downloadingBooks
+                downloadingBooks = viewModel.downloadingBooks,
                 mainViewModel = mainViewModel
             )
         }
