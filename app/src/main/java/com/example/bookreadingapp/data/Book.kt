@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.data
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.bookreadingapp.R
@@ -40,7 +41,7 @@ class Book (
     private fun parseElement(element: Element, elements: MutableList<String>) {
         when (element.tagName()) {
             // Mark where images are
-            "img" -> elements.add("<img>-PLACEHOLDER")
+            "img" -> elements.add("<img>-PLACEHOLDER src=\"" + element.attr("src") + "\"")
             // Mark where paragraphs begin and end
             "p" -> {
                 elements.add("<p>-Start" + element.text())
@@ -99,6 +100,7 @@ class Book (
         var elementPosition = 0
 
         for (e in elements) {
+            Log.d("long message", e)
             // Insert chapters
             if (e.contains("<h2>-Start")) {
                 // Reset element positions to zero at the start of every chapter
@@ -123,12 +125,22 @@ class Book (
                 elementPosition ++
             }
             // Insert images
-            if (e.contains("<img>-PLACEHOLDER")) {
-                mainViewModel.imageViewModel.insertImage(
-                    Image(e, elementPosition)
-                )
-                elementPosition ++
+            if (e.contains("<img>-PLACEHOLDER src=\"")) {
+                val imgSrc = e.substringAfter("src=\"").substringBefore("\"")
+                val validImgSrc = imgSrc.trim()
+                if (validImgSrc.isNotEmpty()) {
+                    val imgPathWithPrefix = "./$validImgSrc"
+                    val img = Image(imgPathWithPrefix, elementPosition)
+                    Log.e("Image Parsing", "Image URI: ${img.uri}")
+                    mainViewModel.imageViewModel.insertImage(img)
+                    elementPosition++
+                } else {
+                    Log.e("Image Parsing", "Image src is empty or invalid at position $elementPosition")
+                }
+            } else {
+                Log.e("Image Parsing", "Didn't even start first if")
             }
+
         }
     }
 }
