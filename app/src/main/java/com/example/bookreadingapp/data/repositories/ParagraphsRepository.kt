@@ -2,6 +2,7 @@ package com.example.bookreadingapp.data.repositories
 
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.ParagraphDao
+import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -41,6 +42,17 @@ class ParagraphsRepository(private val paragraphDao: ParagraphDao) {
             searchResults.value = asyncFindParagraphByChapterId(chapterId).await()
         }
     }
+
+    fun findParagraphsInAscOrder(chapterId: Int) {
+        coroutineScope.launch(Dispatchers.Main) {
+            searchResults.value = asyncFindParagraphsInAscOrder(chapterId).await()
+        }
+    }
+
+    private fun asyncFindParagraphsInAscOrder(chapterId: Int) : Deferred<List<Paragraphs>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async paragraphDao.findParagraphsInAscOrder(chapterId)
+        }
 
     private fun asyncFindParagraphByChapterId(chapterId: Int) : Deferred<List<Paragraphs>?> =
         coroutineScope.async(Dispatchers.IO) {
