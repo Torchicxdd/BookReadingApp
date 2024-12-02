@@ -25,6 +25,9 @@ class MainActivity : ComponentActivity() {
     private val bookViewModel: BookViewModel by viewModels {
         AppViewModelFactory(this.application)
     }
+    private val mainViewModel: MainViewModel by viewModels {
+        AppViewModelFactory(this.application)
+    }
 
     @ExperimentalMaterial3WindowSizeClassApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 BookReadingApp(
                     windowSize = windowSize.widthSizeClass,
                     downloadViewModel = downloadViewModel,
-                    bookViewModel = bookViewModel
+                    bookViewModel = mainViewModel.bookViewModel
                 )
             }
         }
