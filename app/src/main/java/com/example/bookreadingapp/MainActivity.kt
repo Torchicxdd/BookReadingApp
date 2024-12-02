@@ -15,6 +15,7 @@ import com.example.bookreadingapp.ui.viewmodels.DownloadViewModelFactory
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.ui.viewmodels.AppViewModelFactory
 import com.example.bookreadingapp.ui.viewmodels.BookViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -22,6 +23,9 @@ class MainActivity : ComponentActivity() {
         DownloadViewModelFactory(this.applicationContext)
     }
     private val bookViewModel: BookViewModel by viewModels {
+        AppViewModelFactory(this.application)
+    }
+    private val mainViewModel: MainViewModel by viewModels {
         AppViewModelFactory(this.application)
     }
 
@@ -35,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 BookReadingApp(
                     windowSize = windowSize.widthSizeClass,
                     downloadViewModel = downloadViewModel,
-                    bookViewModel = bookViewModel
+                    bookViewModel = mainViewModel.bookViewModel
                 )
             }
         }
