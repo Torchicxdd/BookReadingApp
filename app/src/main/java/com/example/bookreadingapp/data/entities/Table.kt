@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 class Table {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "tableId")
-    var id: Int = 0
+    var id: Long = 0
 
     var chapterId: Int = 0
 

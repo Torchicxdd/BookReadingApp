@@ -119,8 +119,8 @@ class Book (
         }
     }
 
-    fun insertBook(mainViewModel: MainViewModel) {
-        mainViewModel.bookViewModel.insertBook(
+    suspend fun insertBook(mainViewModel: MainViewModel): Long {
+        val newBookID = mainViewModel.bookViewModel.insertBook(
             Books(
                 title.toString(), "AUTHOR_HERE", imageResourceId.toString()
             )

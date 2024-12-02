@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
 class Paragraphs {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "paragraphId")
-    var id: Int = 0
+    var id: Long = 0
 
     var chapterId: Int = 0
 
@@ -30,6 +30,7 @@ class Paragraphs {
     var text: String = ""
 
     constructor()
+
     constructor(text: String, chapterId: Int, position: Int) {
         this.text = text
         this.chapterId = chapterId
