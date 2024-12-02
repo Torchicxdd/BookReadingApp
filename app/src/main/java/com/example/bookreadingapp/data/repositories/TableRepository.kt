@@ -14,7 +14,7 @@ class TableRepository(private val tableDao: TableDao) {
     val searchResults = MutableLiveData<List<Table>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertTable(newTable: Table) {
+    suspend fun insertTable(newTable: Table) {
         coroutineScope.launch(Dispatchers.IO) {
             tableDao.insertTable(newTable)
         }

@@ -113,17 +113,20 @@ class Book (
     suspend fun insertChapters(newBookID: Long, mainViewModel: MainViewModel) {
         val elements = parseHtml(readHtmlFile())
         var chapterPosition = 1;
+        var elementPosition = 0;
 
         // Insert chapters into database
         for (e in elements) {
             if (e.contains("<h2>-Start")) {
+                // Reset element positions to zero at the start of every chapter
+                elementPosition = 0
                 mainViewModel.chapterViewModel.insertChapter(
                     Chapters(e.replace("<h2>-Start", ""), chapterPosition, newBookID)
                 )
                 chapterPosition ++
             }
             if (e.contains("<table>-Start")) {
-                Log.i("Table", e)
+                mainViewModel
             }
         }
     }

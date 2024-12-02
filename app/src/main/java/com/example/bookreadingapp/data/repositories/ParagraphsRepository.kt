@@ -14,7 +14,7 @@ class ParagraphsRepository(private val paragraphDao: ParagraphDao) {
     val searchResults = MutableLiveData<List<Paragraphs>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertParagraph(newParagraph: Paragraphs) {
+    suspend fun insertParagraph(newParagraph: Paragraphs) {
         coroutineScope.launch(Dispatchers.IO) {
             paragraphDao.insertParagraph(newParagraph)
         }

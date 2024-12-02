@@ -13,7 +13,7 @@ class ImageRepository(private val imageDao: ImageDao) {
     val searchResults = MutableLiveData<List<Image>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertImage(newImage: Image) {
+    suspend fun insertImage(newImage: Image) {
         coroutineScope.launch(Dispatchers.IO) {
             imageDao.insertImage(newImage)
         }

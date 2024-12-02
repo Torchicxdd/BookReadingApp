@@ -19,7 +19,7 @@ class TableViewModel(application: Application) : ViewModel() {
         searchedResults = repository.searchResults
     }
 
-    fun insertTable(table: Table) {
+    suspend fun insertTable(table: Table) {
         repository.insertTable(table)
     }
 

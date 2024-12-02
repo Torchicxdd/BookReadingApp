@@ -8,7 +8,7 @@ import androidx.room.Query
 @Dao
 interface ParagraphDao {
     @Insert
-    fun insertParagraph(paragraph: Paragraphs)
+    suspend fun insertParagraph(paragraph: Paragraphs)
 
     @Query("SELECT * FROM paragraphs WHERE paragraphId = :id")
     fun findParagraphById(id: Int): List<Paragraphs>
