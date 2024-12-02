@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 class Image {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "imageId")
-    var id: Int = 0
+    var id: Long = 0
 
     var chapterId: Long = 0
 

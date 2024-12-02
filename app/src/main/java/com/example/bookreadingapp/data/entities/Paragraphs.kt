@@ -22,7 +22,7 @@ class Paragraphs {
     @ColumnInfo(name = "paragraphId")
     var id: Long = 0
 
-    var chapterId: Int = 0
+    var chapterId: Long = 0
 
     @ColumnInfo(name="paragraphPosition")
     var position: Int = 0
@@ -31,7 +31,7 @@ class Paragraphs {
 
     constructor()
 
-    constructor(text: String, chapterId: Int, position: Int) {
+    constructor(text: String, chapterId: Long, position: Int) {
         this.text = text
         this.chapterId = chapterId
         this.position = position

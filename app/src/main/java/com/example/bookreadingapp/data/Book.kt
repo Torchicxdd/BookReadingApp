@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.entities.Chapters
+import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
@@ -114,6 +115,7 @@ class Book (
 
     suspend fun insertElements(newBookID: Long, mainViewModel: MainViewModel) {
         val elements = parseHtml(readHtmlFile())
+        var currentChapterID: Long = 0;
         var chapterPosition = 1;
         var elementPosition = 0;
 
@@ -122,7 +124,7 @@ class Book (
             if (e.contains("<h2>-Start")) {
                 // Reset element positions to zero at the start of every chapter
                 elementPosition = 0
-                mainViewModel.chapterViewModel.insertChapter(
+                currentChapterID = mainViewModel.chapterViewModel.insertChapter(
                     Chapters(e.replace("<h2>-Start", ""), chapterPosition, newBookID)
                 )
                 chapterPosition ++
@@ -130,14 +132,21 @@ class Book (
             // Insert tables
             if (e.contains("<table>-Start")) {
                 mainViewModel.tableViewModel.insertTable(
-                    Table(e.replace("<table>-Start", ""), chapterPosition, elementPosition)
+                    Table(e.replace("<table>-Start", ""), currentChapterID, elementPosition)
                 )
                 elementPosition ++
             }
             // Insert paragraphs
             if (e.contains("<p>-Start")) {
                 mainViewModel.paragraphViewModel.insertParagraph(
-                    Paragraphs(e.replace("<p>-Start", ""), chapterPosition, elementPosition)
+                    Paragraphs(e.replace("<p>-Start", ""), currentChapterID, elementPosition)
+                )
+                elementPosition ++
+            }
+            // Insert images
+            if (e.contains("<img>-PLACEHOLDER")) {
+                mainViewModel.imageViewModel.insertImage(
+                    Image(e.replace("<img>-PLACEHOLDER", ""), elementPosition)
                 )
                 elementPosition ++
             }

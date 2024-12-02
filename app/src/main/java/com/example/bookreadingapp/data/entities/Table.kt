@@ -21,7 +21,7 @@ class Table {
     @ColumnInfo(name = "tableId")
     var id: Long = 0
 
-    var chapterId: Int = 0
+    var chapterId: Long = 0
 
     @ColumnInfo(name = "tablePosition")
     var position: Int = 0
@@ -29,7 +29,7 @@ class Table {
     var content: String = ""
 
     constructor()
-    constructor(content: String, chapterId: Int, position: Int) {
+    constructor(content: String, chapterId: Long, position: Int) {
         this.content = content
         this.chapterId = chapterId
         this.position = position
