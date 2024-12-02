@@ -1,21 +1,16 @@
 package com.example.bookreadingapp.data
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.entities.Chapters
-import com.example.bookreadingapp.ui.viewmodels.BookViewModel
-import com.example.bookreadingapp.ui.viewmodels.ChapterViewModel
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import java.io.File
 
 class Book (
@@ -144,7 +139,7 @@ class Book (
                     val chapter = Chapters(
                         title = e.replace("<h2>-Start", ""),
                         position = chapterPosition,
-                        bookId = 0
+                        bookId = 1
                     )
                     mainViewModel.chapterViewModel.insertChapter(chapter)
                     chapterPosition++

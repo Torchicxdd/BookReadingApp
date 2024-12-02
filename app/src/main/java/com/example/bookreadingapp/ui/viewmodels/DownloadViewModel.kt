@@ -1,10 +1,6 @@
 package com.example.bookreadingapp.ui.viewmodels
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +9,6 @@ import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.download.FileDownload
 import com.example.bookreadingapp.data.entities.Books
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -53,8 +48,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             _isDownloading.value = false
             updateDirectoryContents("")
 
-            book.insertBook(mainViewModel)
-            book.insertChapters(mainViewModel)
+//            book.insertChapters(mainViewModel)
         }
     }
 

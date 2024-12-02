@@ -11,7 +11,7 @@ interface ChaptersDao {
 
     // Insert a new chapter
     @Insert
-    fun insertChapter(chapter: Chapters)
+    suspend fun insertChapter(chapter: Chapters)
 
     // Insert multiple chapters at once
     @Insert
