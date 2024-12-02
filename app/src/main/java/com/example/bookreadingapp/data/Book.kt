@@ -83,23 +83,6 @@ class Book (
         elements.add(table.toString())
     }
 
-    // Parsing used if we're using WebView display for tables
-    private fun parseTableWebView(element: Element, elements: MutableList<String>) {
-        val table = StringBuilder()
-        table.append("<table>")
-        element.select("tr").forEach { row ->
-            table.append("<tr>")
-            row.select("td, th").forEach { data ->
-                table.append("<").append(data.tagName()).append(">")
-                table.append(data.text())
-                table.append("</").append(data.tagName()).append(">")
-            }
-            table.append("</tr>")
-        }
-        table.append("</table>")
-        elements.add(table.toString())
-    }
-
     suspend fun insertBook(mainViewModel: MainViewModel): Long {
         val newBookID = mainViewModel.bookViewModel.insertBook(
             Books(
