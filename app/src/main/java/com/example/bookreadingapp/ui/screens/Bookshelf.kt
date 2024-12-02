@@ -8,14 +8,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 // Main composable function for the bookshelf screen
 @Composable
@@ -24,10 +28,13 @@ fun Bookshelf(
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
-    isDownloading: State<Boolean>
+    isDownloading: State<Boolean>,
+    mainViewModel: MainViewModel
 ) {
+    val downloadBooks by mainViewModel.bookViewModel.allBooks.observeAsState(emptyList())
+
     BooksAvailable(
-        books = bookshelfBooks,
+        books = downloadBooks,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()
@@ -58,7 +65,7 @@ fun NoBooksAvailableMessage(){
 // Composable function to display the available books in a grid layout
 @Composable
 fun BooksAvailable(
-    books: List<Book>,
+    books: List<Books>,
     onBookClick: (Book) -> Unit,
     isDownloading: Boolean,
     progressPercentage: Int
