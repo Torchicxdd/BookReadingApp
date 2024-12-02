@@ -100,25 +100,6 @@ class Book (
         elements.add(table.toString())
     }
 
-    fun exampleHtmlParsing() {
-        val elements = parseHtml(readHtmlFile())
-        var insideTable = true
-
-        // Table elements located between "<table>-Start" & "<table>-End"
-        for (element in elements) {
-            if(element.contains("<table>-Start")) {
-                insideTable = true
-            }
-            if (element.contains("<table>-End")) {
-                Log.i("HtmlParser", element)
-                insideTable = false
-            }
-            if(insideTable) {
-                Log.i("HtmlParser", element)
-            }
-        }
-    }
-
     suspend fun insertBook(mainViewModel: MainViewModel): Long {
         val newBookID = mainViewModel.bookViewModel.insertBook(
             Books(
@@ -133,17 +114,12 @@ class Book (
         var chapterPosition = 1;
 
         // Insert chapters into database
-        mainViewModel.viewModelScope.launch {
-            for (e in elements) {
-                if (e.contains("<h2>-Start")) {
-                    val chapter = Chapters(
-                        title = e.replace("<h2>-Start", ""),
-                        position = chapterPosition,
-                        bookId = 1
-                    )
-                    mainViewModel.chapterViewModel.insertChapter(chapter)
-                    chapterPosition++
-                }
+        for (e in elements) {
+            if (e.contains("<h2>-Start")) {
+                mainViewModel.chapterViewModel.insertChapter(
+                    Chapters(e.replace("<h2>-Start", ""), chapterPosition, newBookID)
+                )
+                chapterPosition ++
             }
         }
     }
