@@ -5,9 +5,17 @@ import androidx.annotation.StringRes
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.entities.Books
+import com.example.bookreadingapp.data.entities.Chapters
 import com.example.bookreadingapp.ui.viewmodels.BookViewModel
+import com.example.bookreadingapp.ui.viewmodels.ChapterViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 class Book (
@@ -86,14 +94,31 @@ class Book (
         }
     }
 
-    fun insertElementsIntoTables(bookViewModel: BookViewModel) {
-        if(!inserted) {
-            bookViewModel.insertBook(
-                Books(
-                    title.toString(), "AUTHOR_HERE", imageResourceId.toString()
-                )
+    fun insertBook(mainViewModel: MainViewModel) {
+        mainViewModel.bookViewModel.insertBook(
+            Books(
+                title.toString(), "AUTHOR_HERE", imageResourceId.toString()
             )
-            inserted = true;
+        )
+    }
+//
+    fun insertChapters(mainViewModel: MainViewModel) {
+        val elements = parseHtml(readHtmlFile())
+        var chapterPosition = 1;
+
+        // Insert chapters into database
+        mainViewModel.viewModelScope.launch {
+            for (e in elements) {
+                if (e.contains("<h2>-Start")) {
+                    val chapter = Chapters(
+                        title = e.replace("<h2>-Start", ""),
+                        position = chapterPosition,
+                        bookId = 0
+                    )
+                    mainViewModel.chapterViewModel.insertChapter(chapter)
+                    chapterPosition++
+                }
+            }
         }
     }
 }
