@@ -39,7 +39,7 @@ fun Bookshelf(
         },
         isDownloading.value,
         progressPercentage.value,
-        isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == true  },
+        isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == false  },
         disableClicks = false
     )
 }
@@ -102,7 +102,7 @@ fun BooksAvailable(
             libraryBooks = books,
             onBookClick = onBookClick,
             isBookDownloading = isBookDownloading,
-            disableAllClicks = true
+            disableAllClicks = disableClicks
         )
     }
 }
