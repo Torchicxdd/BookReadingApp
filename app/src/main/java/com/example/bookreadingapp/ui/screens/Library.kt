@@ -29,7 +29,7 @@ fun Library(
     isDownloading: State<Boolean>,
     setupDownload: (String, String, Book, (Book) -> Unit) -> Unit,
     setBookDownloading: (Int, Boolean) -> Unit,
-    downloadingBooks: State<Map<Int, Boolean>>
+    downloadingBooks: MutableMap<Int, Boolean>
 ) {
     val urlList = stringArrayResource(R.array.download)
 
@@ -61,7 +61,7 @@ fun Library(
                 libraryBooks = libraryBooks,
                 onBookClick = { book ->
                     // Only start download if the book is not already being downloaded
-                    val isDownloadingBook = downloadingBooks.value[book.arrayIndex] == true
+                    val isDownloadingBook = downloadingBooks[book.arrayIndex] == true
                     if (!isDownloadingBook && !isDownloading.value) {
                         val url = urlList[book.arrayIndex]
                         setupDownload(
@@ -76,7 +76,7 @@ fun Library(
                     }
                 },
                 isBookDownloading = { book ->
-                    downloadingBooks.value[book.arrayIndex] == true
+                    downloadingBooks[book.arrayIndex] == true
                 },
                 // Disable clicks if any book is downloading
                 disableAllClicks = isDownloading.value
