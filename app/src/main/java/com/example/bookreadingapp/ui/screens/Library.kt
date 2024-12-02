@@ -37,9 +37,6 @@ fun Library(
 ) {
     val urlList = stringArrayResource(R.array.download)
 
-    // State to track if any book is downloading
-    val isAnyBookDownloading = libraryBooks.any { downloadingBooks.value[it.arrayIndex] == true }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +66,7 @@ fun Library(
                 onBookClick = { book ->
                     // Only start download if the book is not already being downloaded
                     val isDownloadingBook = downloadingBooks.value[book.arrayIndex] == true
-                    if (!isDownloadingBook && !isAnyBookDownloading) {
+                    if (!isDownloadingBook && !isDownloading.value) {
                         val url = urlList[book.arrayIndex]
                         setupDownload(
                             url,
@@ -85,7 +82,7 @@ fun Library(
                 isBookDownloading = { book ->
                     downloadingBooks.value[book.arrayIndex] == true
                 },
-                disableAllClicks = isAnyBookDownloading // Disable clicks if any book is downloading
+                disableAllClicks = isDownloading.value // Disable clicks if any book is downloading
             )
         }
     }

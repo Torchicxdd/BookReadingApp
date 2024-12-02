@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,6 +72,9 @@ fun BooksAvailable(
     isBookDownloading: (Book) -> Boolean,
     disableClicks: Boolean
 ) {
+    LaunchedEffect(disableClicks) {
+        Log.d("DisplayBookList", "disableAllClicks in Bookshelf: $disableClicks")
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +102,7 @@ fun BooksAvailable(
             libraryBooks = books,
             onBookClick = onBookClick,
             isBookDownloading = isBookDownloading,
-            disableAllClicks = disableClicks
+            disableAllClicks = true
         )
     }
 }
