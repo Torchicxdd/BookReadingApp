@@ -9,6 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -28,7 +30,9 @@ fun Library(
     moveBookToBookshelf: (Book) -> Unit,
     progressPercentage: State<Int>,
     isDownloading: State<Boolean>,
-    setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit ) -> Unit,
+    setupDownload: (String, String, Book, (Book) -> Unit ) -> Unit,
+    setBookDownloading: (Int, Boolean) -> Unit,
+    downloadingBooks: State<Map<Int, Boolean>>
     mainViewModel: MainViewModel
 ) {
     val urlList = stringArrayResource(R.array.download)
@@ -60,17 +64,24 @@ fun Library(
             DisplayBookList(
                 libraryBooks = libraryBooks,
                 onBookClick = { book ->
-                    // Starts downloading only if this book is not already being downloaded
-                    //viewModel.updateCurrentDownloadingBook(book)
-                    val url = urlList[book.arrayIndex]
-                    setupDownload(
-                        url,
-                        "${url.substringAfterLast("/").replace(".zip", "")}-dir",
-                        book,
-                        mainViewModel,
-                        moveBookToBookshelf
-                    )
-                }
+                    // Only start download if the book is not already being downloaded
+                    val isDownloadingBook = downloadingBooks.value[book.arrayIndex] == true
+                    if (!isDownloadingBook) {
+                        val url = urlList[book.arrayIndex]
+                        setupDownload(
+                            url,
+                            "${url.substringAfterLast("/").replace(".zip", "")}-dir",
+                            book,
+                            mainViewModel,
+                            moveBookToBookshelf
+                        )
+
+                        // Mark this book as downloading
+                        setBookDownloading(book.arrayIndex, true)
+                    }
+                },
+                // Pass download state for each book
+                isBookDownloading = { book -> downloadingBooks.value[book.arrayIndex] == true }
             )
         }
     }
