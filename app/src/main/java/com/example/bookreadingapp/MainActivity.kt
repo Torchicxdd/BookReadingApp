@@ -15,11 +15,16 @@ import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModelFactory
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.ui.viewmodels.AppViewModelFactory
+import com.example.bookreadingapp.ui.viewmodels.BookViewModel
 
 
 class MainActivity : ComponentActivity() {
     private val downloadViewModel: DownloadViewModel by viewModels {
         DownloadViewModelFactory(this.applicationContext)
+    }
+    private val bookViewModel: BookViewModel by viewModels {
+        AppViewModelFactory(this.application)
     }
 
     @ExperimentalMaterial3WindowSizeClassApi
@@ -31,7 +36,8 @@ class MainActivity : ComponentActivity() {
                 val windowSize = calculateWindowSizeClass(this)
                 BookReadingApp(
                     windowSize = windowSize.widthSizeClass,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    bookViewModel = bookViewModel
                 )
             }
         }
@@ -46,9 +52,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ReadingPreview() {
     BookReadingAppTheme {
-        BookReadingApp(
-            windowSize = WindowWidthSizeClass.Expanded,
-            downloadViewModel = viewModel()
-        )
+//        BookReadingApp(
+//            windowSize = WindowWidthSizeClass.Expanded,
+//            downloadViewModel = viewModel()
+//        )
     }
 }
