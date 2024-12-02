@@ -22,9 +22,6 @@ class MainActivity : ComponentActivity() {
     private val downloadViewModel: DownloadViewModel by viewModels {
         DownloadViewModelFactory(this.applicationContext)
     }
-    private val bookViewModel: BookViewModel by viewModels {
-        AppViewModelFactory(this.application)
-    }
     private val mainViewModel: MainViewModel by viewModels {
         AppViewModelFactory(this.application)
     }
@@ -39,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 BookReadingApp(
                     windowSize = windowSize.widthSizeClass,
                     downloadViewModel = downloadViewModel,
-                    bookViewModel = mainViewModel.bookViewModel
+                    mainViewModel = mainViewModel
                 )
             }
         }

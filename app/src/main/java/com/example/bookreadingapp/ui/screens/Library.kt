@@ -74,7 +74,6 @@ fun Library(
                         mainViewModel,
                         moveBookToBookshelf
                     )
-                    book.insertElementsIntoTables(bookViewModel = bookViewModel)
                 }
             )
         }
