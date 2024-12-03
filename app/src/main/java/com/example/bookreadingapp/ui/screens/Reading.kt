@@ -125,18 +125,27 @@ private fun createStringList(
     var elementPosition = 0
     val stringList: MutableList<String> = mutableListOf()
 
+    if (elementSize == 0) {
+        stringList.add("No Text")
+        return stringList
+    }
+
+    // Create a string list of all texts to be displayed
     while(elementPosition < elementSize) {
         if (paragraphList.isNotEmpty() &&
+            paragraphPosition < paragraphList.size &&
             paragraphList[paragraphPosition].position == elementPosition) {
             stringList.add(paragraphList[paragraphPosition].text)
             paragraphPosition++
         }
         if (tableList.isNotEmpty() &&
+            tablePosition < tableList.size &&
             tableList[tablePosition].position == elementPosition) {
             stringList.add(tableList[tablePosition].content)
             tablePosition++
         }
         if (imageList.isNotEmpty() &&
+            imagePosition < imageList.size &&
             imageList[imagePosition].position == elementPosition) {
             stringList.add(imageList[imagePosition].uri)
             imagePosition++
