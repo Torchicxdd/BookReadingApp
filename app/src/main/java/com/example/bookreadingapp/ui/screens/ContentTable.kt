@@ -43,7 +43,7 @@ fun ContentTable(
     navigateToReading: () -> Unit,
 ) {
     // Observe search results in viewmodel
-    val searchChapterResults by mainViewModel.chapterViewModel.allChapters.observeAsState(listOf())
+    val searchChapterResults by mainViewModel.chapterViewModel.searchResults.observeAsState(listOf())
     val chapterViewModel = mainViewModel.chapterViewModel
     if (book != null) {
         chapterViewModel.getChaptersByBookId(book.bookID)
