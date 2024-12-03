@@ -2,6 +2,11 @@ package com.example.bookreadingapp.ui.objects
 
 import NavBarItems
 import android.content.Context
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -65,8 +70,11 @@ fun NavigationHost(
     downloadViewModel: DownloadViewModel,
     mainViewModel: MainViewModel
 ) {
-    NavHost(navController = navController,
-        startDestination = Routes.Home.route
+    NavHost(
+        navController = navController,
+        startDestination = Routes.Home.route,
+        enterTransition = { fadeIn(animationSpec = tween(durationMillis = 100)) },
+        exitTransition = { fadeOut(animationSpec = tween(durationMillis = 100)) }
     ) {
         composable(Routes.Home.route) {
             Home()

@@ -107,7 +107,8 @@ fun TableOfContentsHeader(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium)),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
