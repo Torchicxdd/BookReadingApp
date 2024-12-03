@@ -57,11 +57,14 @@ fun ContentTable(
     mainViewModel: MainViewModel,
     navigateToSearch: () -> Unit,
     navigateToReading: (Long) -> Unit,
+    setMaxChapter: (Int) -> Unit
 ) {
     // Observe search results in viewmodel
     val searchChapterResults by mainViewModel.chapterViewModel.searchResults.observeAsState(listOf())
     if (book != null) {
         mainViewModel.chapterViewModel.getChaptersByBookId(book.bookID)
+        // Set max chapter in regular viewmodel
+        setMaxChapter(searchChapterResults.size)
     }
 
     Column(
