@@ -131,6 +131,7 @@ fun NavigationHost(
                 toggleReadingMode = { viewModel.readingMode = !viewModel.readingMode },
                 currentChapterId = navBackStack.arguments?.getLong("chapterId"),
                 changeChapter = {chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId")},
+                viewModel = viewModel,
                 mainViewModel = mainViewModel
             )
         }

@@ -43,6 +43,7 @@ import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.utils.BookCover
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
@@ -56,6 +57,7 @@ fun Reading(
     toggleReadingMode: () -> Unit,
     currentChapterId: Long?,
     changeChapter: (Long) -> Unit,
+    viewModel: AppViewModel,
     mainViewModel: MainViewModel
 ) {
     // Query paragraphs, tables and images in current chapter
@@ -105,6 +107,8 @@ fun Reading(
         // Display the chapter navigation only if not in reading mode
         if (!readingMode) {
             ChapterNavigation(
+                currentChapterId = currentChapterId,
+                currentChapterList = viewModel.currentBookChapterList,
                 changeChapter = changeChapter,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -187,6 +191,8 @@ fun BookDisplay(
  */
 @Composable
 fun ChapterNavigation(
+    currentChapterId: Long?,
+    currentChapterList: List<Long>,
     changeChapter: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -199,7 +205,12 @@ fun ChapterNavigation(
     ){
         Button(
             onClick = {
-                changeChapter(1)
+                if (currentChapterId != null) {
+                    val previousChapter = currentChapterId - 1
+                    if (currentChapterList.contains(previousChapter)) {
+                        changeChapter(previousChapter)
+                    }
+                }
             },
         ){
             Text(
@@ -210,7 +221,12 @@ fun ChapterNavigation(
 
         Button(
             onClick = {
-                changeChapter(10)
+                if (currentChapterId != null) {
+                    val nextChapter = currentChapterId + 1
+                    if (currentChapterList.contains(nextChapter)) {
+                        changeChapter(nextChapter)
+                    }
+                }
             },
         ){
             Text(
