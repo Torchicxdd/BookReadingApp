@@ -117,6 +117,7 @@ fun DisplayBookList(
     isBookDownloading: (Book) -> Boolean,
     disableAllClicks: Boolean
 ) {
+    Log.d("DisplayBookList", "disableAllClicks: $disableAllClicks")
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
