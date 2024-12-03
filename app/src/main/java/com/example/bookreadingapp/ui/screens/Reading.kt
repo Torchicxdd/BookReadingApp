@@ -1,16 +1,9 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,15 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,12 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -54,15 +37,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.ui.BookReadingApp
-import com.example.bookreadingapp.ui.extensions.detectedTapWithoutSwipe
-import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.data.entities.Image
+import com.example.bookreadingapp.data.entities.Paragraphs
+import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.utils.BookCover
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
-import java.io.File
 
 
 /**
@@ -85,33 +66,7 @@ fun Reading(
     val searchTablesResult by mainViewModel.tableViewModel.searchedResults.observeAsState(listOf())
     val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
 
-    var paragraphPosition = 0
-    var tablePosition = 0
-    var imagePosition = 0
-
-    val elementSize = searchParagraphsResult.size + searchTablesResult.size + searchImagesResult.size
-    var elementPosition = 0
-
-    val stringList: MutableList<String> = mutableListOf()
-
-    while(elementPosition < elementSize) {
-        if (searchParagraphsResult.isNotEmpty() &&
-            searchParagraphsResult[paragraphPosition].position == elementPosition) {
-            stringList.add(searchParagraphsResult[paragraphPosition].text)
-            paragraphPosition++
-        }
-        if (searchTablesResult.isNotEmpty() &&
-            searchTablesResult[tablePosition].position == elementPosition) {
-            stringList.add(searchTablesResult[tablePosition].content)
-            tablePosition++
-        }
-        if (searchImagesResult.isNotEmpty() &&
-            searchImagesResult[imagePosition].position == elementPosition) {
-            stringList.add(searchImagesResult[imagePosition].uri)
-            imagePosition++
-        }
-        elementPosition++
-    }
+    val stringList = createStringList(searchParagraphsResult, searchTablesResult, searchImagesResult)
 
     Box(
         modifier = Modifier
@@ -153,6 +108,41 @@ fun Reading(
             )
         }
     }
+}
+
+private fun createStringList(
+    paragraphList: List<Paragraphs>,
+    tableList: List<Table>,
+    imageList: List<Image>
+): List<String> {
+    var paragraphPosition = 0
+    var tablePosition = 0
+    var imagePosition = 0
+
+    val elementSize = paragraphList.size + tableList.size + imageList.size
+    var elementPosition = 0
+    val stringList: MutableList<String> = mutableListOf()
+
+    while(elementPosition < elementSize) {
+        if (paragraphList.isNotEmpty() &&
+            paragraphList[paragraphPosition].position == elementPosition) {
+            stringList.add(paragraphList[paragraphPosition].text)
+            paragraphPosition++
+        }
+        if (tableList.isNotEmpty() &&
+            tableList[tablePosition].position == elementPosition) {
+            stringList.add(tableList[tablePosition].content)
+            tablePosition++
+        }
+        if (imageList.isNotEmpty() &&
+            imageList[imagePosition].position == elementPosition) {
+            stringList.add(imageList[imagePosition].uri)
+            imagePosition++
+        }
+        elementPosition++
+    }
+
+    return stringList
 }
 
 /**
