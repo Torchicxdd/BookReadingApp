@@ -69,7 +69,8 @@ fun Reading(
     changeChapter: (Long) -> Unit,
     viewModel: AppViewModel,
     mainViewModel: MainViewModel,
-    createPages: (List<String>, TextMeasurer, Float, Dp, TextUnit, Density) -> List<List<String>>
+    createPages: (List<String>, TextMeasurer, Float, Dp, TextUnit, Density) -> List<List<String>>,
+    createStringList: (List<Paragraphs>, List<Table>, List<Image>) -> List<String>
 ) {
     // Query paragraphs, tables and images in current chapter
     if (currentChapterId != null) {
@@ -96,22 +97,6 @@ fun Reading(
             .testTag("reading_screen")
     ) {
         val boxWithConstraintsScope = this
-//        Column(
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .testTag("reading_screen")
-//        ) {
-//            Text(
-//                text = stringResource(R.string.reading),
-//                style = MaterialTheme.typography.displayLarge
-//            )
-//            PageScrollLazyColumn(
-//                book = book,
-//                textList = stringList
-//            )
-//        }
-//        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
         ChapterDisplay(
             paragraphs = stringList,
             width = boxWithConstraintsScope.maxWidth,
@@ -193,74 +178,6 @@ fun PageDisplay(
     }
 }
 
-private fun createStringList(
-    paragraphList: List<Paragraphs>,
-    tableList: List<Table>,
-    imageList: List<Image>
-): List<String> {
-    var paragraphPosition = 0
-    var tablePosition = 0
-    var imagePosition = 0
-
-    val elementSize = paragraphList.size + tableList.size + imageList.size
-    var elementPosition = 0
-    val stringList: MutableList<String> = mutableListOf()
-
-    if (elementSize == 0) {
-        stringList.add("No Text")
-        return stringList
-    }
-
-    // Create a string list of all texts to be displayed
-    while(elementPosition < elementSize) {
-        if (paragraphList.isNotEmpty() &&
-            paragraphPosition < paragraphList.size &&
-            paragraphList[paragraphPosition].position == elementPosition) {
-            stringList.add(paragraphList[paragraphPosition].text)
-            paragraphPosition++
-        }
-        if (tableList.isNotEmpty() &&
-            tablePosition < tableList.size &&
-            tableList[tablePosition].position == elementPosition) {
-            stringList.add(tableList[tablePosition].content)
-            tablePosition++
-        }
-        if (imageList.isNotEmpty() &&
-            imagePosition < imageList.size &&
-            imageList[imagePosition].position == elementPosition) {
-            stringList.add(imageList[imagePosition].uri)
-            imagePosition++
-        }
-        elementPosition++
-    }
-
-    return stringList
-}
-
-/**
- * Book display on the reading screen
- */
-@Composable
-fun BookDisplay(
-    @DrawableRes imageResourceId: Int,
-    @StringRes titleResourceId: Int,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier.padding(dimensionResource(R.dimen.padding_small))
-    ) {
-        BookCover(imageResourceId)
-        Text(
-            text = stringResource(titleResourceId),
-            style = MaterialTheme.typography.displayMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_medium))
-        )
-    }
-}
-
 /**
  * The button used to navigate through a chapter
  */
@@ -308,108 +225,6 @@ fun ChapterNavigation(
                 text = stringResource(R.string.next_chap),
                 style = MaterialTheme.typography.labelSmall
             )
-        }
-    }
-}
-/**
- * Column where book text will be placed
- */
-@Composable
-fun PageScrollLazyColumn(
-    book: Book?,
-    textList: List<String>
-) {
-    var currentPage by rememberSaveable { mutableStateOf(0) }
-
-    val swipeThreshold = 300f
-    var swipeDetected by remember { mutableStateOf(false) }
-    var dragOffset by remember { mutableStateOf(0f) }
-
-    var itemsPerPage by remember { mutableStateOf(1) }
-
-    val boxModifier = Modifier
-        .fillMaxSize()
-        .onGloballyPositioned { coordinates ->
-            val height = coordinates.size.height.toFloat()
-            itemsPerPage = (height / 260).toInt()
-        }
-
-    val chunkedPages = textList.chunked(itemsPerPage)
-
-    val swipeModifier = Modifier.pointerInput(Unit) {
-        detectHorizontalDragGestures { change, dragAmount ->
-            dragOffset += dragAmount * 0.5f
-
-            if (dragOffset > swipeThreshold && !swipeDetected) {
-                if (currentPage > 0) {
-                    currentPage--
-                    swipeDetected = true
-                }
-            } else if (dragOffset < -swipeThreshold && !swipeDetected) {
-                if (currentPage < chunkedPages.lastIndex) {
-                    currentPage++
-                    swipeDetected = true
-                }
-            }
-            if (swipeDetected) {
-                dragOffset = 0f
-            }
-        }
-    }
-
-    LaunchedEffect(currentPage) {
-        swipeDetected = false
-    }
-
-    Box(modifier = boxModifier) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                //.border(BorderStroke(4.dp, Color.Black), RectangleShape)
-                .padding(16.dp)
-                .align(Alignment.Center)
-                .then(swipeModifier)
-        ) {
-            if (currentPage == 0) {
-                item {
-                    book?.let {
-                        BookDisplay(
-                            imageResourceId = it.imageResourceId,
-                            titleResourceId = it.title
-                        )
-                    }
-                }
-            }
-            else{
-                items(chunkedPages[currentPage].size) { index ->
-                    Text(
-                        text = chunkedPages[currentPage][index],
-                        style = TextStyle(fontSize = 18.sp),
-                        modifier = Modifier
-                            .padding(bottom = 8.dp)
-                            .align(Alignment.Center)
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-        // Display the page number at the bottom of the screen
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(16.dp)
-        ) {
-            if(currentPage != 0) {
-                Text(
-                    text = "Page ${currentPage} of ${chunkedPages.size - 1}",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.Black,
-                        fontSize = 16.sp
-                    ),
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
         }
     }
 }

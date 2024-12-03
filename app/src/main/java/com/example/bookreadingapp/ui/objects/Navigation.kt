@@ -147,7 +147,8 @@ fun NavigationHost(
                 }},
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
-                createPages = viewModel::createPages
+                createPages = viewModel::createPages,
+                createStringList = viewModel::createStringList
             )
         }
 

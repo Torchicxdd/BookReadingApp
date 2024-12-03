@@ -13,6 +13,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.lifecycle.ViewModel
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
+import com.example.bookreadingapp.data.entities.Image
+import com.example.bookreadingapp.data.entities.Paragraphs
+import com.example.bookreadingapp.data.entities.Table
 
 class AppViewModel : ViewModel() {
     var readingMode by mutableStateOf(false)
@@ -81,6 +84,9 @@ class AppViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Creates pages with strings according to given maxHeight
+     */
     fun createPages(
         paragraphs: List<String>,
         textMeasurer: TextMeasurer,
@@ -119,5 +125,52 @@ class AppViewModel : ViewModel() {
         }
 
         return pages
+    }
+
+    /**
+     * Separates a string into string lists of paragraphs
+     */
+    fun createStringList(
+        paragraphList: List<Paragraphs>,
+        tableList: List<Table>,
+        imageList: List<Image>
+    ): List<String> {
+        var paragraphPosition = 0
+        var tablePosition = 0
+        var imagePosition = 0
+
+        val elementSize = paragraphList.size + tableList.size + imageList.size
+        var elementPosition = 0
+        val stringList: MutableList<String> = mutableListOf()
+
+        if (elementSize == 0) {
+            stringList.add("No Text")
+            return stringList
+        }
+
+        // Create a string list of all texts to be displayed
+        while(elementPosition < elementSize) {
+            if (paragraphList.isNotEmpty() &&
+                paragraphPosition < paragraphList.size &&
+                paragraphList[paragraphPosition].position == elementPosition) {
+                stringList.add(paragraphList[paragraphPosition].text)
+                paragraphPosition++
+            }
+            if (tableList.isNotEmpty() &&
+                tablePosition < tableList.size &&
+                tableList[tablePosition].position == elementPosition) {
+                stringList.add(tableList[tablePosition].content)
+                tablePosition++
+            }
+            if (imageList.isNotEmpty() &&
+                imagePosition < imageList.size &&
+                imageList[imagePosition].position == elementPosition) {
+                stringList.add(imageList[imagePosition].uri)
+                imagePosition++
+            }
+            elementPosition++
+        }
+
+        return stringList
     }
 }
