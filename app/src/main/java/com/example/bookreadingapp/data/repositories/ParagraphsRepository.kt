@@ -3,6 +3,7 @@ package com.example.bookreadingapp.data.repositories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.ParagraphDao
+import com.example.bookreadingapp.data.entities.Chapters
 import com.example.bookreadingapp.data.entities.Paragraphs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
