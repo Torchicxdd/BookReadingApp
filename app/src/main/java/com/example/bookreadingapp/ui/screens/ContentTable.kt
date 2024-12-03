@@ -1,16 +1,22 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.util.Log
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +33,13 @@ import com.example.bookreadingapp.ui.utils.GoToReadingButton
 import com.example.bookreadingapp.ui.utils.GoToSearchButton
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -61,26 +73,43 @@ fun ContentTable(
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             // Title and selected book information
-            Text(text = stringResource(R.string.content), style = MaterialTheme.typography.displayLarge)
-            Text(
-                text = stringResource(
-                    R.string.book_chosen,
-                    stringResource(book!!.title)
-                )
+            TableOfContentsHeader(
+                bookCover = book!!.imageResourceId,
+                bookTitle = book.title,
+                navigateToSearch = navigateToSearch,
+                navigateToReading = navigateToReading
             )
-
-            // Navigation buttons for Bookshelf, Search, and Reading screens
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                GoToSearchButton(navigateToSearch)
-                GoToReadingButton(navigateToReading)
-            }
             
             DisplayChaptersList(chapters = searchChapterResults)
+        }
+    }
+}
+
+@Composable
+fun TableOfContentsHeader(
+    @DrawableRes bookCover: Int,
+    @StringRes bookTitle: Int,
+    navigateToSearch: () -> Unit,
+    navigateToReading: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(bookCover),
+            contentDescription = null,
+            modifier = Modifier
+                .size(dimensionResource(R.dimen.image_size))
+        )
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(stringResource(bookTitle), textAlign = TextAlign.Center)
+            GoToSearchButton(navigateToSearch)
+            GoToReadingButton(navigateToReading)
         }
     }
 }

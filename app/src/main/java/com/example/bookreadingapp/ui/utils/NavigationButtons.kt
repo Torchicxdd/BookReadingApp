@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.utils
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +28,12 @@ fun GoToReadingButton(navigateToReading: () -> Unit) {
 // Generic reusable button for navigation
 @Composable
 private fun NavigationButton(text: String, testTag: String, onClick: () -> Unit) {
-    Button(onClick = onClick, modifier = Modifier.testTag(testTag)) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .testTag(testTag)
+            .fillMaxWidth()
+    ) {
         Text(text)
     }
 }
