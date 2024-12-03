@@ -152,7 +152,8 @@ fun ChapterDisplay(
             PageDisplay(
                 paragraphs = page,
                 width = width,
-                height = height
+                height = height,
+                textSize = textSizeInSp
             )
         }
     }
@@ -162,7 +163,8 @@ fun ChapterDisplay(
 fun PageDisplay(
     paragraphs: List<String>,
     height: Dp,
-    width: Dp
+    width: Dp,
+    textSize: TextUnit
 ) {
     Column(
         modifier = Modifier
@@ -172,7 +174,8 @@ fun PageDisplay(
         for (paragraph in paragraphs) {
             Text(
                 text = paragraph,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = textSize
             )
         }
     }
