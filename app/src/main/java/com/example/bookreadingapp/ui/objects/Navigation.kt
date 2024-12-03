@@ -35,9 +35,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.ui.screens.Bookshelf
 import com.example.bookreadingapp.ui.screens.ContentTable
@@ -113,14 +115,20 @@ fun NavigationHost(
                 book = viewModel.selectedBook,
                 mainViewModel = mainViewModel,
                 navigateToSearch =  { navController.navigate(Routes.Search.route) },
-                navigateToReading =  { navController.navigate(Routes.Reading.route) }
+                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId") }
             )
         }
-        composable(Routes.Reading.route) {
+        composable(
+            route = Routes.Reading.route + "/{chapterId}",
+            arguments = listOf(navArgument("chapterId") {
+                type = NavType.LongType
+            })) { navBackStack ->
+
             Reading(
                 book = viewModel.selectedBook,
                 readingMode = viewModel.readingMode,
-                toggleReadingMode =  { viewModel.readingMode = !viewModel.readingMode },
+                toggleReadingMode = { viewModel.readingMode = !viewModel.readingMode },
+                currentChapterId = navBackStack.arguments?.getLong("chapterId")
             )
         }
 

@@ -1,16 +1,25 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.util.Log
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +36,14 @@ import com.example.bookreadingapp.ui.utils.GoToReadingButton
 import com.example.bookreadingapp.ui.utils.GoToSearchButton
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -40,7 +56,7 @@ fun ContentTable(
     book: Book?,
     mainViewModel: MainViewModel,
     navigateToSearch: () -> Unit,
-    navigateToReading: () -> Unit,
+    navigateToReading: (Long) -> Unit,
 ) {
     // Observe search results in viewmodel
     val searchChapterResults by mainViewModel.chapterViewModel.searchResults.observeAsState(listOf())
@@ -61,41 +77,92 @@ fun ContentTable(
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             // Title and selected book information
-            Text(text = stringResource(R.string.content), style = MaterialTheme.typography.displayLarge)
-            Text(
-                text = stringResource(
-                    R.string.book_chosen,
-                    stringResource(book!!.title)
-                )
+            TableOfContentsHeader(
+                bookCover = book!!.imageResourceId,
+                bookTitle = book.title,
+                navigateToSearch = navigateToSearch,
+                navigateToReading = navigateToReading
             )
-
-            // Navigation buttons for Bookshelf, Search, and Reading screens
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                GoToSearchButton(navigateToSearch)
-                GoToReadingButton(navigateToReading)
-            }
             
-            DisplayChaptersList(chapters = searchChapterResults)
+            DisplayChaptersList(chapters = searchChapterResults, navigateToReading = navigateToReading)
+        }
+    }
+}
+
+@Composable
+fun TableOfContentsHeader(
+    @DrawableRes bookCover: Int,
+    @StringRes bookTitle: Int,
+    navigateToSearch: () -> Unit,
+    navigateToReading: (Long) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(bookCover),
+            contentDescription = null,
+            modifier = Modifier
+                .size(dimensionResource(R.dimen.small_image))
+        )
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(bookTitle),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold
+            )
+            GoToSearchButton(navigateToSearch)
+            GoToReadingButton(chapterId = 0, navigateToReading = navigateToReading)
         }
     }
 }
 
 @Composable
 fun DisplayChaptersList(
-    chapters: List<Chapters>
+    chapters: List<Chapters>,
+    navigateToReading: (Long) -> Unit
 ) {
-    LazyColumn (
+   Column {
+       Text(
+           text = stringResource(R.string.num_chap, chapters.size),
+           fontWeight = FontWeight.Bold,
+           modifier = Modifier
+               .padding(top = dimensionResource(R.dimen.padding_medium))
+       )
+       LazyColumn (
+           modifier = Modifier
+               .fillMaxSize(),
+           content = {
+               items(chapters) { chapter ->
+                   DisplayChapter(chapter = chapter, navigateToReading = navigateToReading)
+               }
+           }
+       )
+   }
+}
+
+@Composable
+fun DisplayChapter(
+    chapter: Chapters,
+    navigateToReading: (Long) -> Unit
+) {
+    Text(
+        text = chapter.title,
         modifier = Modifier
-            .fillMaxSize(),
-        content = {
-            items(chapters) { chapter ->
-                Text(chapter.title)
-            }
-        }
+            .fillMaxWidth()
+            .padding(
+                top = dimensionResource(R.dimen.padding_small),
+                bottom = dimensionResource(R.dimen.padding_small)
+            )
+            .clickable(
+                onClick = {
+                    navigateToReading(chapter.id)
+                }
+            )
     )
 }

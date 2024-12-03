@@ -65,4 +65,5 @@
     <string name="insert_progress">Parsing and Inserting Progress: %1$d%%</string>
     <string name="next_chap">&gt;&gt;</string>
     <string name="prev_chap">&lt;&lt;</string>
+    <string name="num_chap">%1$d chapters</string>
 </resources>

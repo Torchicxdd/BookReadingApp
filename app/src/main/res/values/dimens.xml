@@ -3,9 +3,11 @@
     <dimen name="border_small">1dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_XMedium">40dp</dimen>
     <dimen name="padding_big_medium">50dp</dimen>
     <dimen name="padding_big">80dp</dimen>
     <dimen name="padding_large">130dp</dimen>
+    <dimen name="small_image">175dp</dimen>
     <dimen name="image_size">250dp</dimen>
     <dimen name="logo_size">285dp</dimen>
     <dimen name="spacer_padding">5dp</dimen>
