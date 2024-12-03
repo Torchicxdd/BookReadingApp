@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +39,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bookreadingapp.R
@@ -73,7 +78,7 @@ fun Reading(
 
     val stringList = createStringList(searchParagraphsResult, searchTablesResult, searchImagesResult)
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
@@ -82,23 +87,30 @@ fun Reading(
                     onTap = { toggleReadingMode() }
                 )
             }
+            .testTag("reading_screen")
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .testTag("reading_screen")
-        ) {
-            Text(
-                text = stringResource(R.string.reading),
-                style = MaterialTheme.typography.displayLarge
-            )
-            PageScrollLazyColumn(
-                book = book,
-                textList = stringList
-            )
-        }
-        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+        val boxWithConstraintsScope = this
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .testTag("reading_screen")
+//        ) {
+//            Text(
+//                text = stringResource(R.string.reading),
+//                style = MaterialTheme.typography.displayLarge
+//            )
+//            PageScrollLazyColumn(
+//                book = book,
+//                textList = stringList
+//            )
+//        }
+//        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+        ChapterDisplay(
+            paragraphs = stringList,
+            width = boxWithConstraintsScope.maxWidth,
+            height = boxWithConstraintsScope.maxHeight
+        )
     }
     Box(
         modifier = Modifier
@@ -116,6 +128,37 @@ fun Reading(
             )
         }
     }
+}
+
+@Composable
+fun ChapterDisplay(
+    paragraphs: List<String>,
+    height: Dp,
+    width: Dp
+) {
+    LazyRow {
+        items(paragraphs) { paragraph ->
+            ParagraphDisplay(
+                paragraph = paragraph,
+                width = width,
+                height = height
+            )
+        }
+    }
+}
+
+@Composable
+fun ParagraphDisplay(
+    paragraph: String,
+    height: Dp,
+    width: Dp
+) {
+    Text(
+        text = paragraph,
+        modifier = Modifier
+            .width(width)
+            .height(height)
+    )
 }
 
 private fun createStringList(

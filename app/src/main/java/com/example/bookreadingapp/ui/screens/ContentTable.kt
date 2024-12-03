@@ -64,6 +64,9 @@ fun ContentTable(
     )
 }
 
+/**
+ * Main method for Table of Content
+ */
 @Composable
 fun TableOfContentMain(
     book: Book?,
@@ -98,6 +101,9 @@ fun TableOfContentMain(
     }
 }
 
+/**
+ * Header information for the book and navigating to search and reading screens
+ */
 @Composable
 fun TableOfContentsHeader(
     @DrawableRes bookCover: Int,
@@ -132,6 +138,9 @@ fun TableOfContentsHeader(
     }
 }
 
+/**
+ * Displays all the chapters
+ */
 @Composable
 fun DisplayChaptersList(
     chapters: List<Chapters>,
@@ -157,6 +166,9 @@ fun DisplayChaptersList(
    }
 }
 
+/**
+ * Singular chapter display
+ */
 @Composable
 fun DisplayChapter(
     chapter: Chapters,
