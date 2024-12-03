@@ -24,14 +24,17 @@ import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 // Main composable function for the bookshelf screen
 @Composable
 fun Bookshelf(
+    bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
     progressInsertPercentage: State<Int>,
     isDownloading: State<Boolean>,
     setBookDownloading: (Int, Boolean) -> Unit,
-    downloadingBooks: MutableMap<Int, Boolean>
+    downloadingBooks: MutableMap<Int, Boolean>,
+    mainViewModel: MainViewModel
 ) {
+    val downloadedBooks by mainViewModel.bookViewModel.allBooks.observeAsState(emptyList())
     // Reset the downloading state to false when the screen is shown for all books
     LaunchedEffect(Unit) {
         bookshelfBooks.forEach { book ->
@@ -39,7 +42,7 @@ fun Bookshelf(
         }
     }
     // Converts Books entity into Book objects
-    val convertedBooks = downloadBooks.mapIndexed() { i, b ->
+    val convertedBooks = downloadedBooks.mapIndexed() { i, b ->
         Book(bookID = b.id,
             imageResourceId = b.coverImage.toInt(),
             title = b.title.toInt(),

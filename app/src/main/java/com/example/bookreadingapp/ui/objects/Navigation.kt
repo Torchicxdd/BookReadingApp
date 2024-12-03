@@ -85,6 +85,7 @@ fun NavigationHost(
         }
         composable(Routes.Bookshelf.route) {
             Bookshelf(
+                bookshelfBooks = viewModel.bookshelfBooks,
                 updateBook = viewModel::updateBook,
                 navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
                     launchSingleTop = true
@@ -94,7 +95,8 @@ fun NavigationHost(
                 progressInsertPercentage = downloadViewModel.progressInsertPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
                 setBookDownloading = viewModel::setBookDownloading,
-                downloadingBooks = viewModel.downloadingBooks
+                downloadingBooks = viewModel.downloadingBooks,
+                mainViewModel = mainViewModel
             )
         }
         composable(Routes.Search.route) {
