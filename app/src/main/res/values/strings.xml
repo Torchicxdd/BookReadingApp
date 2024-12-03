@@ -66,4 +66,5 @@
     <string name="next_chap">&gt;&gt;</string>
     <string name="prev_chap">&lt;&lt;</string>
     <string name="num_chap">%1$d chapters</string>
+    <string name="name_chap">Chapter %1$d: %2$s</string>
 </resources>

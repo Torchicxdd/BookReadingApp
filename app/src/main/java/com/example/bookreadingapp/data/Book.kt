@@ -129,7 +129,7 @@ class Book (
             // Insert tables
             if (e.contains("<table>-Start")) {
                 mainViewModel.tableViewModel.insertTable(
-                    Table(e.replace("<table>-Start", ""), currentChapterID, elementPosition)
+                    Table(e.replace("<table>-Start", "\t"), currentChapterID, elementPosition)
                 )
                 elementPosition ++
             }

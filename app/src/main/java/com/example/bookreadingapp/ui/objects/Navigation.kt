@@ -2,6 +2,11 @@ package com.example.bookreadingapp.ui.objects
 
 import NavBarItems
 import android.content.Context
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -65,8 +70,11 @@ fun NavigationHost(
     downloadViewModel: DownloadViewModel,
     mainViewModel: MainViewModel
 ) {
-    NavHost(navController = navController,
-        startDestination = Routes.Home.route
+    NavHost(
+        navController = navController,
+        startDestination = Routes.Home.route,
+        enterTransition = { fadeIn(animationSpec = tween(durationMillis = 100)) },
+        exitTransition = { fadeOut(animationSpec = tween(durationMillis = 100)) }
     ) {
         composable(Routes.Home.route) {
             Home()
@@ -116,7 +124,10 @@ fun NavigationHost(
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
                 navigateToSearch =  { navController.navigate(Routes.Search.route) },
-                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId") }
+                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId"){
+                    launchSingleTop = true
+                    restoreState = true
+                } }
             )
         }
         composable(
@@ -130,9 +141,14 @@ fun NavigationHost(
                 readingMode = viewModel.readingMode,
                 toggleReadingMode = { viewModel.readingMode = !viewModel.readingMode },
                 currentChapterId = navBackStack.arguments?.getLong("chapterId"),
-                changeChapter = {chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId")},
+                changeChapter = {chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId"){
+                    launchSingleTop = true
+                    restoreState = true
+                }},
                 viewModel = viewModel,
-                mainViewModel = mainViewModel
+                mainViewModel = mainViewModel,
+                createPages = viewModel::createPages,
+                createStringList = viewModel::createStringList
             )
         }
 
