@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.data.daos
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -27,11 +28,11 @@ interface ChaptersDao {
 
     // Find chapters by their title
     @Query("SELECT * FROM chapters WHERE title = :title")
-    fun findChapterByName(title: String): LiveData<List<Chapters>>
+    fun findChapterByName(title: String): List<Chapters>
 
     // Get all chapters by bookId in ascending order
     @Query("SELECT * FROM chapters WHERE bookId = :bookId ORDER BY chapterPosition ASC")
-    fun getChaptersByBookId(bookId: Int): LiveData<List<Chapters>>
+    fun getChaptersByBookId(bookId: Long): List<Chapters>
 
     // Delete a chapter by its id
     @Query("DELETE FROM chapters WHERE chapterId = :id")

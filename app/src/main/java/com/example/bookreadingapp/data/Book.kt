@@ -16,6 +16,7 @@ import org.jsoup.nodes.Element
 import java.io.File
 
 class Book (
+    val bookID: Long,
     @DrawableRes val imageResourceId: Int,
     @StringRes val title: Int,
     val arrayIndex: Int
@@ -95,7 +96,7 @@ class Book (
     suspend fun insertBook(mainViewModel: MainViewModel): Long {
         val newBookID = mainViewModel.bookViewModel.insertBook(
             Books(
-                title.toString(), "AUTHOR_HERE", imageResourceId.toString()
+                title.toString(), "AUTHOR_HERE", htmlFilePath, imageResourceId.toString()
             )
         )
         return newBookID
@@ -111,11 +112,10 @@ class Book (
         var processedElements = 0
 
         var currentChapterID: Long = 0
-        var chapterPosition = 1
+        var chapterPosition = 0
         var elementPosition = 0
 
         for (e in elements) {
-            Log.d("long message", e)
             // Insert chapters
             if (e.contains("<h2>-Start")) {
                 // Reset element positions to zero at the start of every chapter
@@ -123,6 +123,7 @@ class Book (
                 currentChapterID = mainViewModel.chapterViewModel.insertChapter(
                     Chapters(e.replace("<h2>-Start", ""), chapterPosition, newBookID)
                 )
+                // Increases chapter position at every new chapter
                 chapterPosition ++
             }
             // Insert tables
@@ -144,16 +145,15 @@ class Book (
                 val imgSrc = e.substringAfter("src=\"").substringBefore("\"")
                 val validImgSrc = imgSrc.trim()
                 if (validImgSrc.isNotEmpty()) {
-                    val imgPathWithPrefix = "./$validImgSrc"
-                    val img = Image(imgPathWithPrefix, elementPosition)
+                    val img = Image("/$validImgSrc", elementPosition)
                     Log.e("Image Parsing", "Image URI: ${img.uri}")
                     mainViewModel.imageViewModel.insertImage(img)
                     elementPosition++
                 } else {
-                    Log.e("Image Parsing", "Image src is empty or invalid at position $elementPosition")
+                    Log.i("Image Parsing", "Image src is empty or invalid at position $elementPosition")
                 }
             } else {
-                Log.e("Image Parsing", "Didn't even start first if")
+                Log.i("Image Parsing", "Didn't even start first if")
             }
             processedElements++
             val progress = (processedElements * 100 / totalElements)
@@ -168,11 +168,12 @@ class Book (
     }
 }
 
+// ID's set to zero because they aren't used yet
 val books = listOf(
-    Book(R.drawable.wood_cover, R.string.wood, 0),
-    Book(R.drawable.plumbing_cover, R.string.plumbing, 1),
-    Book(R.drawable.hardware_cover, R.string.hardware, 2),
-    Book(R.drawable.steam_cover, R.string.steam, 3),
-    Book(R.drawable.dairy_cover, R.string.dairy, 4),
-    Book(R.drawable.mushroom_cover, R.string.mushroom, 5)
+    Book(0, R.drawable.wood_cover, R.string.wood, 0),
+    Book(0, R.drawable.plumbing_cover, R.string.plumbing, 1),
+    Book(0, R.drawable.hardware_cover, R.string.hardware, 2),
+    Book(0, R.drawable.steam_cover, R.string.steam, 3),
+    Book(0, R.drawable.dairy_cover, R.string.dairy, 4),
+    Book(0, R.drawable.mushroom_cover, R.string.mushroom, 5)
 )

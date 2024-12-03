@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -17,28 +19,37 @@ import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.ui.utils.DisplayBookList
 import com.example.bookreadingapp.ui.utils.ProgressMessage
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 // Main composable function for the bookshelf screen
 @Composable
 fun Bookshelf(
-    bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
     progressInsertPercentage: State<Int>,
     isDownloading: State<Boolean>,
     setBookDownloading: (Int, Boolean) -> Unit,
-    downloadingBooks: MutableMap<Int, Boolean>
+    downloadingBooks: MutableMap<Int, Boolean>,
+    mainViewModel: MainViewModel
 ) {
+    val downloadedBooks by mainViewModel.bookViewModel.allBooks.observeAsState(emptyList())
     // Reset the downloading state to false when the screen is shown for all books
     LaunchedEffect(Unit) {
         bookshelfBooks.forEach { book ->
             setBookDownloading(book.arrayIndex, false)
         }
     }
+    // Converts Books entity into Book objects
+    val convertedBooks = downloadedBooks.mapIndexed() { i, b ->
+        Book(bookID = b.id,
+            imageResourceId = b.coverImage.toInt(),
+            title = b.title.toInt(),
+            arrayIndex = i )
+    }
 
     BooksAvailable(
-        books = bookshelfBooks,
+        books = convertedBooks,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()

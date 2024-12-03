@@ -15,13 +15,16 @@ class Books {
     var title: String = ""
     @ColumnInfo(name="author")
     var author: String = ""
+    @ColumnInfo(name="filePath")
+    var filePath: String = ""
     @ColumnInfo(name="coverImage")
     var coverImage: String = ""
 
     constructor()
-    constructor(title: String, author: String, coverImage: String) {
+    constructor(title: String, author: String, filePath: String, coverImage: String) {
         this.title = title
         this.author = author
+        this.filePath = filePath
         this.coverImage = coverImage
     }
 }
