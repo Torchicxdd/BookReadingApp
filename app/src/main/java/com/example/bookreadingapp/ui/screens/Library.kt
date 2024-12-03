@@ -29,6 +29,7 @@ fun Library(
     progressPercentage: State<Int>,
     progressInsertPercentage: State<Int>,
     isDownloading: State<Boolean>,
+    isInserting: State<Boolean>,
     setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit) -> Unit,
     setBookDownloading: (Int, Boolean) -> Unit,
     downloadingBooks: MutableMap<Int, Boolean>,
@@ -48,7 +49,7 @@ fun Library(
             Text(text = stringResource(R.string.library), style = MaterialTheme.typography.displayLarge)
 
             // Display progress message if download or unzip is ongoing
-            if (isDownloading.value) {
+            if (isDownloading.value || isInserting.value) {
                 ProgressMessage(
                     progress = progressPercentage.value,
                     progressInsert = progressInsertPercentage.value

@@ -76,6 +76,7 @@ fun NavigationHost(
                 progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
                 progressInsertPercentage = downloadViewModel.progressInsertPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
+                isInserting = downloadViewModel.isInserting.collectAsState(),
                 setupDownload = downloadViewModel::setupDownload,
                 setBookDownloading = viewModel::setBookDownloading,
                 downloadingBooks = viewModel.downloadingBooks,
