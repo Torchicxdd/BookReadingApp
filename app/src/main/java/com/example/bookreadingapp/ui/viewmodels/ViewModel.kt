@@ -4,6 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.lifecycle.ViewModel
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.books
@@ -73,5 +79,45 @@ class AppViewModel : ViewModel() {
         downloadingBooks = downloadingBooks.toMutableMap().apply {
             this[bookId] = isDownloading
         }
+    }
+
+    fun createPages(
+        paragraphs: List<String>,
+        textMeasurer: TextMeasurer,
+        maxHeightPx: Float,
+        width: Dp,
+        fontSize: TextUnit,
+        localDensity: Density
+    ): List<List<String>> {
+        val pages = mutableListOf<List<String>>()
+        val currentPage = mutableListOf<String>()
+        var currentHeight = 0f
+
+        paragraphs.forEach { paragraph ->
+            // Find the height of the paragraph in Float
+            val paragraphHeight = textMeasurer.measure(
+                text = paragraph,
+                style = TextStyle(fontSize = fontSize),
+                constraints = Constraints(maxWidth = with(localDensity) { width.toPx().toInt() })
+            ).size.height.toFloat()
+
+            // If the new paragraph and current page height is larger than the height
+            if (currentHeight + paragraphHeight > maxHeightPx && currentPage.isNotEmpty()) {
+                pages.add(currentPage.toList())
+                currentPage.clear()
+                currentHeight = 0f
+            }
+
+            // If not bigger, add paragraph to page
+            currentPage.add(paragraph)
+            currentHeight += paragraphHeight
+        }
+
+        // Add paragraph if returned not bigger but still with content
+        if (currentPage.isNotEmpty()) {
+            pages.add(currentPage)
+        }
+
+        return pages
     }
 }
