@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.ui.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,8 +21,14 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _progressPercentage = MutableStateFlow(0)
     val progressPercentage: StateFlow<Int> get() = _progressPercentage
 
+    private val _progressInsertPercentage = MutableStateFlow(0)
+    val progressInsertPercentage: StateFlow<Int> get() = _progressInsertPercentage
+
     private val _isDownloading = MutableStateFlow(false)
     val isDownloading: StateFlow<Boolean> get() = _isDownloading
+
+    private val _isInserting = MutableStateFlow(false)
+    val isInserting: StateFlow<Boolean> get() = _isInserting
 
     // Function to set up file download and data insertion
     fun setupDownload(
@@ -33,20 +40,29 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
+
             val file = repository.createFile(directoryName, fileName)
 
             // Initialize progress
             _progressPercentage.emit(0)
             _isDownloading.emit(true)
+            _progressInsertPercentage.emit(0)
 
+            // Start downloading the file
             downloadFileWithProgress(url, file)
-            extractZipWithProgress(file, directoryName, book, moveBookToBookshelf)
-            _isDownloading.value = false
+            // Start extracting the zip file
+            extractZipWithProgress(file, directoryName, book)
+            _isDownloading.emit(false)
             updateDirectoryContents("")
+            _isInserting.emit(true)
 
-            // Insert new book information into database
+            // Insert book information into the database
             val newBookID = book.insertBook(mainViewModel)
-            book.insertElements(newBookID, mainViewModel)
+            book.insertElements(newBookID, mainViewModel, _progressInsertPercentage)
+            _isInserting.emit(false)
+
+            // Check if both download and insertion are complete
+            checkCompletion(book, moveBookToBookshelf)
         }
     }
 
@@ -54,13 +70,12 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
         url: String,
         file: File
     ) {
-        // Download zip file from url with progress update
+        // Download zip file from URL with progress update
         if (repository.downloadFile(url, file) { progress ->
                 viewModelScope.launch {
                     _progressPercentage.emit(progress)
                 }
-            }
-        ) {
+            }) {
             Log.i(TAG_DVM, "File Downloaded")
         } else {
             Log.e(TAG_DVM, "Failed to download file")
@@ -70,8 +85,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private suspend fun extractZipWithProgress(
         file: File,
         directoryName: String,
-        book: Book,
-        moveBookToBookshelf: (Book) -> Unit
+        book: Book
     ) {
         // Extract zip file after downloading
         try {
@@ -82,20 +96,25 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             }
             if (downloadedFilePath.isNotEmpty()) {
                 book.htmlFilePath = downloadedFilePath
-                moveBookToBookshelf(book)
             } else {
                 Log.e(TAG_DVM, "Download file path is empty, book was not moved to bookshelf")
             }
-
         } catch (e: IOException) {
             e.printStackTrace()
             e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
         }
-
     }
 
     private suspend fun updateDirectoryContents(directoryName: String) {
         val contents = repository.listDirectoryContents(directoryName)
         _directoryContents.postValue(contents)
+    }
+
+    // Check if both download and insert processes are complete
+    private fun checkCompletion(book: Book, moveBookToBookshelf: (Book) -> Unit) {
+        if (_progressPercentage.value == 100 && _progressInsertPercentage.value == 100) {
+            // Move the book to bookshelf when both download and insert are complete
+            moveBookToBookshelf(book)
+        }
     }
 }

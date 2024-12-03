@@ -27,8 +27,12 @@ fun Library(
     libraryBooks: List<Book>,
     moveBookToBookshelf: (Book) -> Unit,
     progressPercentage: State<Int>,
+    progressInsertPercentage: State<Int>,
     isDownloading: State<Boolean>,
-    setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit ) -> Unit,
+    isInserting: State<Boolean>,
+    setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit) -> Unit,
+    setBookDownloading: (Int, Boolean) -> Unit,
+    downloadingBooks: MutableMap<Int, Boolean>,
     mainViewModel: MainViewModel
 ) {
     val urlList = stringArrayResource(R.array.download)
@@ -40,37 +44,48 @@ fun Library(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = stringResource(R.string.library), style = MaterialTheme.typography.displayLarge)
 
             // Display progress message if download or unzip is ongoing
-            if (isDownloading.value) {
+            if (isDownloading.value || isInserting.value) {
                 ProgressMessage(
-                    progress = progressPercentage.value
+                    progress = progressPercentage.value,
+                    progressInsert = progressInsertPercentage.value
                 )
             }
         }
+
         // Check if the library has books
         if (libraryBooks.isEmpty()) {
             NoBooksToDownloadMessage()
         } else {
-            // LazyVerticalGrid for the book items
+            // Display the books in a LazyVerticalGrid
             DisplayBookList(
                 libraryBooks = libraryBooks,
                 onBookClick = { book ->
-                    // Starts downloading only if this book is not already being downloaded
-                    //viewModel.updateCurrentDownloadingBook(book)
-                    val url = urlList[book.arrayIndex]
-                    setupDownload(
-                        url,
-                        "${url.substringAfterLast("/").replace(".zip", "")}-dir",
-                        book,
-                        mainViewModel,
-                        moveBookToBookshelf
-                    )
-                }
+                    // Only start download if the book is not already being downloaded
+                    val isDownloadingBook = downloadingBooks[book.arrayIndex] == true
+                    if (!isDownloadingBook && !isDownloading.value) {
+                        val url = urlList[book.arrayIndex]
+                        setupDownload(
+                            url,
+                            "${url.substringAfterLast("/").replace(".zip", "")}-dir",
+                            book,
+                            mainViewModel,
+                            moveBookToBookshelf
+                        )
+
+                        // Mark this book as downloading
+                        setBookDownloading(book.arrayIndex, true)
+                    }
+                },
+                isBookDownloading = { book ->
+                    downloadingBooks[book.arrayIndex] == true
+                },
+                // Disable clicks if any book is downloading
+                disableAllClicks = isDownloading.value || isInserting.value
             )
         }
     }

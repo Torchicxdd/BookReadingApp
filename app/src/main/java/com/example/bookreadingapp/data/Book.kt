@@ -10,6 +10,7 @@ import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.io.File
@@ -27,13 +28,20 @@ class Book (
         return htmlFile.readText()
     }
 
-    private fun parseHtml(html: String): List<String> {
+    private suspend fun parseHtml(html: String, progressFlow: MutableStateFlow<Int>): List<String> {
         val content = Jsoup.parse(html)
         val elements = mutableListOf<String>()
 
+        val totalElements = content.body().children().size
+        var processedElements = 0
+
         content.body().children().forEach { element ->
             parseElement(element, elements)
+            processedElements++
+            val progress = (processedElements * 100 / totalElements)
+            progressFlow.emit(progress)
         }
+
 
         return elements
     }
@@ -93,8 +101,15 @@ class Book (
         return newBookID
     }
 
-    suspend fun insertElements(newBookID: Long, mainViewModel: MainViewModel) {
-        val elements = parseHtml(readHtmlFile())
+    suspend fun insertElements(
+        newBookID: Long,
+        mainViewModel: MainViewModel,
+        progressFlow: MutableStateFlow<Int>
+    ){
+        val elements = parseHtml(readHtmlFile(), progressFlow)
+        val totalElements = elements.size
+        var processedElements = 0
+
         var currentChapterID: Long = 0
         var chapterPosition = 1
         var elementPosition = 0
@@ -140,8 +155,16 @@ class Book (
             } else {
                 Log.e("Image Parsing", "Didn't even start first if")
             }
-
+            processedElements++
+            val progress = (processedElements * 100 / totalElements)
+            progressFlow.emit(progress)
+            var i: Int = 0
+            Log.d("InsertElements", "\nProgress emitted $i : ${progressFlow.value}%")
+            i += 1
         }
+        // Ensure the final update reflects actual completion
+        progressFlow.emit(100)
+        Log.d("InsertElements", "\nProgress emitted: ${progressFlow.value}%")
     }
 }
 

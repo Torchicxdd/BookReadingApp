@@ -74,8 +74,12 @@ fun NavigationHost(
                 libraryBooks = viewModel.libraryBooks,
                 moveBookToBookshelf = viewModel::moveBookToBookshelf,
                 progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
+                progressInsertPercentage = downloadViewModel.progressInsertPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
+                isInserting = downloadViewModel.isInserting.collectAsState(),
                 setupDownload = downloadViewModel::setupDownload,
+                setBookDownloading = viewModel::setBookDownloading,
+                downloadingBooks = viewModel.downloadingBooks,
                 mainViewModel = mainViewModel
             )
         }
@@ -88,7 +92,10 @@ fun NavigationHost(
                     restoreState = true
                 } },
                 progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
+                progressInsertPercentage = downloadViewModel.progressInsertPercentage.collectAsState(),
                 isDownloading = downloadViewModel.isDownloading.collectAsState(),
+                setBookDownloading = viewModel::setBookDownloading,
+                downloadingBooks = viewModel.downloadingBooks
             )
         }
         composable(Routes.Search.route) {

@@ -14,6 +14,9 @@ class AppViewModel : ViewModel() {
     var searchBarInput by mutableStateOf("")
     var searchResultText by mutableStateOf("")
 
+    // Track which books are downloading
+    var downloadingBooks by mutableStateOf(mutableMapOf<Int, Boolean>())
+
     // MutableStateList to hold the books in the library
     private val _libraryBooks = mutableStateListOf<Book>()
     val libraryBooks: List<Book> = _libraryBooks
@@ -62,4 +65,10 @@ class AppViewModel : ViewModel() {
         }
     }
 
+    // Function to set a book's downloading state
+    fun setBookDownloading(bookId: Int, isDownloading: Boolean) {
+        downloadingBooks = downloadingBooks.toMutableMap().apply {
+            this[bookId] = isDownloading
+        }
+    }
 }

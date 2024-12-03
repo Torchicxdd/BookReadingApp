@@ -37,7 +37,6 @@
     <string name="steam">Steam, Its Generation and Use by Babcock &amp; Wilcox Company</string>
     <string name="dairy">Outlines of Dairy Bacteriology, 8th edition by H. L. Russell</string>
     <string name="mushroom">The Mushroom, Edible and Otherwise by Miron Elisha Hard</string>
-    <string name="glass">Glass and Glass Manufacture</string>
 
     <string name="book_404">Book not found</string>
     <string name="search_input">Search for</string>
@@ -63,6 +62,7 @@
     <string name="no_books_to_download">No books available to download</string>
     <string name="back_button">Back</string>
     <string name="download_progress">Download and Unzip Progress: %1$d%%</string>
+    <string name="insert_progress">Parsing and Inserting Progress: %1$d%%</string>
     <string name="next_chap">&gt;&gt;</string>
     <string name="prev_chap">&lt;&lt;</string>
 </resources>

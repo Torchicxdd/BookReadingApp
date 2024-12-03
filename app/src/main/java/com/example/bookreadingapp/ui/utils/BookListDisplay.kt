@@ -37,12 +37,18 @@ fun BookItem(
     book: Book,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    isBookDownloading: Boolean,
+    disableClicks : Boolean
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(dimensionResource(R.dimen.padding_small))
-            .clickable(onClick = onClick)
+            .clickable(
+                // Disable click if a book is downloading
+                enabled = !disableClicks && !isBookDownloading,
+                onClick = onClick
+            )
     ) {
         Column(
             modifier = Modifier
@@ -107,7 +113,9 @@ fun BookInformation(
 @Composable
 fun DisplayBookList(
     libraryBooks: List<Book>,
-    onBookClick: (Book) -> Unit
+    onBookClick: (Book) -> Unit,
+    isBookDownloading: (Book) -> Boolean,
+    disableAllClicks: Boolean
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -118,7 +126,10 @@ fun DisplayBookList(
                 BookItem(
                     book = book,
                     onClick = { onBookClick(book) },
-                    modifier = Modifier.testTag("book_item_${book.title}"))
+                    modifier = Modifier.testTag("book_item_${book.title}"),
+                    isBookDownloading = isBookDownloading(book),
+                    disableClicks  = disableAllClicks
+                )
                 Log.d("TestTagLogging", "Found testTag: book_item_${book.title}")
             }
         }

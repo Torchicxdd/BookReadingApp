@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,16 +25,30 @@ fun Bookshelf(
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
-    isDownloading: State<Boolean>
+    progressInsertPercentage: State<Int>,
+    isDownloading: State<Boolean>,
+    setBookDownloading: (Int, Boolean) -> Unit,
+    downloadingBooks: MutableMap<Int, Boolean>
 ) {
+    // Reset the downloading state to false when the screen is shown for all books
+    LaunchedEffect(Unit) {
+        bookshelfBooks.forEach { book ->
+            setBookDownloading(book.arrayIndex, false)
+        }
+    }
+
     BooksAvailable(
         books = bookshelfBooks,
         onBookClick = { book ->
             updateBook(book)
             navigateToTableOfContents()
+            setBookDownloading(book.arrayIndex, false)
         },
         isDownloading.value,
-        progressPercentage.value
+        progressPercentage.value,
+        progressInsertPercentage.value,
+        isBookDownloading = { book -> downloadingBooks[book.arrayIndex] ?: false },
+        disableClicks = false
     )
 }
 
@@ -61,7 +76,10 @@ fun BooksAvailable(
     books: List<Book>,
     onBookClick: (Book) -> Unit,
     isDownloading: Boolean,
-    progressPercentage: Int
+    progressPercentage: Int,
+    progressInsertPercentage: Int,
+    isBookDownloading: (Book) -> Boolean,
+    disableClicks: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -81,14 +99,17 @@ fun BooksAvailable(
             // Display progress message if download or unzip is ongoing
             if (isDownloading) {
                 ProgressMessage(
-                    progress = progressPercentage
+                    progress = progressPercentage,
+                    progressInsert = progressInsertPercentage
                 )
             }
         }
         // LazyVerticalGrid to display books in a grid
         DisplayBookList(
             libraryBooks = books,
-            onBookClick = onBookClick
+            onBookClick = onBookClick,
+            isBookDownloading = isBookDownloading,
+            disableAllClicks = disableClicks
         )
     }
 }
