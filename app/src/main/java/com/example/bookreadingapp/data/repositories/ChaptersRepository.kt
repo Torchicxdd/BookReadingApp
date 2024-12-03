@@ -8,6 +8,7 @@ import com.example.bookreadingapp.data.entities.Chapters
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     val searchResults = MutableLiveData<List<Chapters>>()
@@ -18,11 +19,9 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
      * Insert a new chapter into the database
      */
     suspend fun insertChapter(chapter: Chapters): Long {
-        var newChapterID: Long = 1
-        coroutineScope.launch(Dispatchers.IO) {
-            newChapterID = chaptersDao.insertChapter(chapter)
+        return withContext(Dispatchers.IO) {
+            chaptersDao.insertChapter(chapter)
         }
-        return newChapterID
     }
 
     /**
