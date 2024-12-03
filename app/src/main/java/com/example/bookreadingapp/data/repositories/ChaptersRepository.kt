@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.data.repositories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.ChaptersDao
@@ -79,7 +80,7 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     /**
      * Get chapters by bookId in ascending order of position
      */
-    fun getChaptersByBookId(bookId: Int) {
+    fun getChaptersByBookId(bookId: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResults.value = asyncGetChaptersByBookId(bookId).value
         }
@@ -88,7 +89,7 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     /**
      * Async function to get chapters by bookId in ascending order
      */
-    private fun asyncGetChaptersByBookId(bookId: Int): LiveData<List<Chapters>> {
+    private fun asyncGetChaptersByBookId(bookId: Long): LiveData<List<Chapters>> {
         return chaptersDao.getChaptersByBookId(bookId)
     }
 

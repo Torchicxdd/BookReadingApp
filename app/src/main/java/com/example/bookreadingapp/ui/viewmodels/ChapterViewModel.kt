@@ -55,7 +55,7 @@ class ChapterViewModel(application: Application) : ViewModel() {
     }
 
     // Get chapters by bookId in ascending order of position
-    fun getChaptersByBookId(bookId: Int) {
+    fun getChaptersByBookId(bookId: Long) {
         repository.getChaptersByBookId(bookId)
     }
 
