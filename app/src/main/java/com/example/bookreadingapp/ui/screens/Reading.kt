@@ -2,6 +2,7 @@ package com.example.bookreadingapp.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -79,6 +82,7 @@ fun Reading(
         mainViewModel.imageViewModel.findImagesInAscOrder(currentChapterId)
     }
 
+    val verticalScrollState = rememberScrollState()
     val searchParagraphsResult by mainViewModel.paragraphViewModel.searchedResults.observeAsState(listOf())
     val searchTablesResult by mainViewModel.tableViewModel.searchedResults.observeAsState(listOf())
     val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
@@ -101,7 +105,8 @@ fun Reading(
             paragraphs = stringList,
             width = boxWithConstraintsScope.maxWidth,
             height = boxWithConstraintsScope.maxHeight,
-            createPages = createPages
+            createPages = createPages,
+            verticalScrollState = verticalScrollState
         )
     }
     Box(
@@ -129,7 +134,8 @@ fun ChapterDisplay(
     width: Dp,
     createPages: (
         List<String>, TextMeasurer, Float, Dp, TextUnit, Density
-    ) -> List<List<String>>
+    ) -> List<List<String>>,
+    verticalScrollState: ScrollState
 ) {
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
@@ -153,7 +159,8 @@ fun ChapterDisplay(
                 paragraphs = page,
                 width = width,
                 height = height,
-                textSize = textSizeInSp
+                textSize = textSizeInSp,
+                verticalScrollState = verticalScrollState
             )
         }
     }
@@ -164,12 +171,14 @@ fun PageDisplay(
     paragraphs: List<String>,
     height: Dp,
     width: Dp,
-    textSize: TextUnit
+    textSize: TextUnit,
+    verticalScrollState: ScrollState
 ) {
     Column(
         modifier = Modifier
             .width(width)
             .height(height)
+            .verticalScroll(verticalScrollState)
     ) {
         for (paragraph in paragraphs) {
             Text(
