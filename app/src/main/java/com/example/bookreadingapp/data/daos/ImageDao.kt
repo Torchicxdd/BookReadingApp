@@ -19,5 +19,5 @@ interface ImageDao {
     fun findImageById(id: Int): List<Image>
 
     @Query("SELECT * FROM images WHERE chapterId = :chapterId ORDER BY imagePosition ASC")
-    fun findImagesInAscOrder(chapterId: Int): List<Image>
+    fun findImagesInAscOrder(chapterId: Long): List<Image>
 }

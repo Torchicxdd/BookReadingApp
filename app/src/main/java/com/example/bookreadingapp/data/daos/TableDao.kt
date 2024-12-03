@@ -20,5 +20,5 @@ interface TableDao {
     fun deleteTable(id: Int)
 
     @Query("SELECT * FROM tables WHERE chapterId = :chapterId ORDER BY tablePosition ASC")
-    fun findTablesInAscOrder(chapterId: Int): List<Table>
+    fun findTablesInAscOrder(chapterId: Long): List<Table>
 }

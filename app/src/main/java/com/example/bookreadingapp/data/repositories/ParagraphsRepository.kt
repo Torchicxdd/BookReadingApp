@@ -42,13 +42,13 @@ class ParagraphsRepository(private val paragraphDao: ParagraphDao) {
         }
     }
 
-    fun findParagraphsInAscOrder(chapterId: Int) {
+    fun findParagraphsInAscOrder(chapterId: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResults.value = asyncFindParagraphsInAscOrder(chapterId).await()
         }
     }
 
-    private fun asyncFindParagraphsInAscOrder(chapterId: Int) : Deferred<List<Paragraphs>?> =
+    private fun asyncFindParagraphsInAscOrder(chapterId: Long) : Deferred<List<Paragraphs>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async paragraphDao.findParagraphsInAscOrder(chapterId)
         }

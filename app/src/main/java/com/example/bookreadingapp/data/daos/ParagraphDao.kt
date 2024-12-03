@@ -20,5 +20,5 @@ interface ParagraphDao {
     fun deleteParagraph(id: Int)
 
     @Query("SELECT * FROM paragraphs WHERE chapterId = :chapterId ORDER BY paragraphPosition ASC")
-    fun findParagraphsInAscOrder(chapterId: Int): List<Paragraphs>
+    fun findParagraphsInAscOrder(chapterId: Long): List<Paragraphs>
 }

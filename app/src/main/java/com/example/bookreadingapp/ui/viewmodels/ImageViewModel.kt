@@ -31,7 +31,7 @@ class ImageViewModel(application: Application) : ViewModel() {
         repository.findImageById(id)
     }
 
-    fun findImagesInAscOrder(chapterId: Int) {
+    fun findImagesInAscOrder(chapterId: Long) {
         repository.findImagesInAscOrder(chapterId)
     }
 }

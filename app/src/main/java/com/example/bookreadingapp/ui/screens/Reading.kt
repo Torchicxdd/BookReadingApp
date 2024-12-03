@@ -54,13 +54,15 @@ fun Reading(
     book: Book?,
     readingMode: Boolean,
     toggleReadingMode: () -> Unit,
-    currentChapterId: Long?
+    currentChapterId: Long?,
     mainViewModel: MainViewModel
 ) {
     // Query paragraphs, tables and images in current chapter
-    mainViewModel.paragraphViewModel.findParagraphsInAscOrder(1)
-    mainViewModel.tableViewModel.findTablesInAscOrder(1)
-    mainViewModel.imageViewModel.findImagesInAscOrder(1)
+    if (currentChapterId != null) {
+        mainViewModel.paragraphViewModel.findParagraphsInAscOrder(currentChapterId)
+        mainViewModel.tableViewModel.findTablesInAscOrder(currentChapterId)
+        mainViewModel.imageViewModel.findImagesInAscOrder(currentChapterId)
+    }
 
     val searchParagraphsResult by mainViewModel.paragraphViewModel.searchedResults.observeAsState(listOf())
     val searchTablesResult by mainViewModel.tableViewModel.searchedResults.observeAsState(listOf())

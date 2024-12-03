@@ -47,13 +47,13 @@ class TableRepository(private val tableDao: TableDao) {
             return@async tableDao.findTableByChapterId(chapterId)
         }
 
-    fun findTablesInAscOrder(chapterId: Int) {
+    fun findTablesInAscOrder(chapterId: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResults.value = asyncFindTablesInAscOrder(chapterId).await()
         }
     }
 
-    private fun asyncFindTablesInAscOrder(chapterId: Int) : Deferred<List<Table>?> =
+    private fun asyncFindTablesInAscOrder(chapterId: Long) : Deferred<List<Table>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async tableDao.findTablesInAscOrder(chapterId)
         }
