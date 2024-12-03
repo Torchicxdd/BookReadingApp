@@ -21,7 +21,7 @@ class Image {
     @ColumnInfo(name = "imageId")
     var id: Long = 0
 
-    var chapterId: Long = 0
+    var chapterId: Long = 1
 
     @ColumnInfo(name = "imagePosition")
     var position: Int = 0
