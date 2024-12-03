@@ -124,7 +124,10 @@ fun NavigationHost(
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
                 navigateToSearch =  { navController.navigate(Routes.Search.route) },
-                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId") }
+                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId"){
+                    launchSingleTop = true
+                    restoreState = true
+                } }
             )
         }
         composable(
@@ -138,7 +141,10 @@ fun NavigationHost(
                 readingMode = viewModel.readingMode,
                 toggleReadingMode = { viewModel.readingMode = !viewModel.readingMode },
                 currentChapterId = navBackStack.arguments?.getLong("chapterId"),
-                changeChapter = {chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId")},
+                changeChapter = {chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId"){
+                    launchSingleTop = true
+                    restoreState = true
+                }},
                 viewModel = viewModel,
                 mainViewModel = mainViewModel
             )
