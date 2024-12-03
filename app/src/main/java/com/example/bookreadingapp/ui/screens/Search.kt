@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -46,6 +47,7 @@ fun Search(
     updateSearchBar: (String) -> Unit,
     performSearch: () -> Unit,
     searchResult: String,
+    navigateToReading: (Long) -> Unit,
     mainViewModel: MainViewModel
 ) {
     var searchPerformed by remember { mutableStateOf(false) }
@@ -72,7 +74,8 @@ fun Search(
             },
             searchResult = searchResult,
             mainViewModel = mainViewModel,
-            searchPerformed = searchPerformed
+            searchPerformed = searchPerformed,
+            navigateToReading = navigateToReading
         )
     }
 }
@@ -89,7 +92,8 @@ fun SearchBar(
     performSearch: () -> Unit,
     searchResult: String,
     mainViewModel: MainViewModel,
-    searchPerformed: Boolean
+    searchPerformed: Boolean,
+    navigateToReading: (Long) -> Unit
 ) {
     // Observe search results in viewmodel
     val searchParagraphResults by mainViewModel.paragraphViewModel.allParagraphs.observeAsState(listOf())
@@ -110,7 +114,6 @@ fun SearchBar(
     // Determine if dark theme is active
     val darkTheme = isSystemInDarkTheme()
 
-    //val listState = rememberLazyListState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -150,36 +153,15 @@ fun SearchBar(
                 }
             )
         )
-        // Only display search results if search has been performed
-        if (searchPerformed) {
-            if (occurrences.isNotEmpty() && searchBarInput != "") {
-                Text(
-                    text = "${occurrences.size} occurences of ${searchBarInput} found ",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small))
-                )
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(horizontal = dimensionResource(R.dimen.padding_small))
-                ) {
-                    items(occurrences.toList()) { (paragraphId, index) ->
-                        Text(
-                            text = "${searchBarInput} found in Paragraph $paragraphId",
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small))
-                        )
-                    }
-                }
-            }
-        }
-
-
-        // Display the filtered and highlighted paragraphs based on the search term
-            //DisplayParagraphsList(paragraphs = searchParagraphResults, searchTerm = searchBarInput, listState = listState)
-        }
+        DisplaySearchResults(
+            searchPerformed = searchPerformed,
+            occurrences = occurrences,
+            searchBarInput = searchBarInput,
+            navigateToReading = navigateToReading
+        )
+    }
 
 }
-
-
 
 fun findOccurrences(searchTerm: String, paragraphs: List<Paragraphs>): List<Pair<Long, Int>> {
     val occurrences = mutableListOf<Pair<Long, Int>>()
@@ -192,85 +174,40 @@ fun findOccurrences(searchTerm: String, paragraphs: List<Paragraphs>): List<Pair
     return occurrences
 }
 
-/**
- * Display for finding a word in the text
- */
 @Composable
-fun DisplayFoundWord(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall,
-        modifier = Modifier
-            .padding(top = dimensionResource(R.dimen.padding_small))
-    )
+fun DisplaySearchResults(
+    searchPerformed: Boolean,
+    occurrences:  List<Pair<Long, Int>>,
+    searchBarInput: String,
+    navigateToReading: (Long) -> Unit,
+){
+    // Only display search results if search has been performed
+    if (searchPerformed) {
+        if (occurrences.isNotEmpty() && searchBarInput != "") {
+            Text(
+                text = "${occurrences.size} occurences of ${searchBarInput} found ",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small))
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = dimensionResource(R.dimen.padding_small))
+            ) {
+                items(occurrences.toList()) { (paragraphId, index) ->
+                    Text(
+                        text = "${searchBarInput} found in Paragraph $paragraphId",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .padding(vertical = dimensionResource(R.dimen.padding_small))
+                            .clickable(onClick = {
+                                navigateToReading(paragraphId)
+                            })
+                    )
+                }
+            }
+        }
+    }
 }
 
-/**
- * Display for book content
- */
-//@Composable
-//fun DisplayParagraphsList(
-//    paragraphs: List<Paragraphs>,
-//    searchTerm: String,
-//    listState: LazyListState
-//) {
-//    LazyColumn(
-//        state = listState,
-//        modifier = Modifier.fillMaxSize()
-//    ) {
-//        items(paragraphs) { paragraph ->
-//            val index = paragraphs.indexOf(paragraph)
-//            if (searchTerm.isNotEmpty()) {
-//                HighlightedText(paragraph.text, searchTerm, index, listState)
-//            }
-//        }
-//    }
-//}
-
-
-/**
- * Highlights Searched for text
- */
-//@Composable
-//fun HighlightedText(
-//    text: String,
-//    searchTerm: String,
-//    index: Int,
-//    listState: LazyListState
-//) {
-//    if (searchTerm.isNotEmpty()) {
-//        val annotatedString = buildAnnotatedString {
-//            var startIndex = 0
-//            var matchStart: Int
-//            var matchEnd: Int
-//
-//            while (startIndex < text.length) {
-//                matchStart = text.indexOf(searchTerm, startIndex, ignoreCase = true)
-//                if (matchStart == -1) break
-//
-//                matchEnd = matchStart + searchTerm.length
-//
-//                append(text.substring(startIndex, matchStart))
-//
-//                withStyle(style = SpanStyle(color = Color.Blue)) {
-//                    append(text.substring(matchStart, matchEnd))
-//                }
-//                startIndex = matchEnd
-//            }
-//
-//            append(text.substring(startIndex))
-//        }
-//
-//        // Scroll to the first match of the search term
-//        LaunchedEffect(searchTerm) {
-//            if (annotatedString.contains(searchTerm, ignoreCase = true)) {
-//                listState.animateScrollToItem(index)
-//            }
-//        }
-//
-//        Text(annotatedString)
-//    } else {
-//        Text(text)
-//    }
-//}
 

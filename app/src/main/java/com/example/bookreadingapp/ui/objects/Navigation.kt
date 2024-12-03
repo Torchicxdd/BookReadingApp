@@ -108,6 +108,7 @@ fun NavigationHost(
                 updateSearchBar = viewModel::updateSearchBarInput,
                 performSearch = viewModel::performSearch,
                 searchResult = viewModel.searchResultText,
+                navigateToReading =  { paragraphId -> navController.navigate(Routes.Reading.route + "/$paragraphId") },
                 mainViewModel = mainViewModel
             )
         }
