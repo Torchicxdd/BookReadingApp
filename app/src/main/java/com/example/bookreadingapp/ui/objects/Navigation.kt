@@ -85,6 +85,7 @@ fun NavigationHost(
         }
         composable(Routes.Bookshelf.route) {
             Bookshelf(
+                bookshelfBooks = viewModel.bookshelfBooks,
                 updateBook = viewModel::updateBook,
                 navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
                     launchSingleTop = true
