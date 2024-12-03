@@ -34,12 +34,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bookreadingapp.R
@@ -63,7 +68,8 @@ fun Reading(
     currentChapterId: Long?,
     changeChapter: (Long) -> Unit,
     viewModel: AppViewModel,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    createPages: (List<String>, TextMeasurer, Float, Dp, TextUnit, Density) -> List<List<String>>
 ) {
     // Query paragraphs, tables and images in current chapter
     if (currentChapterId != null) {
@@ -109,7 +115,8 @@ fun Reading(
         ChapterDisplay(
             paragraphs = stringList,
             width = boxWithConstraintsScope.maxWidth,
-            height = boxWithConstraintsScope.maxHeight
+            height = boxWithConstraintsScope.maxHeight,
+            createPages = createPages
         )
     }
     Box(
@@ -134,12 +141,31 @@ fun Reading(
 fun ChapterDisplay(
     paragraphs: List<String>,
     height: Dp,
-    width: Dp
+    width: Dp,
+    createPages: (
+        List<String>, TextMeasurer, Float, Dp, TextUnit, Density
+    ) -> List<List<String>>
 ) {
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    val maxHeightPx = with(density) { height.toPx() }
+    val textSizeInSp = with(density) {
+        dimensionResource(R.dimen.text_size).toSp()
+    }
+
+    val pages = createPages(
+        paragraphs,
+        textMeasurer,
+        maxHeightPx,
+        width,
+        textSizeInSp,
+        density
+    )
+
     LazyRow {
-        items(paragraphs) { paragraph ->
-            ParagraphDisplay(
-                paragraph = paragraph,
+        items(pages) { page ->
+            PageDisplay(
+                paragraphs = page,
                 width = width,
                 height = height
             )
@@ -148,17 +174,23 @@ fun ChapterDisplay(
 }
 
 @Composable
-fun ParagraphDisplay(
-    paragraph: String,
+fun PageDisplay(
+    paragraphs: List<String>,
     height: Dp,
     width: Dp
 ) {
-    Text(
-        text = paragraph,
+    Column(
         modifier = Modifier
             .width(width)
             .height(height)
-    )
+    ) {
+        for (paragraph in paragraphs) {
+            Text(
+                text = paragraph,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
 }
 
 private fun createStringList(

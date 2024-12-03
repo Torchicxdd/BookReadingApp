@@ -146,7 +146,8 @@ fun NavigationHost(
                     restoreState = true
                 }},
                 viewModel = viewModel,
-                mainViewModel = mainViewModel
+                mainViewModel = mainViewModel,
+                createPages = viewModel::createPages
             )
         }
 
