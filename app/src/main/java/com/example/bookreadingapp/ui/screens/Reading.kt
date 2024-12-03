@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicText
@@ -31,6 +33,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -58,6 +61,8 @@ import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.extensions.detectedTapWithoutSwipe
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
 import com.example.bookreadingapp.ui.utils.BookCover
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import java.io.File
 
 
 /**
@@ -69,7 +74,52 @@ fun Reading(
     readingMode: Boolean,
     toggleReadingMode: () -> Unit,
     currentChapterId: Long?
+    mainViewModel: MainViewModel
 ) {
+    // Query paragraphs, tables and images in current chapter
+    mainViewModel.paragraphViewModel.findParagraphByChapterId(1)
+    mainViewModel.tableViewModel.findTableByChapterId(1)
+    mainViewModel.imageViewModel.findImagesInAscOrder(1)
+
+    val searchParagraphsResult by mainViewModel.paragraphViewModel.searchedResults.observeAsState(listOf())
+    var paragraphPosition = 0
+    val searchTablesResult by mainViewModel.tableViewModel.searchedResults.observeAsState(listOf())
+    var tablePosition = 0
+    val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
+    var imagePosition = 0
+
+    LazyColumn (
+        modifier = Modifier
+            .fillMaxSize(),
+        content = {
+            items(searchParagraphsResult) { p ->
+                Text(p.text)
+            }
+        }
+    )
+
+//    var elementPosition = 0
+//    val totalElementCount = searchParagraphsResult.size + searchTablesResult.size + searchTablesResult.size
+
+//    for (i in 0..<totalElementCount) {
+//        Log.e("ReadingScreen", "$i $totalElementCount")
+//        if (searchParagraphsResult[paragraphPosition].position == elementPosition) {
+//            Text(text = searchParagraphsResult[i].text)
+//            paragraphPosition ++
+//            elementPosition ++
+//        }
+//        if (searchTablesResult[tablePosition].position == elementPosition) {
+//            Text(text = searchTablesResult[i].content)
+//            tablePosition ++
+//            elementPosition ++
+//        }
+//        if (searchImagesResult[imagePosition].position == elementPosition) {
+//            Text(text = "Image here: ${searchImagesResult[i].uri}")
+//            imagePosition ++
+//            elementPosition ++
+//        }
+//    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -265,7 +315,8 @@ fun PageScrollLazyColumn(
                     Text(
                         text = chunkedPages[currentPage][index],
                         style = TextStyle(fontSize = 18.sp),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
                             .align(Alignment.Center)
                     )
                 }
