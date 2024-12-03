@@ -76,6 +76,8 @@ fun Reading(
     currentChapterId: Long?
     mainViewModel: MainViewModel
 ) {
+    // Query chapters
+    mainViewModel.chapterViewModel.getChaptersByBookId(1)
     // Query paragraphs, tables and images in current chapter
     mainViewModel.paragraphViewModel.findParagraphByChapterId(1)
     mainViewModel.tableViewModel.findTableByChapterId(1)
@@ -88,15 +90,9 @@ fun Reading(
     val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
     var imagePosition = 0
 
-    LazyColumn (
-        modifier = Modifier
-            .fillMaxSize(),
-        content = {
-            items(searchParagraphsResult) { p ->
-                Text(p.text)
-            }
-        }
-    )
+    val paragraphList = searchTablesResult.map { p ->
+        p.content
+    }
 
 //    var elementPosition = 0
 //    val totalElementCount = searchParagraphsResult.size + searchTablesResult.size + searchTablesResult.size
@@ -141,7 +137,8 @@ fun Reading(
                 style = MaterialTheme.typography.displayLarge
             )
             PageScrollLazyColumn(
-                book = book
+                book = book,
+                textList = paragraphList
             )
         }
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
@@ -221,7 +218,8 @@ fun ChapterNavigation(modifier: Modifier = Modifier) {
  */
 @Composable
 fun PageScrollLazyColumn(
-    book: Book?
+    book: Book?,
+    textList: List<String>
 ) {
     //filler text for now
     val textPages = listOf(
@@ -264,7 +262,7 @@ fun PageScrollLazyColumn(
             itemsPerPage = (height / 260).toInt()
         }
 
-    val chunkedPages = textPages.chunked(itemsPerPage)
+    val chunkedPages = textList.chunked(itemsPerPage)
 
     val swipeModifier = Modifier.pointerInput(Unit) {
         detectHorizontalDragGestures { change, dragAmount ->
