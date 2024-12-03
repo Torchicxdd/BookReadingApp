@@ -19,9 +19,12 @@ fun GoToSearchButton(navigateToSearch: () -> Unit) {
 
 // Go to Reading Button
 @Composable
-fun GoToReadingButton(navigateToReading: () -> Unit) {
+fun GoToReadingButton(
+    chapterId: Long,
+    navigateToReading: (Long) -> Unit
+) {
     NavigationButton(text = stringResource(id = R.string.go_to_reading), testTag = "go_to_reading_button") {
-        navigateToReading()
+        navigateToReading(chapterId)
     }
 }
 

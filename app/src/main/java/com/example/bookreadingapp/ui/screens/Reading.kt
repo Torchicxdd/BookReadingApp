@@ -68,7 +68,7 @@ fun Reading(
     book: Book?,
     readingMode: Boolean,
     toggleReadingMode: () -> Unit,
-    currentChapterId: Int?
+    currentChapterId: Long?
 ) {
     Box(
         modifier = Modifier
