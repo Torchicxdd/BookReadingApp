@@ -110,6 +110,7 @@ class Book (
                     Chapters(e.replace("<h2>-Start", ""), chapterPosition, newBookID)
                 )
                 chapterPosition ++
+                Log.i("Book", "Chapter ID after insert: $currentChapterID")
             }
             // Insert tables
             if (e.contains("<table>-Start")) {
@@ -125,7 +126,6 @@ class Book (
                 )
                 elementPosition ++
             }
-            // This thing is not working
             // Insert images
             if (e.contains("<img>-PLACEHOLDER src=\"")) {
                 val imgSrc = e.substringAfter("src=\"").substringBefore("\"")
@@ -137,10 +137,10 @@ class Book (
                     mainViewModel.imageViewModel.insertImage(img)
                     elementPosition++
                 } else {
-                    Log.e("Image Parsing", "Image src is empty or invalid at position $elementPosition")
+                    Log.i("Image Parsing", "Image src is empty or invalid at position $elementPosition")
                 }
             } else {
-                Log.e("Image Parsing", "Didn't even start first if")
+                Log.i("Image Parsing", "Didn't even start first if")
             }
 
         }
