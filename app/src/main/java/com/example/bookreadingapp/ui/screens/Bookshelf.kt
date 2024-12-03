@@ -24,7 +24,6 @@ import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 // Main composable function for the bookshelf screen
 @Composable
 fun Bookshelf(
-    bookshelfBooks: List<Book>,
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
