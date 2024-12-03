@@ -102,7 +102,7 @@ class AppViewModel : ViewModel() {
             ).size.height.toFloat()
 
             // If the new paragraph and current page height is larger than the height
-            if (currentHeight + paragraphHeight > maxHeightPx && currentPage.isNotEmpty()) {
+            if (currentHeight + paragraphHeight > maxHeightPx - 100 && currentPage.isNotEmpty()) {
                 pages.add(currentPage.toList())
                 currentPage.clear()
                 currentHeight = 0f
