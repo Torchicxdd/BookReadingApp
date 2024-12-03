@@ -46,7 +46,6 @@ fun ContentTable(
     val searchChapterResults by mainViewModel.chapterViewModel.allChapters.observeAsState(listOf())
     val chapterViewModel = mainViewModel.chapterViewModel
     if (book != null) {
-        Log.i("ContentTable", "Not Null - ${book.bookID}")
         chapterViewModel.getChaptersByBookId(book.bookID)
     }
 
