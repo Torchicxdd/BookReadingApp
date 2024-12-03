@@ -22,12 +22,12 @@ interface ParagraphDao {
     fun deleteParagraph(id: Int)
 
     @Query("SELECT * FROM paragraphs WHERE chapterId = :chapterId ORDER BY paragraphPosition ASC")
-    fun findParagraphsInAscOrder(chapterId: Long): List<Paragraphs>
+    fun findParagraphsInAscOrder(chapterId: Int): List<Paragraphs>
 
     // Get all chapters as LiveData
     @Query("SELECT * FROM paragraphs")
     fun getAllParagraphs(): LiveData<List<Paragraphs>>
 
     @Query("SELECT * FROM paragraphs INNER JOIN chapters USING(chapterId) WHERE bookId = :bookId")
-    fun findParagraphByBookId(bookId: Long): List<Paragraphs>
+    fun findParagraphByBookId(bookId : Long): List<Paragraphs>
 }
