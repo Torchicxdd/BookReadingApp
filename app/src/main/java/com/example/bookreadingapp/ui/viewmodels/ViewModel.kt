@@ -108,7 +108,7 @@ class AppViewModel : ViewModel() {
             ).size.height.toFloat()
 
             // If the new paragraph and current page height is larger than the height
-            if (currentHeight + paragraphHeight > maxHeightPx - 100 && currentPage.isNotEmpty()) {
+            if (currentHeight + paragraphHeight > maxHeightPx - 200 && currentPage.isNotEmpty()) {
                 pages.add(currentPage.toList())
                 currentPage.clear()
                 currentHeight = 0f
@@ -165,7 +165,7 @@ class AppViewModel : ViewModel() {
             if (imageList.isNotEmpty() &&
                 imagePosition < imageList.size &&
                 imageList[imagePosition].position == elementPosition) {
-                stringList.add(imageList[imagePosition].uri)
+                stringList.add("<img>" + imageList[imagePosition].uri)
                 imagePosition++
             }
             elementPosition++
