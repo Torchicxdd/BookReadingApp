@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -54,14 +55,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun ContentTable(
     book: Book?,
+    viewModel: AppViewModel,
     mainViewModel: MainViewModel,
     navigateToSearch: () -> Unit,
-    navigateToReading: (Long) -> Unit,
+    navigateToReading: (Long) -> Unit
 ) {
     // Observe search results in viewmodel
     val searchChapterResults by mainViewModel.chapterViewModel.searchResults.observeAsState(listOf())
     if (book != null) {
         mainViewModel.chapterViewModel.getChaptersByBookId(book.bookID)
+        // Set chapter list in view model
+        viewModel.currentBookChapterList = searchChapterResults.map { chapter ->
+            chapter.id
+        }
     }
 
     Column(

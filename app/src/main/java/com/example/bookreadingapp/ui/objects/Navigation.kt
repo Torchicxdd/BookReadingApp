@@ -113,6 +113,7 @@ fun NavigationHost(
         composable(Routes.ContentTable.route) {
             ContentTable(
                 book = viewModel.selectedBook,
+                viewModel = viewModel,
                 mainViewModel = mainViewModel,
                 navigateToSearch =  { navController.navigate(Routes.Search.route) },
                 navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId") }
@@ -129,6 +130,8 @@ fun NavigationHost(
                 readingMode = viewModel.readingMode,
                 toggleReadingMode = { viewModel.readingMode = !viewModel.readingMode },
                 currentChapterId = navBackStack.arguments?.getLong("chapterId"),
+                changeChapter = {chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId")},
+                viewModel = viewModel,
                 mainViewModel = mainViewModel
             )
         }
