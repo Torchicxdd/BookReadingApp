@@ -97,7 +97,8 @@ fun NavigationHost(
                 searchBarInput = viewModel.searchBarInput,
                 updateSearchBar = viewModel::updateSearchBarInput,
                 performSearch = viewModel::performSearch,
-                searchResult = viewModel.searchResultText
+                searchResult = viewModel.searchResultText,
+                mainViewModel = mainViewModel
             )
         }
         composable(Routes.ContentTable.route) {
