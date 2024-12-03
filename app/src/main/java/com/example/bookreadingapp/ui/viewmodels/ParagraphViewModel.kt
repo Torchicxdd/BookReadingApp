@@ -35,7 +35,7 @@ class ParagraphViewModel(application: Application) : ViewModel() {
         repository.findParagraphByChapterId(chapterId)
     }
 
-    fun findParagraphsInAscOrder(chapterId: Int) {
+    fun findParagraphsInAscOrder(chapterId: Long) {
         repository.findParagraphsInAscOrder(chapterId)
     }
 }

@@ -2,14 +2,8 @@ package com.example.bookreadingapp.ui.screens
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,17 +14,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,12 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -51,13 +37,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
-import com.example.bookreadingapp.ui.BookReadingApp
-import com.example.bookreadingapp.ui.extensions.detectedTapWithoutSwipe
-import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.data.entities.Image
+import com.example.bookreadingapp.data.entities.Paragraphs
+import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.utils.BookCover
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
 /**
@@ -68,8 +54,22 @@ fun Reading(
     book: Book?,
     readingMode: Boolean,
     toggleReadingMode: () -> Unit,
-    currentChapterId: Long?
+    currentChapterId: Long?,
+    mainViewModel: MainViewModel
 ) {
+    // Query paragraphs, tables and images in current chapter
+    if (currentChapterId != null) {
+        mainViewModel.paragraphViewModel.findParagraphsInAscOrder(currentChapterId)
+        mainViewModel.tableViewModel.findTablesInAscOrder(currentChapterId)
+        mainViewModel.imageViewModel.findImagesInAscOrder(currentChapterId)
+    }
+
+    val searchParagraphsResult by mainViewModel.paragraphViewModel.searchedResults.observeAsState(listOf())
+    val searchTablesResult by mainViewModel.tableViewModel.searchedResults.observeAsState(listOf())
+    val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
+
+    val stringList = createStringList(searchParagraphsResult, searchTablesResult, searchImagesResult)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -91,7 +91,8 @@ fun Reading(
                 style = MaterialTheme.typography.displayLarge
             )
             PageScrollLazyColumn(
-                book = book
+                book = book,
+                textList = stringList
             )
         }
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
@@ -109,6 +110,50 @@ fun Reading(
             )
         }
     }
+}
+
+private fun createStringList(
+    paragraphList: List<Paragraphs>,
+    tableList: List<Table>,
+    imageList: List<Image>
+): List<String> {
+    var paragraphPosition = 0
+    var tablePosition = 0
+    var imagePosition = 0
+
+    val elementSize = paragraphList.size + tableList.size + imageList.size
+    var elementPosition = 0
+    val stringList: MutableList<String> = mutableListOf()
+
+    if (elementSize == 0) {
+        stringList.add("No Text")
+        return stringList
+    }
+
+    // Create a string list of all texts to be displayed
+    while(elementPosition < elementSize) {
+        if (paragraphList.isNotEmpty() &&
+            paragraphPosition < paragraphList.size &&
+            paragraphList[paragraphPosition].position == elementPosition) {
+            stringList.add(paragraphList[paragraphPosition].text)
+            paragraphPosition++
+        }
+        if (tableList.isNotEmpty() &&
+            tablePosition < tableList.size &&
+            tableList[tablePosition].position == elementPosition) {
+            stringList.add(tableList[tablePosition].content)
+            tablePosition++
+        }
+        if (imageList.isNotEmpty() &&
+            imagePosition < imageList.size &&
+            imageList[imagePosition].position == elementPosition) {
+            stringList.add(imageList[imagePosition].uri)
+            imagePosition++
+        }
+        elementPosition++
+    }
+
+    return stringList
 }
 
 /**
@@ -171,7 +216,8 @@ fun ChapterNavigation(modifier: Modifier = Modifier) {
  */
 @Composable
 fun PageScrollLazyColumn(
-    book: Book?
+    book: Book?,
+    textList: List<String>
 ) {
     //filler text for now
     val textPages = listOf(
@@ -214,7 +260,7 @@ fun PageScrollLazyColumn(
             itemsPerPage = (height / 260).toInt()
         }
 
-    val chunkedPages = textPages.chunked(itemsPerPage)
+    val chunkedPages = textList.chunked(itemsPerPage)
 
     val swipeModifier = Modifier.pointerInput(Unit) {
         detectHorizontalDragGestures { change, dragAmount ->
@@ -265,7 +311,8 @@ fun PageScrollLazyColumn(
                     Text(
                         text = chunkedPages[currentPage][index],
                         style = TextStyle(fontSize = 18.sp),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
                             .align(Alignment.Center)
                     )
                 }

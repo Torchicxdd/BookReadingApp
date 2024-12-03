@@ -31,7 +31,7 @@ class ImageRepository(private val imageDao: ImageDao) {
         }
     }
 
-    fun findImagesInAscOrder(chapterId: Int) {
+    fun findImagesInAscOrder(chapterId: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResults.value = asyncFindImagesInAscOrder(chapterId).await()
         }
@@ -42,7 +42,7 @@ class ImageRepository(private val imageDao: ImageDao) {
             return@async imageDao.findImageById(id)
         }
 
-    private fun asyncFindImagesInAscOrder(chapterId: Int) : Deferred<List<Image>?> =
+    private fun asyncFindImagesInAscOrder(chapterId: Long) : Deferred<List<Image>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async imageDao.findImagesInAscOrder(chapterId)
         }

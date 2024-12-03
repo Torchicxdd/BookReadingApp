@@ -128,7 +128,8 @@ fun NavigationHost(
                 book = viewModel.selectedBook,
                 readingMode = viewModel.readingMode,
                 toggleReadingMode = { viewModel.readingMode = !viewModel.readingMode },
-                currentChapterId = navBackStack.arguments?.getLong("chapterId")
+                currentChapterId = navBackStack.arguments?.getLong("chapterId"),
+                mainViewModel = mainViewModel
             )
         }
 

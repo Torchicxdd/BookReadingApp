@@ -35,7 +35,7 @@ class TableViewModel(application: Application) : ViewModel() {
         repository.findTableByChapterId(chapterId)
     }
 
-    fun findTablesInAscOrder(chapterId: Int) {
+    fun findTablesInAscOrder(chapterId: Long) {
         repository.findTablesInAscOrder(chapterId)
     }
 }
