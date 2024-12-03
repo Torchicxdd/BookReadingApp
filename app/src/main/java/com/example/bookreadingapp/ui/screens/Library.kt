@@ -85,7 +85,7 @@ fun Library(
                     downloadingBooks[book.arrayIndex] == true
                 },
                 // Disable clicks if any book is downloading
-                disableAllClicks = isDownloading.value
+                disableAllClicks = isDownloading.value || isInserting.value
             )
         }
     }
