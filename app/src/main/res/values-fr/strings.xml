@@ -66,6 +66,7 @@
     <string name="no_books_to_download">Aucun livre disponible à télécharger</string>
     <string name="back_button">Revenir</string>
     <string name="download_progress">Progression du téléchargement et de la décompression: %1$d%%</string>
+    <string name="insert_progress">Progression de l\'analyse et de l\'insertion : %1$d%%</string>
     <string name="next_chap">&gt;&gt;</string>
     <string name="prev_chap">&lt;&lt;</string>
 </resources>

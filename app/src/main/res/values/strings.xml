@@ -63,6 +63,7 @@
     <string name="no_books_to_download">No books available to download</string>
     <string name="back_button">Back</string>
     <string name="download_progress">Download and Unzip Progress: %1$d%%</string>
+    <string name="insert_progress">Parsing and Inserting Progress: %1$d%%</string>
     <string name="next_chap">&gt;&gt;</string>
     <string name="prev_chap">&lt;&lt;</string>
 </resources>

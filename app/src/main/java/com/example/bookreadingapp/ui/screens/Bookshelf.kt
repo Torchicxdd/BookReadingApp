@@ -25,6 +25,7 @@ fun Bookshelf(
     updateBook: (Book) -> Unit,
     navigateToTableOfContents: () -> Unit,
     progressPercentage: State<Int>,
+    progressInsertPercentage: State<Int>,
     isDownloading: State<Boolean>,
     setBookDownloading: (Int, Boolean) -> Unit,
     downloadingBooks: MutableMap<Int, Boolean>
@@ -45,6 +46,7 @@ fun Bookshelf(
         },
         isDownloading.value,
         progressPercentage.value,
+        progressInsertPercentage.value,
         isBookDownloading = { book -> downloadingBooks[book.arrayIndex] ?: false },
         disableClicks = false
     )
@@ -75,6 +77,7 @@ fun BooksAvailable(
     onBookClick: (Book) -> Unit,
     isDownloading: Boolean,
     progressPercentage: Int,
+    progressInsertPercentage: Int,
     isBookDownloading: (Book) -> Boolean,
     disableClicks: Boolean
 ) {
@@ -96,7 +99,8 @@ fun BooksAvailable(
             // Display progress message if download or unzip is ongoing
             if (isDownloading) {
                 ProgressMessage(
-                    progress = progressPercentage
+                    progress = progressPercentage,
+                    progressInsert = progressInsertPercentage
                 )
             }
         }
