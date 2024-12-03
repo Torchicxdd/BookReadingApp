@@ -28,11 +28,11 @@ interface ChaptersDao {
 
     // Find chapters by their title
     @Query("SELECT * FROM chapters WHERE title = :title")
-    fun findChapterByName(title: String): LiveData<List<Chapters>>
+    fun findChapterByName(title: String): List<Chapters>
 
     // Get all chapters by bookId in ascending order
     @Query("SELECT * FROM chapters WHERE bookId = :bookId ORDER BY chapterPosition ASC")
-    fun getChaptersByBookId(bookId: Long): LiveData<List<Chapters>>
+    fun getChaptersByBookId(bookId: Long): List<Chapters>
 
     // Delete a chapter by its id
     @Query("DELETE FROM chapters WHERE chapterId = :id")
