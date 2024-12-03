@@ -113,10 +113,10 @@ fun NavigationHost(
         composable(Routes.ContentTable.route) {
             ContentTable(
                 book = viewModel.selectedBook,
+                viewModel = viewModel,
                 mainViewModel = mainViewModel,
                 navigateToSearch =  { navController.navigate(Routes.Search.route) },
-                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId") },
-                setMaxChapter = {maxChapter -> viewModel.maxChapter = maxChapter}
+                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId") }
             )
         }
         composable(

@@ -15,8 +15,7 @@ class AppViewModel : ViewModel() {
     var searchResultText by mutableStateOf("")
 
     // To keep track of changing chapters
-    var currentChapter = 0;
-    var maxChapter = 0
+    lateinit var currentBookChapterList: List<Long>
 
     // Track which books are downloading
     var downloadingBooks by mutableStateOf(mutableMapOf<Int, Boolean>())
