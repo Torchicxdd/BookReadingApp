@@ -109,7 +109,7 @@ fun BooksAvailable(
             libraryBooks = books,
             onBookClick = onBookClick,
             isBookDownloading = isBookDownloading,
-            disableAllClicks = true
+            disableAllClicks = disableClicks
         )
     }
 }
