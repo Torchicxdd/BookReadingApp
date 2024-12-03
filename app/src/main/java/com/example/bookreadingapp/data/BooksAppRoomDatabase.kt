@@ -30,10 +30,10 @@ abstract class BooksAppRoomDatabase: RoomDatabase() {
             synchronized(this) {
                 var instance = INSTANCE
                 if (instance == null) {
-                    instance = Room.databaseBuilder(
+                    instance = Room.inMemoryDatabaseBuilder(
                         context.applicationContext,
                         BooksAppRoomDatabase::class.java,
-                        "books_app_database"
+//                        "books_app_database"
                     ).fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
