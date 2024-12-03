@@ -96,7 +96,7 @@ class Book (
     suspend fun insertBook(mainViewModel: MainViewModel): Long {
         val newBookID = mainViewModel.bookViewModel.insertBook(
             Books(
-                title.toString(), "AUTHOR_HERE", imageResourceId.toString()
+                title.toString(), "AUTHOR_HERE", htmlFilePath, imageResourceId.toString()
             )
         )
         return newBookID
@@ -145,8 +145,7 @@ class Book (
                 val imgSrc = e.substringAfter("src=\"").substringBefore("\"")
                 val validImgSrc = imgSrc.trim()
                 if (validImgSrc.isNotEmpty()) {
-                    val imgPathWithPrefix = "./$validImgSrc"
-                    val img = Image(imgPathWithPrefix, elementPosition)
+                    val img = Image("/$validImgSrc", elementPosition)
                     Log.e("Image Parsing", "Image URI: ${img.uri}")
                     mainViewModel.imageViewModel.insertImage(img)
                     elementPosition++
