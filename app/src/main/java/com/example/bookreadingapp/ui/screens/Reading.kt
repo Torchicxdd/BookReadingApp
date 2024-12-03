@@ -76,45 +76,42 @@ fun Reading(
     currentChapterId: Long?
     mainViewModel: MainViewModel
 ) {
-    // Query chapters
-    mainViewModel.chapterViewModel.getChaptersByBookId(1)
     // Query paragraphs, tables and images in current chapter
-    mainViewModel.paragraphViewModel.findParagraphByChapterId(1)
-    mainViewModel.tableViewModel.findTableByChapterId(1)
+    mainViewModel.paragraphViewModel.findParagraphsInAscOrder(1)
+    mainViewModel.tableViewModel.findTablesInAscOrder(1)
     mainViewModel.imageViewModel.findImagesInAscOrder(1)
 
     val searchParagraphsResult by mainViewModel.paragraphViewModel.searchedResults.observeAsState(listOf())
-    var paragraphPosition = 0
     val searchTablesResult by mainViewModel.tableViewModel.searchedResults.observeAsState(listOf())
-    var tablePosition = 0
     val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
+
+    var paragraphPosition = 0
+    var tablePosition = 0
     var imagePosition = 0
 
-    val paragraphList = searchTablesResult.map { p ->
-        p.content
+    val elementSize = searchParagraphsResult.size + searchTablesResult.size + searchImagesResult.size
+    var elementPosition = 0
+
+    val stringList: MutableList<String> = mutableListOf()
+
+    while(elementPosition < elementSize) {
+        if (searchParagraphsResult.isNotEmpty() &&
+            searchParagraphsResult[paragraphPosition].position == elementPosition) {
+            stringList.add(searchParagraphsResult[paragraphPosition].text)
+            paragraphPosition++
+        }
+        if (searchTablesResult.isNotEmpty() &&
+            searchTablesResult[tablePosition].position == elementPosition) {
+            stringList.add(searchTablesResult[tablePosition].content)
+            tablePosition++
+        }
+        if (searchImagesResult.isNotEmpty() &&
+            searchImagesResult[imagePosition].position == elementPosition) {
+            stringList.add(searchImagesResult[imagePosition].uri)
+            imagePosition++
+        }
+        elementPosition++
     }
-
-//    var elementPosition = 0
-//    val totalElementCount = searchParagraphsResult.size + searchTablesResult.size + searchTablesResult.size
-
-//    for (i in 0..<totalElementCount) {
-//        Log.e("ReadingScreen", "$i $totalElementCount")
-//        if (searchParagraphsResult[paragraphPosition].position == elementPosition) {
-//            Text(text = searchParagraphsResult[i].text)
-//            paragraphPosition ++
-//            elementPosition ++
-//        }
-//        if (searchTablesResult[tablePosition].position == elementPosition) {
-//            Text(text = searchTablesResult[i].content)
-//            tablePosition ++
-//            elementPosition ++
-//        }
-//        if (searchImagesResult[imagePosition].position == elementPosition) {
-//            Text(text = "Image here: ${searchImagesResult[i].uri}")
-//            imagePosition ++
-//            elementPosition ++
-//        }
-//    }
 
     Box(
         modifier = Modifier
@@ -138,7 +135,7 @@ fun Reading(
             )
             PageScrollLazyColumn(
                 book = book,
-                textList = paragraphList
+                textList = stringList
             )
         }
         Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
