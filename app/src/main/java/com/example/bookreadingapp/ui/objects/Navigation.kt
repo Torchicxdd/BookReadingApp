@@ -150,7 +150,10 @@ fun NavigationHost(
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
                 createPages = viewModel::createPages,
-                createStringList = viewModel::createStringList
+                createStringList = viewModel::createStringList,
+                pages = viewModel.pages,
+                pageLazyListState = viewModel.pagesLazyListState,
+                resetScroll = viewModel::resetReadingScroll
             )
         }
 
