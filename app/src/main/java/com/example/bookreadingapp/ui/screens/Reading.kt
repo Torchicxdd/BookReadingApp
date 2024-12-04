@@ -1,8 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.graphics.BitmapFactory
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -150,7 +148,8 @@ fun ChapterDisplay(
                 parentDirectory = parentDirectory,
                 paragraphs = page,
                 width = width,
-                height = height
+                height = height,
+                textSize = textSizeInSp
             )
         }
     }
@@ -161,7 +160,8 @@ fun PageDisplay(
     parentDirectory: String?,
     paragraphs: List<String>,
     height: Dp,
-    width: Dp
+    width: Dp,
+    textSize: TextUnit
 ) {
     Column(
         modifier = Modifier
@@ -178,7 +178,8 @@ fun PageDisplay(
             } else {
                 Text(
                     text = paragraph,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    fontSize = textSize
                 )
             }
         }
