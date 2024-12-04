@@ -43,10 +43,12 @@ fun Bookshelf(
     }
     // Converts Books entity into Book objects
     val convertedBooks = downloadedBooks.mapIndexed() { i, b ->
-        Book(bookID = b.id,
-            imageResourceId = b.coverImage.toInt(),
-            title = b.title.toInt(),
-            arrayIndex = i )
+        val convertedBook = Book(bookID = b.id,
+                        imageResourceId = b.coverImage.toInt(),
+                        title = b.title.toInt(),
+                        arrayIndex = i )
+        convertedBook.htmlFilePath = b.filePath
+        convertedBook
     }
 
     BooksAvailable(

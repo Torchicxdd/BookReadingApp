@@ -51,6 +51,7 @@ class Book (
         when (element.tagName()) {
             // Mark where images are
             "img" -> elements.add("<img>-PLACEHOLDER src=\"" + element.attr("src") + "\"")
+
             // Mark where paragraphs begin and end
             "p" -> {
                 elements.add("<p>-Start" + element.text())
@@ -145,15 +146,13 @@ class Book (
                 val imgSrc = e.substringAfter("src=\"").substringBefore("\"")
                 val validImgSrc = imgSrc.trim()
                 if (validImgSrc.isNotEmpty()) {
-                    val img = Image("/$validImgSrc", elementPosition)
+                    val img = Image("/$validImgSrc", currentChapterID, elementPosition)
                     Log.e("Image Parsing", "Image URI: ${img.uri}")
                     mainViewModel.imageViewModel.insertImage(img)
                     elementPosition++
                 } else {
                     Log.i("Image Parsing", "Image src is empty or invalid at position $elementPosition")
                 }
-            } else {
-                Log.i("Image Parsing", "Didn't even start first if")
             }
             processedElements++
             val progress = (processedElements * 100 / totalElements)

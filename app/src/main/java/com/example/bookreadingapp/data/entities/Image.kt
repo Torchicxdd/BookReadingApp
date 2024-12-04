@@ -21,7 +21,7 @@ class Image {
     @ColumnInfo(name = "imageId")
     var id: Long = 0
 
-    var chapterId: Long = 1
+    var chapterId: Long = 0
 
     @ColumnInfo(name = "imagePosition")
     var position: Int = 0
@@ -30,8 +30,9 @@ class Image {
 
     constructor()
 
-    constructor(uri: String, position: Int) {
+    constructor(uri: String, chapterId: Long, position: Int) {
         this.uri = uri
+        this.chapterId = chapterId
         this.position = position
     }
 }
