@@ -146,7 +146,7 @@ class Book (
                 val imgSrc = e.substringAfter("src=\"").substringBefore("\"")
                 val validImgSrc = imgSrc.trim()
                 if (validImgSrc.isNotEmpty()) {
-                    val img = Image("/$validImgSrc", elementPosition)
+                    val img = Image("/$validImgSrc", currentChapterID, elementPosition)
                     Log.e("Image Parsing", "Image URI: ${img.uri}")
                     mainViewModel.imageViewModel.insertImage(img)
                     elementPosition++

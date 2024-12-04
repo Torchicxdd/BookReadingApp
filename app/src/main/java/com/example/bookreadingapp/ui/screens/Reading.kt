@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -157,6 +158,9 @@ fun PageDisplay(
             .height(height)
     ) {
         for (paragraph in paragraphs) {
+            if (paragraph.contains("img")) {
+                Log.i("DisplayImage", paragraph)
+            }
             Text(
                 text = paragraph,
                 modifier = Modifier.fillMaxWidth()
@@ -164,6 +168,7 @@ fun PageDisplay(
         }
     }
 }
+
 /**
  * Load and display an image from app's internal storage
  */
@@ -179,7 +184,7 @@ fun StorageImage(
         val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
 
         Image(bitmap = bitmap.asImageBitmap(),
-            contentDescription = "/images/fig70tn.gif")
+            contentDescription = imageName)
     }
 }
 

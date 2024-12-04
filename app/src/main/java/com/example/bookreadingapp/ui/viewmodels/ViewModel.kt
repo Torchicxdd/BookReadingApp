@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.viewmodels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -167,6 +168,7 @@ class AppViewModel : ViewModel() {
                 imageList[imagePosition].position == elementPosition) {
                 stringList.add("<img>" + imageList[imagePosition].uri)
                 imagePosition++
+                Log.i("DisplayImage", "<img>" + imageList[imagePosition].uri)
             }
             elementPosition++
         }
