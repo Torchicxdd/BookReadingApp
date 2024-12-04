@@ -1,10 +1,11 @@
 package com.example.bookreadingapp.ui.screens
 
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -33,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -86,6 +88,7 @@ fun Reading(
     val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
 
     val stringList = createStringList(searchParagraphsResult, searchTablesResult, searchImagesResult)
+    var imagePath = ""
 
     BoxWithConstraints(
         modifier = Modifier
