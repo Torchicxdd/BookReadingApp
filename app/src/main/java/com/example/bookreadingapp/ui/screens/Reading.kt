@@ -1,6 +1,7 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -183,7 +184,7 @@ fun PageDisplay(
     ) {
         for (paragraph in paragraphs) {
             // Load image from local storage if contains <img> tag
-            if (paragraph.contains("img")) {
+            if (paragraph.contains("<img>")) {
                 StorageImage(
                     parentDirectory = parentDirectory,
                     imageName = paragraph.replace("<img>", "")
