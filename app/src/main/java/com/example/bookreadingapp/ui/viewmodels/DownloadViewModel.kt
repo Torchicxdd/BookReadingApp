@@ -35,8 +35,7 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
         url: String,
         directoryName: String,
         book: Book,
-        mainViewModel: MainViewModel,
-        moveBookToBookshelf: (Book) -> Unit
+        mainViewModel: MainViewModel
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
@@ -60,9 +59,6 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
             val newBookID = book.insertBook(mainViewModel)
             book.insertElements(newBookID, mainViewModel, _progressInsertPercentage)
             _isInserting.emit(false)
-
-            // Check if both download and insertion are complete
-            checkCompletion(book, moveBookToBookshelf)
         }
     }
 
@@ -108,13 +104,5 @@ class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private suspend fun updateDirectoryContents(directoryName: String) {
         val contents = repository.listDirectoryContents(directoryName)
         _directoryContents.postValue(contents)
-    }
-
-    // Check if both download and insert processes are complete
-    private fun checkCompletion(book: Book, moveBookToBookshelf: (Book) -> Unit) {
-        if (_progressPercentage.value == 100 && _progressInsertPercentage.value == 100) {
-            // Move the book to bookshelf when both download and insert are complete
-            moveBookToBookshelf(book)
-        }
     }
 }
