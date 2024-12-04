@@ -5,6 +5,7 @@ import com.example.bookreadingapp.data.entities.Paragraphs
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.bookreadingapp.data.entities.Chapters
 
 @Dao
 interface ParagraphDao {

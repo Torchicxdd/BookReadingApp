@@ -174,6 +174,7 @@ fun findOccurrences(searchTerm: String, paragraphs: List<Paragraphs>): List<Pair
     return occurrences
 }
 
+
 @Composable
 fun DisplaySearchResults(
     searchPerformed: Boolean,
