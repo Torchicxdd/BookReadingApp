@@ -172,9 +172,6 @@ class Book (
 // ID's set to zero because they aren't used yet
 val books = listOf(
     Book(0, R.drawable.wood_cover, R.string.wood, 0),
-    Book(0, R.drawable.plumbing_cover, R.string.plumbing, 1),
-    Book(0, R.drawable.hardware_cover, R.string.hardware, 2),
-    Book(0, R.drawable.steam_cover, R.string.steam, 3),
-    Book(0, R.drawable.dairy_cover, R.string.dairy, 4),
-    Book(0, R.drawable.mushroom_cover, R.string.mushroom, 5)
+    Book(0, R.drawable.dairy_cover, R.string.dairy, 1),
+    Book(0, R.drawable.mushroom_cover, R.string.mushroom, 2)
 )

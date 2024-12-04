@@ -4,9 +4,6 @@
 
     <string-array name="download">
         <item>https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip</item>
-        <item>https://www.gutenberg.org/cache/epub/25269/pg25269-h.zip</item>
-        <item>https://www.gutenberg.org/cache/epub/72897/pg72897-h.zip</item>
-        <item>https://www.gutenberg.org/cache/epub/22657/pg22657-h.zip</item>
         <item>https://www.gutenberg.org/cache/epub/27778/pg27778-h.zip</item>
         <item>https://www.gutenberg.org/cache/epub/29086/pg29086-h.zip</item>
         <item>https://www.gutenberg.org/cache/epub/63421/pg63421-h.zip</item>
