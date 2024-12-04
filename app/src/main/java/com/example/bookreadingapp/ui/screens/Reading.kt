@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.entities.Image
@@ -72,6 +74,11 @@ fun Reading(
     val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
 
     val stringList = createStringList(searchParagraphsResult, searchTablesResult, searchImagesResult)
+    // Find parent directory
+    var parentDirectory = ""
+    if (book != null) {
+        parentDirectory = File(book.htmlFilePath).parent?: ""
+    }
 
     BoxWithConstraints(
         modifier = Modifier
@@ -86,6 +93,7 @@ fun Reading(
     ) {
         val boxWithConstraintsScope = this
         ChapterDisplay(
+            parentDirectory = parentDirectory,
             paragraphs = stringList,
             width = boxWithConstraintsScope.maxWidth,
             height = boxWithConstraintsScope.maxHeight,
@@ -112,6 +120,7 @@ fun Reading(
 
 @Composable
 fun ChapterDisplay(
+    parentDirectory: String?,
     paragraphs: List<String>,
     height: Dp,
     width: Dp,
@@ -138,6 +147,7 @@ fun ChapterDisplay(
     LazyRow {
         items(pages) { page ->
             PageDisplay(
+                parentDirectory = parentDirectory,
                 paragraphs = page,
                 width = width,
                 height = height
@@ -148,6 +158,7 @@ fun ChapterDisplay(
 
 @Composable
 fun PageDisplay(
+    parentDirectory: String?,
     paragraphs: List<String>,
     height: Dp,
     width: Dp
@@ -158,13 +169,18 @@ fun PageDisplay(
             .height(height)
     ) {
         for (paragraph in paragraphs) {
+            // Load image from local storage if contains <img> tag
             if (paragraph.contains("img")) {
-                Log.i("DisplayImage", paragraph)
+                StorageImage(
+                    parentDirectory = parentDirectory,
+                    imageName = paragraph.replace("<img>", "")
+                )
+            } else {
+                Text(
+                    text = paragraph,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
-            Text(
-                text = paragraph,
-                modifier = Modifier.fillMaxWidth()
-            )
         }
     }
 }
@@ -182,9 +198,11 @@ fun StorageImage(
 
     if (imageFile.exists()) {
         val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-
-        Image(bitmap = bitmap.asImageBitmap(),
-            contentDescription = imageName)
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = imageName,
+            modifier = Modifier.size(100.dp)
+        )
     }
 }
 

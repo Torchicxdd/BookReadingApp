@@ -168,7 +168,6 @@ class AppViewModel : ViewModel() {
                 imageList[imagePosition].position == elementPosition) {
                 stringList.add("<img>" + imageList[imagePosition].uri)
                 imagePosition++
-                Log.i("DisplayImage", "<img>" + imageList[imagePosition].uri)
             }
             elementPosition++
         }
