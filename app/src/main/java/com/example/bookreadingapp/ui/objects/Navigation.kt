@@ -115,7 +115,9 @@ fun NavigationHost(
                 searchBarInput = viewModel.searchBarInput,
                 updateSearchBar = viewModel::updateSearchBarInput,
                 performSearch = viewModel::performSearch,
-                searchResult = viewModel.searchResultText
+                searchResult = viewModel.searchResultText,
+                navigateToReading =  { paragraphId -> navController.navigate(Routes.Reading.route + "/$paragraphId") },
+                mainViewModel = mainViewModel
             )
         }
         composable(Routes.ContentTable.route) {
