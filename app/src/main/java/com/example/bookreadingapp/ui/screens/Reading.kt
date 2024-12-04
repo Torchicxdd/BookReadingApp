@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.screens
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -55,6 +56,7 @@ import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.utils.BookCover
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import java.io.File
 
 
 /**

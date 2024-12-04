@@ -51,6 +51,7 @@ class Book (
         when (element.tagName()) {
             // Mark where images are
             "img" -> elements.add("<img>-PLACEHOLDER src=\"" + element.attr("src") + "\"")
+
             // Mark where paragraphs begin and end
             "p" -> {
                 elements.add("<p>-Start" + element.text())
@@ -152,8 +153,6 @@ class Book (
                 } else {
                     Log.i("Image Parsing", "Image src is empty or invalid at position $elementPosition")
                 }
-            } else {
-                Log.i("Image Parsing", "Didn't even start first if")
             }
             processedElements++
             val progress = (processedElements * 100 / totalElements)
