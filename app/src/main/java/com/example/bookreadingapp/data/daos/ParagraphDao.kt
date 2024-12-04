@@ -5,7 +5,6 @@ import com.example.bookreadingapp.data.entities.Paragraphs
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.bookreadingapp.data.entities.Chapters
 
 @Dao
 interface ParagraphDao {
@@ -22,7 +21,7 @@ interface ParagraphDao {
     fun deleteParagraph(id: Int)
 
     @Query("SELECT * FROM paragraphs WHERE chapterId = :chapterId ORDER BY paragraphPosition ASC")
-    fun findParagraphsInAscOrder(chapterId: Int): List<Paragraphs>
+    fun findParagraphsInAscOrder(chapterId: Long): List<Paragraphs>
 
     // Get all chapters as LiveData
     @Query("SELECT * FROM paragraphs")
