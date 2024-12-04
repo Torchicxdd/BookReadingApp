@@ -1,5 +1,6 @@
 package com.example.bookreadingapp.ui.viewmodels
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,8 @@ class AppViewModel : ViewModel() {
     var selectedBook by mutableStateOf<Book?>(null)
     var searchBarInput by mutableStateOf("")
     var searchResultText by mutableStateOf("")
+    var pages: List<List<String>> by mutableStateOf<List<List<String>>>(emptyList())
+    val pagesLazyListState = LazyListState()
 
     // To keep track of changing chapters
     lateinit var currentBookChapterList: List<Long>
@@ -94,7 +97,7 @@ class AppViewModel : ViewModel() {
         width: Dp,
         fontSize: TextUnit,
         localDensity: Density
-    ): List<List<String>> {
+    ) {
         val pages = mutableListOf<List<String>>()
         val currentPage = mutableListOf<String>()
         var currentHeight = 0f
@@ -124,7 +127,7 @@ class AppViewModel : ViewModel() {
             pages.add(currentPage)
         }
 
-        return pages
+        this.pages = pages
     }
 
     /**
@@ -172,5 +175,9 @@ class AppViewModel : ViewModel() {
         }
 
         return stringList
+    }
+
+    suspend fun resetReadingScroll() {
+        pagesLazyListState.scrollToItem(0)
     }
 }

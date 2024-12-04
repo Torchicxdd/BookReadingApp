@@ -1,22 +1,18 @@
 package com.example.bookreadingapp.ui.screens
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -25,39 +21,30 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.bookreadingapp.R
 import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.entities.Table
-import com.example.bookreadingapp.ui.utils.BookCover
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 /**
@@ -72,8 +59,11 @@ fun Reading(
     changeChapter: (Long) -> Unit,
     viewModel: AppViewModel,
     mainViewModel: MainViewModel,
-    createPages: (List<String>, TextMeasurer, Float, Dp, TextUnit, Density) -> List<List<String>>,
-    createStringList: (List<Paragraphs>, List<Table>, List<Image>) -> List<String>
+    createPages: (List<String>, TextMeasurer, Float, Dp, TextUnit, Density) -> Unit,
+    createStringList: (List<Paragraphs>, List<Table>, List<Image>) -> List<String>,
+    pages: List<List<String>>,
+    pageLazyListState: LazyListState,
+    resetScroll: suspend () -> Unit
 ) {
     // Query paragraphs, tables and images in current chapter
     if (currentChapterId != null) {
@@ -106,7 +96,9 @@ fun Reading(
             width = boxWithConstraintsScope.maxWidth,
             height = boxWithConstraintsScope.maxHeight,
             createPages = createPages,
-            verticalScrollState = verticalScrollState
+            pages = pages,
+            verticalScrollState = verticalScrollState,
+            pageLazyListState = pageLazyListState
         )
     }
     Box(
@@ -119,6 +111,7 @@ fun Reading(
                 currentChapterId = currentChapterId,
                 currentChapterList = viewModel.currentBookChapterList,
                 changeChapter = changeChapter,
+                resetScroll = resetScroll,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(dimensionResource(R.dimen.padding_small))
@@ -134,8 +127,10 @@ fun ChapterDisplay(
     width: Dp,
     createPages: (
         List<String>, TextMeasurer, Float, Dp, TextUnit, Density
-    ) -> List<List<String>>,
-    verticalScrollState: ScrollState
+    ) -> Unit,
+    verticalScrollState: ScrollState,
+    pages: List<List<String>>,
+    pageLazyListState: LazyListState,
 ) {
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
@@ -144,16 +139,9 @@ fun ChapterDisplay(
         dimensionResource(R.dimen.text_size).toSp()
     }
 
-    val pages = createPages(
-        paragraphs,
-        textMeasurer,
-        maxHeightPx,
-        width,
-        textSizeInSp,
-        density
-    )
+    createPages(paragraphs, textMeasurer, maxHeightPx, width, textSizeInSp, density)
 
-    LazyRow {
+    LazyRow(state = pageLazyListState) {
         items(pages) { page ->
             PageDisplay(
                 paragraphs = page,
@@ -198,6 +186,7 @@ fun ChapterNavigation(
     currentChapterId: Long?,
     currentChapterList: List<Long>,
     changeChapter: (Long) -> Unit,
+    resetScroll: suspend () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -207,12 +196,17 @@ fun ChapterNavigation(
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(R.dimen.padding_medium))
     ){
+        val coroutineScope = rememberCoroutineScope()
+
         Button(
             onClick = {
-                if (currentChapterId != null) {
-                    val previousChapter = currentChapterId - 1
-                    if (currentChapterList.contains(previousChapter)) {
-                        changeChapter(previousChapter)
+                coroutineScope.launch {
+                    resetScroll()
+                    if (currentChapterId != null) {
+                        val previousChapter = currentChapterId - 1
+                        if (currentChapterList.contains(previousChapter)) {
+                            changeChapter(previousChapter)
+                        }
                     }
                 }
             },
@@ -225,10 +219,13 @@ fun ChapterNavigation(
 
         Button(
             onClick = {
-                if (currentChapterId != null) {
-                    val nextChapter = currentChapterId + 1
-                    if (currentChapterList.contains(nextChapter)) {
-                        changeChapter(nextChapter)
+                coroutineScope.launch {
+                    resetScroll()
+                    if (currentChapterId != null) {
+                        val nextChapter = currentChapterId + 1
+                        if (currentChapterList.contains(nextChapter)) {
+                            changeChapter(nextChapter)
+                        }
                     }
                 }
             },
