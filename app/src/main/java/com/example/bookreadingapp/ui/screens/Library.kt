@@ -30,7 +30,7 @@ fun Library(
     progressInsertPercentage: State<Int>,
     isDownloading: State<Boolean>,
     isInserting: State<Boolean>,
-    setupDownload: (String, String, Book, MainViewModel, (Book) -> Unit) -> Unit,
+    setupDownload: (String, String, Book, MainViewModel) -> Unit,
     setBookDownloading: (Int, Boolean) -> Unit,
     downloadingBooks: MutableMap<Int, Boolean>,
     mainViewModel: MainViewModel
@@ -73,9 +73,10 @@ fun Library(
                             url,
                             "${url.substringAfterLast("/").replace(".zip", "")}-dir",
                             book,
-                            mainViewModel,
-                            moveBookToBookshelf
+                            mainViewModel
                         )
+
+                        moveBookToBookshelf(book)
 
                         // Mark this book as downloading
                         setBookDownloading(book.arrayIndex, true)

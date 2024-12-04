@@ -1,8 +1,8 @@
 package com.example.bookreadingapp.ui.screens
 
 import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,14 +15,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -44,6 +48,7 @@ import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.data.entities.Table
 import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -59,8 +64,11 @@ fun Reading(
     changeChapter: (Long) -> Unit,
     viewModel: AppViewModel,
     mainViewModel: MainViewModel,
-    createPages: (List<String>, TextMeasurer, Float, Dp, TextUnit, Density) -> List<List<String>>,
-    createStringList: (List<Paragraphs>, List<Table>, List<Image>) -> List<String>
+    createPages: (List<String>, TextMeasurer, Float, Dp, TextUnit, Density) -> Unit,
+    createStringList: (List<Paragraphs>, List<Table>, List<Image>) -> List<String>,
+    pages: List<List<String>>,
+    pageLazyListState: LazyListState,
+    resetScroll: suspend () -> Unit
 ) {
     // Query paragraphs, tables and images in current chapter
     if (currentChapterId != null) {
@@ -69,6 +77,7 @@ fun Reading(
         mainViewModel.imageViewModel.findImagesInAscOrder(currentChapterId)
     }
 
+    val verticalScrollState = rememberScrollState()
     val searchParagraphsResult by mainViewModel.paragraphViewModel.searchedResults.observeAsState(listOf())
     val searchTablesResult by mainViewModel.tableViewModel.searchedResults.observeAsState(listOf())
     val searchImagesResult by mainViewModel.imageViewModel.searchedResults.observeAsState(listOf())
@@ -97,7 +106,10 @@ fun Reading(
             paragraphs = stringList,
             width = boxWithConstraintsScope.maxWidth,
             height = boxWithConstraintsScope.maxHeight,
-            createPages = createPages
+            createPages = createPages,
+            pages = pages,
+            verticalScrollState = verticalScrollState,
+            pageLazyListState = pageLazyListState
         )
     }
     Box(
@@ -110,6 +122,7 @@ fun Reading(
                 currentChapterId = currentChapterId,
                 currentChapterList = viewModel.currentBookChapterList,
                 changeChapter = changeChapter,
+                resetScroll = resetScroll,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(dimensionResource(R.dimen.padding_small))
@@ -126,7 +139,10 @@ fun ChapterDisplay(
     width: Dp,
     createPages: (
         List<String>, TextMeasurer, Float, Dp, TextUnit, Density
-    ) -> List<List<String>>
+    ) -> Unit,
+    verticalScrollState: ScrollState,
+    pages: List<List<String>>,
+    pageLazyListState: LazyListState,
 ) {
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
@@ -135,22 +151,17 @@ fun ChapterDisplay(
         dimensionResource(R.dimen.text_size).toSp()
     }
 
-    val pages = createPages(
-        paragraphs,
-        textMeasurer,
-        maxHeightPx,
-        width,
-        textSizeInSp,
-        density
-    )
+    createPages(paragraphs, textMeasurer, maxHeightPx, width, textSizeInSp, density)
 
-    LazyRow {
+    LazyRow(state = pageLazyListState) {
         items(pages) { page ->
             PageDisplay(
                 parentDirectory = parentDirectory,
                 paragraphs = page,
                 width = width,
-                height = height
+                height = height,
+                textSize = textSizeInSp,
+                verticalScrollState = verticalScrollState
             )
         }
     }
@@ -161,16 +172,19 @@ fun PageDisplay(
     parentDirectory: String?,
     paragraphs: List<String>,
     height: Dp,
-    width: Dp
+    width: Dp,
+    textSize: TextUnit,
+    verticalScrollState: ScrollState
 ) {
     Column(
         modifier = Modifier
             .width(width)
             .height(height)
+            .verticalScroll(verticalScrollState)
     ) {
         for (paragraph in paragraphs) {
             // Load image from local storage if contains <img> tag
-            if (paragraph.contains("img")) {
+            if (paragraph.contains("<img>")) {
                 StorageImage(
                     parentDirectory = parentDirectory,
                     imageName = paragraph.replace("<img>", "")
@@ -178,7 +192,8 @@ fun PageDisplay(
             } else {
                 Text(
                     text = paragraph,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    fontSize = textSize
                 )
             }
         }
@@ -214,6 +229,7 @@ fun ChapterNavigation(
     currentChapterId: Long?,
     currentChapterList: List<Long>,
     changeChapter: (Long) -> Unit,
+    resetScroll: suspend () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -223,12 +239,17 @@ fun ChapterNavigation(
             .fillMaxWidth()
             .padding(horizontal = dimensionResource(R.dimen.padding_medium))
     ){
+        val coroutineScope = rememberCoroutineScope()
+
         Button(
             onClick = {
-                if (currentChapterId != null) {
-                    val previousChapter = currentChapterId - 1
-                    if (currentChapterList.contains(previousChapter)) {
-                        changeChapter(previousChapter)
+                coroutineScope.launch {
+                    resetScroll()
+                    if (currentChapterId != null) {
+                        val previousChapter = currentChapterId - 1
+                        if (currentChapterList.contains(previousChapter)) {
+                            changeChapter(previousChapter)
+                        }
                     }
                 }
             },
@@ -241,10 +262,13 @@ fun ChapterNavigation(
 
         Button(
             onClick = {
-                if (currentChapterId != null) {
-                    val nextChapter = currentChapterId + 1
-                    if (currentChapterList.contains(nextChapter)) {
-                        changeChapter(nextChapter)
+                coroutineScope.launch {
+                    resetScroll()
+                    if (currentChapterId != null) {
+                        val nextChapter = currentChapterId + 1
+                        if (currentChapterList.contains(nextChapter)) {
+                            changeChapter(nextChapter)
+                        }
                     }
                 }
             },
