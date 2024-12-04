@@ -163,12 +163,12 @@ fun SearchBar(
 
 }
 
-fun findOccurrences(searchTerm: String, paragraphs: List<Paragraphs>): List<Pair<Long, Int>> {
-    val occurrences = mutableListOf<Pair<Long, Int>>()
+fun findOccurrences(searchTerm: String, paragraphs: List<Paragraphs>): List<Pair<Long, Long>> {
+    val occurrences = mutableListOf<Pair<Long, Long>>()
     paragraphs.forEachIndexed { index, paragraph ->
         val matches = Regex("(?i)$searchTerm").findAll(paragraph.text).toList()
         if (matches.isNotEmpty()) {
-            occurrences.add(Pair(paragraph.id, index))
+            occurrences.add(Pair(paragraph.id, paragraph.chapterId))
         }
     }
     return occurrences
@@ -177,7 +177,7 @@ fun findOccurrences(searchTerm: String, paragraphs: List<Paragraphs>): List<Pair
 @Composable
 fun DisplaySearchResults(
     searchPerformed: Boolean,
-    occurrences:  List<Pair<Long, Int>>,
+    occurrences:  List<Pair<Long, Long>>,
     searchBarInput: String,
     navigateToReading: (Long) -> Unit,
 ){
@@ -194,14 +194,14 @@ fun DisplaySearchResults(
                     .fillMaxSize()
                     .padding(horizontal = dimensionResource(R.dimen.padding_small))
             ) {
-                items(occurrences.toList()) { (paragraphId, index) ->
+                items(occurrences.toList()) { (paragraphId, chapterId) ->
                     Text(
-                        text = "${searchBarInput} found in Paragraph $paragraphId",
+                        text = "${searchBarInput} found in Chapter $chapterId, Paragraph $paragraphId",
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier
                             .padding(vertical = dimensionResource(R.dimen.padding_small))
                             .clickable(onClick = {
-                                navigateToReading(paragraphId)
+                                navigateToReading(chapterId)
                             })
                     )
                 }
