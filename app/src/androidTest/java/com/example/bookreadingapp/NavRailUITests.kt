@@ -13,12 +13,7 @@ import com.example.bookreadingapp.data.download.FileDownload
 import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
-import com.example.bookreadingapp.ui.viewmodels.BookViewModel
-import com.example.bookreadingapp.ui.viewmodels.ChapterViewModel
-import com.example.bookreadingapp.ui.viewmodels.ImageViewModel
 import com.example.bookreadingapp.ui.viewmodels.MainViewModel
-import com.example.bookreadingapp.ui.viewmodels.ParagraphViewModel
-import com.example.bookreadingapp.ui.viewmodels.TableViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
