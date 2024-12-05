@@ -1,6 +1,8 @@
 package com.example.bookreadingapp
 
+import android.app.Application
 import android.content.Context
+import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
@@ -16,11 +18,19 @@ import com.example.bookreadingapp.data.download.FileDownload
 import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.ui.viewmodels.AppViewModelFactory
+import com.example.bookreadingapp.ui.viewmodels.BookViewModel
+import com.example.bookreadingapp.ui.viewmodels.ChapterViewModel
+import com.example.bookreadingapp.ui.viewmodels.ImageViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import com.example.bookreadingapp.ui.viewmodels.ParagraphViewModel
+import com.example.bookreadingapp.ui.viewmodels.TableViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 
 
 @RunWith(AndroidJUnit4::class)
@@ -30,11 +40,14 @@ class NavUiTests {
     val composeTestRule = createComposeRule()
     private var contextMock: Context = mock()
     private lateinit var navController: TestNavHostController
+    val applicationMock = mock<Application>()
 
     @Before
     fun setUP() {
+        whenever(applicationMock.applicationContext).thenReturn(contextMock)
         val repository = FileDownload(contextMock)
         val downloadViewModel = DownloadViewModel(repository)
+        val mockMainViewModel = MainViewModel(applicationMock)
 
         composeTestRule.setContent {
             // Setup test navigator
@@ -46,7 +59,8 @@ class NavUiTests {
                 BookReadingApp(
                     windowSize = WindowWidthSizeClass.Compact,
                     navController = navController,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    mainViewModel = mockMainViewModel
                 )
             }
         }
@@ -132,7 +146,7 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("empty_bookshelf_text").assertIsDisplayed()
     }
 
-//test that clicking book in library downloads it
+    //test that clicking book in library downloads it
     @Test
     fun testLibraryScreenBookClicking() {
 
@@ -146,7 +160,7 @@ class NavUiTests {
         composeTestRule.onNodeWithTag("book_item_2131755163").assertIsNotDisplayed()
     }
 
-//test that downloaded book is displayed on bookshelf
+    //test that downloaded book is displayed on bookshelf
     @Test
     fun testNavigateToBookShelfScreenWithBook() {
         composeTestRule.waitForIdle()

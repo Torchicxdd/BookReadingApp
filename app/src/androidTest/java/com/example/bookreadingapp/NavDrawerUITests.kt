@@ -1,5 +1,6 @@
 package com.example.bookreadingapp
 
+import android.app.Application
 import android.content.Context
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.platform.LocalContext
@@ -12,10 +13,17 @@ import com.example.bookreadingapp.data.download.FileDownload
 import com.example.bookreadingapp.ui.BookReadingApp
 import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.theme.BookReadingAppTheme
+import com.example.bookreadingapp.ui.viewmodels.BookViewModel
+import com.example.bookreadingapp.ui.viewmodels.ChapterViewModel
+import com.example.bookreadingapp.ui.viewmodels.ImageViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import com.example.bookreadingapp.ui.viewmodels.ParagraphViewModel
+import com.example.bookreadingapp.ui.viewmodels.TableViewModel
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 
 class NavDrawerUITests {
 
@@ -23,11 +31,14 @@ class NavDrawerUITests {
     val composeTestRule = createComposeRule()
     private var contextMock: Context = mock()
     private lateinit var navController: TestNavHostController
+    val applicationMock = mock<Application>()
 
     @Before
     fun setUp() {
+        whenever(applicationMock.applicationContext).thenReturn(contextMock)
         val repository = FileDownload(contextMock)
         val downloadViewModel = DownloadViewModel(repository)
+        val mockMainViewModel = MainViewModel(applicationMock)
 
         composeTestRule.setContent {
             // Setup test navigator
@@ -39,7 +50,8 @@ class NavDrawerUITests {
                 BookReadingApp(
                     windowSize = WindowWidthSizeClass.Expanded,
                     navController = navController,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    mainViewModel = mockMainViewModel
                 )
             }
         }
