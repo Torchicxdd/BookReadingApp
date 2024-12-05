@@ -19,6 +19,9 @@ class FileDownloadTest {
     private lateinit var mockWebServer: MockWebServer
     private lateinit var testFile: File
     private lateinit var fileDownload: FileDownload
+    val onProgressUpdate: (Int) -> Unit = { progress ->
+        println("Downloading Progress: $progress%")
+    }
 
     // Using MockWebServer to test for http requests
     // https://medium.com/xebia-engineering/the-recommended-way-of-testing-http-calls-mockwebserver-by-okhttp-e716f87d6122
@@ -46,7 +49,7 @@ class FileDownloadTest {
         mockWebServer.enqueue(mockResponse)
 
         val url = mockWebServer.url("/").toString()
-        val result = fileDownload.downloadFile(url, testFile)
+        val result = fileDownload.downloadFile(url, testFile, onProgressUpdate)
 
         // Test that true is returned and that file exists with content
         assertTrue(result)
@@ -62,7 +65,7 @@ class FileDownloadTest {
         mockWebServer.enqueue(mockResponse)
 
         val url = mockWebServer.url("/").toString()
-        val result = fileDownload.downloadFile(url, testFile)
+        val result = fileDownload.downloadFile(url, testFile, onProgressUpdate)
 
         // Test that false is returned and length of file is 0
         assertFalse(result)
@@ -78,7 +81,7 @@ class FileDownloadTest {
         mockWebServer.enqueue(mockResponse)
 
         val url = mockWebServer.url("/").toString()
-        val result = fileDownload.downloadFile(url, testFile)
+        val result = fileDownload.downloadFile(url, testFile, onProgressUpdate)
 
         // Test that false is returned and length of file is 0
         assertFalse(result)

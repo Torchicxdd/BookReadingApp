@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "paragraphs",
+    tableName = "tables",
     foreignKeys = [
         ForeignKey(
             entity = Chapters::class,
@@ -14,25 +14,23 @@ import androidx.room.PrimaryKey
             childColumns = arrayOf("chapterId"),
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
-        )
-    ]
+        )]
 )
-class Paragraphs {
+class Table {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "paragraphId")
+    @ColumnInfo(name = "tableId")
     var id: Long = 0
 
     var chapterId: Long = 0
 
-    @ColumnInfo(name="paragraphPosition")
+    @ColumnInfo(name = "tablePosition")
     var position: Int = 0
 
-    var text: String = ""
+    var content: String = ""
 
     constructor()
-
-    constructor(text: String, chapterId: Long, position: Int) {
-        this.text = text
+    constructor(content: String, chapterId: Long, position: Int) {
+        this.content = content
         this.chapterId = chapterId
         this.position = position
     }

@@ -8,17 +8,20 @@ import com.example.bookreadingapp.data.daos.BooksDao
 import com.example.bookreadingapp.data.daos.ChaptersDao
 import com.example.bookreadingapp.data.daos.ImageDao
 import com.example.bookreadingapp.data.daos.ParagraphDao
+import com.example.bookreadingapp.data.daos.TableDao
 import com.example.bookreadingapp.data.entities.Books
 import com.example.bookreadingapp.data.entities.Chapters
 import com.example.bookreadingapp.data.entities.Image
 import com.example.bookreadingapp.data.entities.Paragraphs
+import com.example.bookreadingapp.data.entities.Table
 
-@Database(entities = [Books::class, Image::class, Chapters::class, Paragraphs::class], version = 1)
+@Database(entities = [Books::class, Image::class, Chapters::class, Paragraphs::class, Table::class], version = 1)
 abstract class BooksAppRoomDatabase: RoomDatabase() {
     abstract fun booksDao(): BooksDao
     abstract fun chaptersDao(): ChaptersDao
     abstract fun imageDao(): ImageDao
     abstract fun paragraphDao(): ParagraphDao
+    abstract fun tableDao(): TableDao
 
 
     companion object {
@@ -31,7 +34,9 @@ abstract class BooksAppRoomDatabase: RoomDatabase() {
                         context.applicationContext,
                         BooksAppRoomDatabase::class.java,
                         "books_app_database"
-                    ).fallbackToDestructiveMigration()
+                    )
+                        .createFromAsset("databases/books_app_database.db")
+                        .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
                 }

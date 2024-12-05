@@ -5,9 +5,6 @@
 
     <string-array name="download">
         <item>https://www.gutenberg.org/cache/epub/12299/pg12299-h.zip</item>
-        <item>https://www.gutenberg.org/cache/epub/25269/pg25269-h.zip</item>
-        <item>https://www.gutenberg.org/cache/epub/72897/pg72897-h.zip</item>
-        <item>https://www.gutenberg.org/cache/epub/22657/pg22657-h.zip</item>
         <item>https://www.gutenberg.org/cache/epub/27778/pg27778-h.zip</item>
         <item>https://www.gutenberg.org/cache/epub/29086/pg29086-h.zip</item>
         <item>https://www.gutenberg.org/cache/epub/63421/pg63421-h.zip</item>
@@ -38,7 +35,6 @@
     <string name="steam">Steam, Its Generation and Use by Babcock &amp; Wilcox Company</string>
     <string name="dairy">Outlines of Dairy Bacteriology, 8th edition by H. L. Russell</string>
     <string name="mushroom">The Mushroom, Edible and Otherwise by Miron Elisha Hard</string>
-    <string name="glass">Glass and Glass Manufacture</string>
 
     <string name="book_404">Livre non trouvé</string>
     <string name="search_input">Rechercher</string>
@@ -65,4 +61,10 @@
     <string name="no_books_available">Vous n\'avez encore téléchargé aucun livre.</string>
     <string name="no_books_to_download">Aucun livre disponible à télécharger</string>
     <string name="back_button">Revenir</string>
+    <string name="download_progress">Progression du téléchargement et de la décompression: %1$d%%</string>
+    <string name="insert_progress">Progression de l\'analyse et de l\'insertion : %1$d%%</string>
+    <string name="next_chap">&gt;&gt;</string>
+    <string name="prev_chap">&lt;&lt;</string>
+    <string name="num_chap">%1$d chapitres</string>
+    <string name="name_chap">Chapitre %1$d: %2$s</string>
 </resources>

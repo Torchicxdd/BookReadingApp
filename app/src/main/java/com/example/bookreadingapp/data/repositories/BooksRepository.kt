@@ -9,6 +9,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BooksRepository(private val booksDao: BooksDao) {
     val searchResults = MutableLiveData<List<Books>>()
@@ -18,8 +19,8 @@ class BooksRepository(private val booksDao: BooksDao) {
     /**
      * Method used to insert new books to the database
      */
-    fun insertBook(newBook: Books) {
-        coroutineScope.launch(Dispatchers.IO) {
+    suspend fun insertBook(newBook: Books): Long {
+        return withContext(Dispatchers.IO) {
             booksDao.insertBook(newBook)
         }
     }

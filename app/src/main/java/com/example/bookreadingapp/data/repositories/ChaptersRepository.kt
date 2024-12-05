@@ -1,12 +1,16 @@
 package com.example.bookreadingapp.data.repositories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bookreadingapp.data.daos.ChaptersDao
 import com.example.bookreadingapp.data.entities.Chapters
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     val searchResults = MutableLiveData<List<Chapters>>()
@@ -16,8 +20,8 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     /**
      * Insert a new chapter into the database
      */
-    fun insertChapter(chapter: Chapters) {
-        coroutineScope.launch(Dispatchers.IO) {
+    suspend fun insertChapter(chapter: Chapters): Long {
+        return withContext(Dispatchers.IO) {
             chaptersDao.insertChapter(chapter)
         }
     }
@@ -25,7 +29,7 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
     /**
      * Insert multiple chapters into the database
      */
-    fun insertManyChapters(chapters: List<Chapters>) {
+    suspend fun insertManyChapters(chapters: List<Chapters>) {
         coroutineScope.launch(Dispatchers.IO) {
             chaptersDao.insertManyChapters(chapters)
         }
@@ -63,32 +67,35 @@ class ChaptersRepository(private val chaptersDao: ChaptersDao) {
      */
     fun findChapterByName(title: String) {
         coroutineScope.launch(Dispatchers.Main) {
-            searchResults.value = asyncFindChapterByName(title).value
+            searchResults.value = asyncFindChapterByName(title).await()
         }
     }
 
     /**
      * Async function to find chapters by title
      */
-    private fun asyncFindChapterByName(title: String): LiveData<List<Chapters>> {
-        return chaptersDao.findChapterByName(title)
-    }
+    private fun asyncFindChapterByName(title: String): Deferred<List<Chapters>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async chaptersDao.findChapterByName(title)
+        }
 
     /**
      * Get chapters by bookId in ascending order of position
      */
-    fun getChaptersByBookId(bookId: Int) {
+    fun getChaptersByBookId(bookId: Long) {
         coroutineScope.launch(Dispatchers.Main) {
-            searchResults.value = asyncGetChaptersByBookId(bookId).value
+            searchResults.value = asyncGetChaptersByBookId(bookId).await()
         }
     }
 
     /**
      * Async function to get chapters by bookId in ascending order
      */
-    private fun asyncGetChaptersByBookId(bookId: Int): LiveData<List<Chapters>> {
-        return chaptersDao.getChaptersByBookId(bookId)
-    }
+    private fun asyncGetChaptersByBookId(bookId: Long): Deferred<List<Chapters>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async chaptersDao.getChaptersByBookId(bookId)
+        }
+
 
     /**
      * Update the title of a chapter by its id

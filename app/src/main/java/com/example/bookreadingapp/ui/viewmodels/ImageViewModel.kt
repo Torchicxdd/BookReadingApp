@@ -19,7 +19,7 @@ class ImageViewModel(application: Application) : ViewModel() {
         searchedResults = repository.searchResults
     }
 
-    fun insertImage(image: Image) {
+    suspend fun insertImage(image: Image) {
         repository.insertImage(image)
     }
 
@@ -29,5 +29,9 @@ class ImageViewModel(application: Application) : ViewModel() {
 
     fun findImageById(id: Int) {
         repository.findImageById(id)
+    }
+
+    fun findImagesInAscOrder(chapterId: Long) {
+        repository.findImagesInAscOrder(chapterId)
     }
 }

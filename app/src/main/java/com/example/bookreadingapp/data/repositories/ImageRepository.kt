@@ -13,7 +13,7 @@ class ImageRepository(private val imageDao: ImageDao) {
     val searchResults = MutableLiveData<List<Image>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    fun insertImage(newImage: Image) {
+    suspend fun insertImage(newImage: Image) {
         coroutineScope.launch(Dispatchers.IO) {
             imageDao.insertImage(newImage)
         }
@@ -27,12 +27,23 @@ class ImageRepository(private val imageDao: ImageDao) {
 
     fun findImageById(id: Int) {
         coroutineScope.launch(Dispatchers.Main) {
-            searchResults.value = asyncFind(id).await()
+            searchResults.value = asyncFindImageById(id).await()
         }
     }
 
-    private fun asyncFind(id: Int) : Deferred<List<Image>?> =
+    fun findImagesInAscOrder(chapterId: Long) {
+        coroutineScope.launch(Dispatchers.Main) {
+            searchResults.value = asyncFindImagesInAscOrder(chapterId).await()
+        }
+    }
+
+    private fun asyncFindImageById(id: Int) : Deferred<List<Image>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async imageDao.findImageById(id)
+        }
+
+    private fun asyncFindImagesInAscOrder(chapterId: Long) : Deferred<List<Image>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async imageDao.findImagesInAscOrder(chapterId)
         }
 }

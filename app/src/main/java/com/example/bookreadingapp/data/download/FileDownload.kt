@@ -2,7 +2,6 @@ package com.example.bookreadingapp.data.download
 
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -15,6 +14,8 @@ import java.io.InputStream
 import java.util.zip.ZipFile
 
 class FileDownload(private val context: Context) {
+    private var totalProgress = 0
+
     // Operations wrapped with withContext(Dispatchers.IO) {} causes the coroutine to switch to
     // the IO dispatcher for IO manipulation/Network request tasks
 
@@ -41,8 +42,8 @@ class FileDownload(private val context: Context) {
 
     // Request content from url and saves to file to its own folder created with createFile()
     // Returns a boolean representing if the request was successful
-    suspend fun downloadFile(url: String, file: File): Boolean {
-        var downloadSuccess : Boolean = false
+    suspend fun downloadFile(url: String, file: File, onProgressUpdate: (Int) -> Unit): Boolean {
+        var downloadSuccess = false
         withContext(Dispatchers.IO) {
             try {
                 val client = OkHttpClient()
@@ -53,9 +54,15 @@ class FileDownload(private val context: Context) {
                 if (!response.isSuccessful || response.body!!.contentLength() == 0L) {
                     return@withContext false
                 }
+
+                // Total bytes to download
+                val totalBytes = response.body!!.contentLength()
+                // Tracking the amount of downloaded bytes
+                var downloadedBytes = 0L
+
                 response.body!!.byteStream().use { inputStream ->
                     FileOutputStream(file).use { outputStream ->
-                        copyData(inputStream, outputStream)
+                        copyData(inputStream, outputStream, downloadedBytes, totalBytes, onProgressUpdate)
                     }
                 }
                 downloadSuccess = true
@@ -68,28 +75,25 @@ class FileDownload(private val context: Context) {
 
     // Helper methods
     // Copy data from one stream to another
-    private fun copyData(input: InputStream, output: FileOutputStream) {
+    private fun copyData(input: InputStream, output: FileOutputStream, downloadedBytes: Long, totalBytes: Long, onProgressUpdate: (Int) -> Unit) {
         val buffer = ByteArray(1024)
         var length: Int
+        var totalDownloaded = downloadedBytes
+
         while (input.read(buffer).also { length = it } > 0) {
             output.write(buffer, 0, length)
-        }
-    }
+            // Tracking the total downloaded bytes
+            totalDownloaded += length
 
-    // Delete directory contents directly without IntentSender
-    suspend fun deleteDirectoryContents(directoryName: String) {
-        var folderToDelete : File
-        withContext(Dispatchers.IO) {
-            folderToDelete = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
-            folderToDelete.listFiles()?.forEach {
-                it.delete()
-            }
+            // Update progress (50% max for download)
+            val downloadProgress = ((totalDownloaded * 50) / totalBytes).toInt()
+            onProgressUpdate(downloadProgress)
         }
     }
 
     // Unzip file and saves to the same folder
     // Returns absolute path of unzipped html file
-    suspend fun unzipFile(zipFile: File, directoryName: String) : String {
+    suspend fun unzipFile(zipFile: File, directoryName: String, onProgressUpdate: (Int) -> Unit) : String {
         var unzippedPath = ""
         withContext(Dispatchers.IO) {
             val unzipFolder = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), directoryName)
@@ -98,7 +102,12 @@ class FileDownload(private val context: Context) {
             }
 
             ZipFile(zipFile).use { zip ->
-                zip.entries().asSequence().forEach { entry ->
+                val entries = zip.entries().asSequence().toList()
+                // Getting the total number of files in the zip
+                val totalEntries = entries.size
+                // Tracking the amount of processed files
+                var processedEntries = 0
+                for (entry in entries) {
                     zip.getInputStream(entry).use { input ->
                         // Create images directory
                         File(unzipFolder.absolutePath + File.separator + "images").mkdir()
@@ -113,6 +122,11 @@ class FileDownload(private val context: Context) {
                         if (entry.name.contains(".html")) {
                             unzippedPath = File(destFilePath).absolutePath
                         }
+
+                        // Update progress (next 50% for unzipping)
+                        processedEntries++
+                        totalProgress = 50 + ((processedEntries * 50) / totalEntries)
+                        onProgressUpdate(totalProgress)
                     }
                 }
             }

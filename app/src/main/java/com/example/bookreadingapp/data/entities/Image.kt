@@ -17,18 +17,22 @@ import androidx.room.PrimaryKey
         )]
 )
 class Image {
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "imageId")
-    var id: Int = 0
+    var id: Long = 0
 
-    var chapterId: Int = 0
+    var chapterId: Long = 0
+
+    @ColumnInfo(name = "imagePosition")
+    var position: Int = 0
 
     var uri: String = ""
 
     constructor()
 
-    constructor(uri: String) {
+    constructor(uri: String, chapterId: Long, position: Int) {
         this.uri = uri
+        this.chapterId = chapterId
+        this.position = position
     }
 }

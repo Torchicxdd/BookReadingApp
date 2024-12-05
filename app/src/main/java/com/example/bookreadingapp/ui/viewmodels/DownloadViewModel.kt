@@ -1,54 +1,108 @@
 package com.example.bookreadingapp.ui.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bookreadingapp.data.Book
 import com.example.bookreadingapp.data.download.FileDownload
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.io.IOException
 
 private const val TAG_DVM = "DownloadViewModel"
 class DownloadViewModel(private val repository: FileDownload) : ViewModel() {
     private val _directoryContents = MutableLiveData<List<String>>()
-    val directoryContents: LiveData<List<String>> = _directoryContents
 
-    // Function to set up file download
-    // Returns the absolute path of the downloaded and extracted html file
-    fun setupDownload(url: String, directoryName: String) : String {
-        var downloadedFilePath = ""
+    private val _progressPercentage = MutableStateFlow(0)
+    val progressPercentage: StateFlow<Int> get() = _progressPercentage
+
+    private val _progressInsertPercentage = MutableStateFlow(0)
+    val progressInsertPercentage: StateFlow<Int> get() = _progressInsertPercentage
+
+    private val _isDownloading = MutableStateFlow(false)
+    val isDownloading: StateFlow<Boolean> get() = _isDownloading
+
+    private val _isInserting = MutableStateFlow(false)
+    val isInserting: StateFlow<Boolean> get() = _isInserting
+
+    // Function to set up file download and data insertion
+    fun setupDownload(
+        url: String,
+        directoryName: String,
+        book: Book,
+        mainViewModel: MainViewModel
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             val fileName = url.substringAfterLast("/")
+
             val file = repository.createFile(directoryName, fileName)
 
-            // Download zip file from url
-            if (repository.downloadFile(url, file)) Log.i(TAG_DVM, "File Downloaded")
-            else Log.e(TAG_DVM, "Failed to download file")
+            // Initialize progress
+            _progressPercentage.emit(0)
+            _isDownloading.emit(true)
+            _progressInsertPercentage.emit(0)
 
-            // Extract zip file after downloading
-            try {
-                downloadedFilePath = repository.unzipFile(file, directoryName)
-            } catch(e: IOException) {
-                e.printStackTrace()
-                e.message?.let { Log.e(TAG_DVM, it) }
-            }
-
+            // Start downloading the file
+            downloadFileWithProgress(url, file)
+            // Start extracting the zip file
+            extractZipWithProgress(file, directoryName, book)
+            _isDownloading.emit(false)
             updateDirectoryContents("")
-        }
+            _isInserting.emit(true)
 
-        return downloadedFilePath
+            // Insert book information into the database
+            val newBookID = book.insertBook(mainViewModel)
+            book.insertElements(newBookID, mainViewModel, _progressInsertPercentage)
+            _isInserting.emit(false)
+        }
+    }
+
+    private suspend fun downloadFileWithProgress(
+        url: String,
+        file: File
+    ) {
+        // Download zip file from URL with progress update
+        if (repository.downloadFile(url, file) { progress ->
+                viewModelScope.launch {
+                    _progressPercentage.emit(progress)
+                }
+            }) {
+            Log.i(TAG_DVM, "File Downloaded")
+        } else {
+            Log.e(TAG_DVM, "Failed to download file")
+        }
+    }
+
+    private suspend fun extractZipWithProgress(
+        file: File,
+        directoryName: String,
+        book: Book
+    ) {
+        // Extract zip file after downloading
+        try {
+            val downloadedFilePath = repository.unzipFile(file, directoryName) { progress ->
+                viewModelScope.launch {
+                    _progressPercentage.emit(progress)
+                }
+            }
+            if (downloadedFilePath.isNotEmpty()) {
+                book.htmlFilePath = downloadedFilePath
+            } else {
+                Log.e(TAG_DVM, "Download file path is empty, book was not moved to bookshelf")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            e.message?.let { Log.e(TAG_DVM, "Failed to extract file! Error: $it") }
+        }
     }
 
     private suspend fun updateDirectoryContents(directoryName: String) {
         val contents = repository.listDirectoryContents(directoryName)
         _directoryContents.postValue(contents)
-    }
-
-    suspend fun confirmDeletion(directoryName: String) {
-        repository.deleteDirectoryContents(directoryName)
-        updateDirectoryContents(directoryName)
-        Log.i(TAG_DVM, "$directoryName content deleted")
     }
 }

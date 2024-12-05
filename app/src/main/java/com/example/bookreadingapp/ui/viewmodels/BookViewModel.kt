@@ -21,8 +21,8 @@ class BookViewModel(application: Application) : ViewModel() {
         searchResults = repository.searchResults
     }
 
-    fun insertBook(book: Books) {
-        repository.insertBook(book)
+    suspend fun insertBook(book: Books): Long {
+        return repository.insertBook(book)
     }
 
     fun deleteBook(id: Int) {

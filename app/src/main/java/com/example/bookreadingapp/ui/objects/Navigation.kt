@@ -2,6 +2,11 @@ package com.example.bookreadingapp.ui.objects
 
 import NavBarItems
 import android.content.Context
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -25,6 +30,7 @@ import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,19 +40,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.bookreadingapp.R
-import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
 import com.example.bookreadingapp.ui.screens.Bookshelf
 import com.example.bookreadingapp.ui.screens.ContentTable
 import com.example.bookreadingapp.ui.screens.Home
 import com.example.bookreadingapp.ui.screens.Library
 import com.example.bookreadingapp.ui.screens.Reading
 import com.example.bookreadingapp.ui.screens.Search
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
 import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.AppViewModel
+import com.example.bookreadingapp.ui.viewmodels.DownloadViewModel
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
 
 
 /**
@@ -56,32 +65,96 @@ import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
 @Composable
 fun NavigationHost(
     navController: NavHostController,
-    context: Context,
-    adaptiveNavigationType: AdaptiveNavigationType,
     modifier: Modifier,
     viewModel: AppViewModel,
-    downloadViewModel: DownloadViewModel
+    downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel
 ) {
-    NavHost(navController = navController,
-        startDestination = Routes.Home.route
+    NavHost(
+        navController = navController,
+        startDestination = Routes.Home.route,
+        enterTransition = { fadeIn(animationSpec = tween(durationMillis = 100)) },
+        exitTransition = { fadeOut(animationSpec = tween(durationMillis = 100)) }
     ) {
         composable(Routes.Home.route) {
-            Home(context, viewModel, adaptiveNavigationType)
+            Home()
         }
         composable(Routes.Library.route) {
-            Library(context, viewModel, navController, adaptiveNavigationType, downloadViewModel)
+            Library(
+                libraryBooks = viewModel.libraryBooks,
+                moveBookToBookshelf = viewModel::moveBookToBookshelf,
+                progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
+                progressInsertPercentage = downloadViewModel.progressInsertPercentage.collectAsState(),
+                isDownloading = downloadViewModel.isDownloading.collectAsState(),
+                isInserting = downloadViewModel.isInserting.collectAsState(),
+                setupDownload = downloadViewModel::setupDownload,
+                setBookDownloading = viewModel::setBookDownloading,
+                downloadingBooks = viewModel.downloadingBooks,
+                mainViewModel = mainViewModel
+            )
         }
         composable(Routes.Bookshelf.route) {
-            Bookshelf(context, viewModel, navController, adaptiveNavigationType)
+            Bookshelf(
+                bookshelfBooks = viewModel.bookshelfBooks,
+                updateBook = viewModel::updateBook,
+                navigateToTableOfContents = { navController.navigate(Routes.ContentTable.route){
+                    launchSingleTop = true
+                    restoreState = true
+                } },
+                progressPercentage = downloadViewModel.progressPercentage.collectAsState(),
+                progressInsertPercentage = downloadViewModel.progressInsertPercentage.collectAsState(),
+                isDownloading = downloadViewModel.isDownloading.collectAsState(),
+                setBookDownloading = viewModel::setBookDownloading,
+                downloadingBooks = viewModel.downloadingBooks,
+                mainViewModel = mainViewModel
+            )
         }
         composable(Routes.Search.route) {
-            Search(context, viewModel, navController, adaptiveNavigationType)
+            Search(
+                book = viewModel.selectedBook,
+                searchBarInput = viewModel.searchBarInput,
+                updateSearchBar = viewModel::updateSearchBarInput,
+                performSearch = viewModel::performSearch,
+                searchResult = viewModel.searchResultText,
+                navigateToReading =  { paragraphId -> navController.navigate(Routes.Reading.route + "/$paragraphId") },
+                mainViewModel = mainViewModel
+            )
         }
         composable(Routes.ContentTable.route) {
-            ContentTable(context, viewModel, navController, adaptiveNavigationType)
+            ContentTable(
+                book = viewModel.selectedBook,
+                viewModel = viewModel,
+                mainViewModel = mainViewModel,
+                navigateToSearch =  { navController.navigate(Routes.Search.route) },
+                navigateToReading =  { chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId"){
+                    launchSingleTop = true
+                    restoreState = true
+                } }
+            )
         }
-        composable(Routes.Reading.route) {
-            Reading(context, viewModel, navController, adaptiveNavigationType)
+        composable(
+            route = Routes.Reading.route + "/{chapterId}",
+            arguments = listOf(navArgument("chapterId") {
+                type = NavType.LongType
+            })) { navBackStack ->
+
+            Reading(
+                book = viewModel.selectedBook,
+                readingMode = viewModel.readingMode,
+                toggleReadingMode = { viewModel.readingMode = !viewModel.readingMode },
+                currentChapterId = navBackStack.arguments?.getLong("chapterId"),
+                changeChapter = {chapterId -> navController.navigate(Routes.Reading.route + "/$chapterId"){
+                    launchSingleTop = true
+                    restoreState = true
+                }},
+                viewModel = viewModel,
+                mainViewModel = mainViewModel,
+                createPages = viewModel::createPages,
+                createStringList = viewModel::createStringList,
+                pages = viewModel.pages,
+                pageLazyListState = viewModel.pagesLazyListState,
+                resetScroll = viewModel::resetReadingScroll
+            )
         }
 
     }
@@ -109,13 +182,11 @@ fun BottomNavBar(
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
                 onClick = {
-                    if (currentRoute != navItem.route) {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
                         }
+                        launchSingleTop = true
                     }
                 },
                 icon = {
@@ -157,7 +228,6 @@ fun NavRail(
                             saveState = true
                         }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 icon = {
@@ -182,6 +252,7 @@ fun PermanentNavDrawer(
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
+    mainViewModel: MainViewModel,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -207,7 +278,6 @@ fun PermanentNavDrawer(
                                             saveState = true
                                         }
                                         launchSingleTop = true
-                                        restoreState = true
                                     }
                                 },
                                 icon = {
@@ -231,12 +301,11 @@ fun PermanentNavDrawer(
                 modifier = modifier
             ) {
                 NavigationHost(
-                    navController,
-                    context,
-                    adaptiveNavigationType,
+                    navController = navController,
                     modifier = modifier.fillMaxSize(),
                     viewModel = viewModel,
-                    downloadViewModel = downloadViewModel
+                    downloadViewModel = downloadViewModel,
+                    mainViewModel = mainViewModel
                 )
             }
         },

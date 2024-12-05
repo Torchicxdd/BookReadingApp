@@ -90,7 +90,10 @@ class FileUnzippingTests {
      */
     @Test
     fun unzipFile_returnsValidPath() = runTest {
-        val unzippedFilePath = fileDownload.unzipFile(zipFileMock, "testFolder")
+        val onProgressUpdate: (Int) -> Unit = { progress ->
+            println("Unzipping Progress: $progress%")
+        }
+        val unzippedFilePath = fileDownload.unzipFile(zipFileMock, "testFolder", onProgressUpdate)
 
         val unzippedFile = File(unzippedFilePath)
         assertTrue("The unzipped file does not exist at the expected path", unzippedFile.exists())

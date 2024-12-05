@@ -1,47 +1,56 @@
 package com.example.bookreadingapp.ui.screens
 
-import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import com.example.bookreadingapp.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.navigation.NavController
-import com.example.bookreadingapp.ui.viewmodels.AppViewModel
+import com.example.bookreadingapp.R
+import com.example.bookreadingapp.data.Book
+import com.example.bookreadingapp.data.entities.Paragraphs
 import com.example.bookreadingapp.ui.theme.md_theme_dark_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_dark_surface
 import com.example.bookreadingapp.ui.theme.md_theme_light_onSurface
 import com.example.bookreadingapp.ui.theme.md_theme_light_surface
-import com.example.bookreadingapp.ui.utils.AdaptiveNavigationType
+import com.example.bookreadingapp.ui.viewmodels.MainViewModel
+import androidx.compose.runtime.*
 
 /**
  * Search screen to use search function
  */
 @Composable
 fun Search(
-    context: Context,
-    viewModel: AppViewModel,
-    navController: NavController,
-    adaptiveNavigationType: AdaptiveNavigationType
+    book: Book?,
+    searchBarInput: String,
+    updateSearchBar: (String) -> Unit,
+    performSearch: () -> Unit,
+    searchResult: String,
+    navigateToReading: (Long) -> Unit,
+    mainViewModel: MainViewModel
 ) {
+    var searchPerformed by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,10 +61,22 @@ fun Search(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Text(text = context.getString(R.string.search), style = MaterialTheme.typography.displayLarge)
+            Text(text = stringResource(R.string.search), style = MaterialTheme.typography.displayLarge)
         }
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_small)))
-        SearchBar(viewModel, context)
+        SearchBar(
+            book = book,
+            searchBarInput = searchBarInput,
+            updateSearchBar = updateSearchBar,
+            performSearch = {
+                performSearch()
+                searchPerformed = true
+            },
+            searchResult = searchResult,
+            mainViewModel = mainViewModel,
+            searchPerformed = searchPerformed,
+            navigateToReading = navigateToReading
+        )
     }
 }
 
@@ -64,9 +85,36 @@ fun Search(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(viewModel: AppViewModel, context: Context) {
+fun SearchBar(
+    book: Book?,
+    searchBarInput: String,
+    updateSearchBar: (String) -> Unit,
+    performSearch: () -> Unit,
+    searchResult: String,
+    mainViewModel: MainViewModel,
+    searchPerformed: Boolean,
+    navigateToReading: (Long) -> Unit
+) {
+    // Observe search results in viewmodel
+    val searchParagraphResults by mainViewModel.paragraphViewModel.allParagraphs.observeAsState(listOf())
+    val paragraphViewModel = mainViewModel.paragraphViewModel
+    if (book != null) {
+        paragraphViewModel.findParagraphByBookId(book.bookID)
+    }
+
+    // Only calculates occurrences if the search has been performed
+    val occurrences = if (searchPerformed) {
+        remember(searchBarInput) {
+            findOccurrences(searchBarInput, searchParagraphResults)
+        }
+    } else {
+        emptyList()
+    }
+
     // Determine if dark theme is active
     val darkTheme = isSystemInDarkTheme()
+
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -76,23 +124,23 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
         Text(
             text = stringResource(
                 id = R.string.searching_in_book,
-                stringResource(viewModel.selectedBookTitleResId)
+                stringResource(book!!.title)
             )
         )
         OutlinedTextField(
-            value = viewModel.searchBarInput,
+            value = searchBarInput,
             singleLine = true,
             shape = shapes.large,
             modifier = Modifier.fillMaxWidth(),
-            colors =TextFieldDefaults.outlinedTextFieldColors(
-                unfocusedBorderColor =  if (darkTheme) md_theme_dark_surface else md_theme_light_surface,
-                focusedBorderColor =  if (darkTheme) md_theme_dark_onSurface else md_theme_light_onSurface,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = if (darkTheme) md_theme_dark_surface else md_theme_light_surface,
+                focusedBorderColor = if (darkTheme) md_theme_dark_onSurface else md_theme_light_onSurface,
                 containerColor = if (darkTheme) md_theme_dark_surface else md_theme_light_surface
             ),
-            onValueChange = { viewModel.updateSearchBarInput(it) },
+            onValueChange = { updateSearchBar(it) },
             placeholder = {
                 Text(
-                    text = context.getString(R.string.search_input),
+                    text = stringResource(R.string.search_input),
                     style = MaterialTheme.typography.bodyLarge
                 )
             },
@@ -101,26 +149,66 @@ fun SearchBar(viewModel: AppViewModel, context: Context) {
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    viewModel.performSearch()
+                    performSearch()
                 }
             )
         )
-        // Display the search result if it's not empty
-        if (viewModel.searchResultText.isNotEmpty()) {
-            DisplayFoundWord(viewModel.searchResultText)
+        DisplaySearchResults(
+            searchPerformed = searchPerformed,
+            occurrences = occurrences,
+            searchBarInput = searchBarInput,
+            navigateToReading = navigateToReading
+        )
+    }
+
+}
+
+fun findOccurrences(searchTerm: String, paragraphs: List<Paragraphs>): List<Pair<Long, Long>> {
+    val occurrences = mutableListOf<Pair<Long, Long>>()
+    paragraphs.forEachIndexed { index, paragraph ->
+        val matches = Regex("(?i)$searchTerm").findAll(paragraph.text).toList()
+        if (matches.isNotEmpty()) {
+            occurrences.add(Pair(paragraph.id, paragraph.chapterId))
+        }
+    }
+    return occurrences
+}
+
+
+@Composable
+fun DisplaySearchResults(
+    searchPerformed: Boolean,
+    occurrences:  List<Pair<Long, Long>>,
+    searchBarInput: String,
+    navigateToReading: (Long) -> Unit,
+){
+    // Only display search results if search has been performed
+    if (searchPerformed) {
+        if (occurrences.isNotEmpty() && searchBarInput != "") {
+            Text(
+                text = "${occurrences.size} occurences of ${searchBarInput} found ",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_small))
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = dimensionResource(R.dimen.padding_small))
+            ) {
+                items(occurrences.toList()) { (paragraphId, chapterId) ->
+                    Text(
+                        text = "${searchBarInput} found in Chapter $chapterId, Paragraph $paragraphId",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .padding(vertical = dimensionResource(R.dimen.padding_small))
+                            .clickable(onClick = {
+                                navigateToReading(chapterId)
+                            })
+                    )
+                }
+            }
         }
     }
 }
 
-/**
- * Display for finding a word in the text
- */
-@Composable
-fun DisplayFoundWord(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall,
-        modifier = Modifier
-            .padding(top = dimensionResource(R.dimen.padding_small))
-    )
-}
+
