@@ -1,7 +1,6 @@
 package com.example.bookreadingapp.ui.objects
 
 import NavBarItems
-import android.content.Context
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
@@ -34,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -168,7 +168,6 @@ fun NavigationHost(
 @Composable
 fun BottomNavBar(
     navController: NavHostController,
-    context: Context,
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
@@ -176,7 +175,7 @@ fun BottomNavBar(
     ) {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
-        val barItems = NavBarItems.getBarItems(context)
+        val barItems = NavBarItems.getBarItems(LocalContext.current)
         // Loops through all the NavBarItems and places them on the bottom bar
         barItems.forEach { navItem ->
             NavigationBarItem(
@@ -207,12 +206,11 @@ fun BottomNavBar(
 @Composable
 fun NavRail(
     navController: NavHostController,
-    context: Context,
     modifier: Modifier = Modifier
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val barItems = NavBarItems.getBarItems(context)
+    val barItems = NavBarItems.getBarItems(LocalContext.current)
 
     NavigationRail(
         modifier = modifier.testTag("nav_rail")
@@ -248,7 +246,6 @@ fun NavRail(
 @Composable
 fun PermanentNavDrawer(
     navController: NavHostController,
-    context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
@@ -257,7 +254,7 @@ fun PermanentNavDrawer(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    val barItems = NavBarItems.getBarItems(context)
+    val barItems = NavBarItems.getBarItems(LocalContext.current)
 
     PermanentNavigationDrawer(
         drawerContent = {

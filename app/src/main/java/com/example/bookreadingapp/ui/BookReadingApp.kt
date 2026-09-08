@@ -1,5 +1,4 @@
 package com.example.bookreadingapp.ui
-import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -9,7 +8,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.bookreadingapp.ui.objects.BottomNavBar
@@ -39,8 +37,6 @@ fun BookReadingApp(
     downloadViewModel: DownloadViewModel,
     mainViewModel: MainViewModel
 ) {
-    val context = LocalContext.current
-
     // Determine the type of navigation based on the window size
     val adaptiveNavigationType = when (windowSize) {
         WindowWidthSizeClass.Compact -> AdaptiveNavigationType.BOTTOM_NAVIGATION
@@ -78,7 +74,6 @@ fun BookReadingApp(
                 AdaptiveContent(
                     adaptiveNavigationType = adaptiveNavigationType,
                     navController = navController,
-                    context = context,
                     viewModel = viewModel,
                     downloadViewModel = downloadViewModel,
                     mainViewModel = mainViewModel
@@ -88,7 +83,7 @@ fun BookReadingApp(
         bottomBar = {
             // Display the bottom navigation bar only for compact screens
             if (adaptiveNavigationType == AdaptiveNavigationType.BOTTOM_NAVIGATION && !viewModel.readingMode) {
-                BottomNavBar(navController, context)
+                BottomNavBar(navController)
             }
         }
     )
@@ -99,7 +94,6 @@ fun BookReadingApp(
  *
  * @param adaptiveNavigationType The navigation type (bottom navigation, rail, or permanent drawer).
  * @param navController The NavHostController for managing navigation.
- * @param context The current context for accessing resources.
  * @param modifier Modifier to apply padding or layout behavior.
  * @param viewModel The ViewModel for managing the app state.
  * @param downloadViewModel The ViewModel for handling download and data operations.
@@ -108,7 +102,6 @@ fun BookReadingApp(
 fun AdaptiveContent(
     adaptiveNavigationType: AdaptiveNavigationType,
     navController: NavHostController,
-    context: Context,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
     mainViewModel: MainViewModel,
@@ -117,11 +110,11 @@ fun AdaptiveContent(
     Row(modifier = modifier) {
         // Display the navigation rail for medium-sized screens
         if (adaptiveNavigationType == AdaptiveNavigationType.NAVIGATION_RAIL && !viewModel.readingMode) {
-            NavRailComponent(navController, context)
+            NavRailComponent(navController)
         }
         // Display the permanent navigation drawer for expanded screens
         if (adaptiveNavigationType == AdaptiveNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-            PermanentNavDrawerComponent(navController, context, adaptiveNavigationType, viewModel, downloadViewModel, mainViewModel)
+            PermanentNavDrawerComponent(navController, adaptiveNavigationType, viewModel, downloadViewModel, mainViewModel)
         }
         // Display the main content for smaller screens or when in reading mode
         if (adaptiveNavigationType in listOf(AdaptiveNavigationType.NAVIGATION_RAIL, AdaptiveNavigationType.BOTTOM_NAVIGATION)) {
@@ -134,16 +127,13 @@ fun AdaptiveContent(
  * Displays the navigation rail for medium screen sizes.
  *
  * @param navController The NavHostController for managing navigation.
- * @param context The current context for accessing resources.
  */
 @Composable
 fun NavRailComponent(
-    navController: NavHostController,
-    context: Context
+    navController: NavHostController
 ) {
     NavRail(
         navController,
-        context,
         modifier = Modifier
             .fillMaxHeight()
     )
@@ -153,7 +143,6 @@ fun NavRailComponent(
  * Displays the permanent navigation drawer for expanded screen sizes.
  *
  * @param navController The NavHostController for managing navigation.
- * @param context The current context for accessing resources.
  * @param adaptiveNavigationType The type of adaptive navigation (rail or drawer).
  * @param viewModel The ViewModel for managing the app state.
  * @param downloadViewModel The ViewModel for handling download and data operations.
@@ -161,7 +150,6 @@ fun NavRailComponent(
 @Composable
 fun PermanentNavDrawerComponent(
     navController: NavHostController,
-    context: Context,
     adaptiveNavigationType: AdaptiveNavigationType,
     viewModel: AppViewModel,
     downloadViewModel: DownloadViewModel,
@@ -170,7 +158,6 @@ fun PermanentNavDrawerComponent(
 ) {
     PermanentNavDrawer(
         navController,
-        context,
         adaptiveNavigationType,
         modifier = modifier
             .fillMaxSize(),
